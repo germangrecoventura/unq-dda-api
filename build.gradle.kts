@@ -4,9 +4,18 @@ plugins {
 	war
 	id("org.springframework.boot") version "3.0.4"
 	id("io.spring.dependency-management") version "1.1.0"
+	id("org.sonarqube") version "3.5.0.2730"
 	kotlin("jvm") version "1.7.22"
 	kotlin("plugin.spring") version "1.7.22"
 	kotlin("plugin.jpa") version "1.7.22"
+}
+
+sonarqube {
+	properties {
+		property("sonar.projectKey", "germangrecoventura_unq-dda-api")
+		property("sonar.organization", "germangrecoventura")
+		property("sonar.host.url", "https://sonarcloud.io")
+	}
 }
 
 group = "ar.edu.unq.desapp.groupb"
