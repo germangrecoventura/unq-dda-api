@@ -11,12 +11,12 @@ class UserRequestDTO {
 
     class BuilderUserDTO {
         private val userDTO = UserRequestDTO()
-        fun whitFirstName(first_name: String?) = apply { userDTO.firstName = first_name }
-        fun whitLastName(last_name: String?) = apply { userDTO.lastName = last_name }
-        fun whitEmail(email: String?) = apply { userDTO.emailAddress = email }
-        fun whitAddress(addressUpdate: String?) = apply { userDTO.address = addressUpdate }
-        fun whitPassword(passwordUpdate: String?) = apply { userDTO.password = passwordUpdate }
-        fun whitCVU(cvuUpdate: String?) = apply { userDTO.cvump = cvuUpdate }
+        fun withFirstName(first_name: String?) = apply { userDTO.firstName = first_name }
+        fun withLastName(last_name: String?) = apply { userDTO.lastName = last_name }
+        fun withEmail(email: String?) = apply { userDTO.emailAddress = email }
+        fun withAddress(addressUpdate: String?) = apply { userDTO.address = addressUpdate }
+        fun withPassword(passwordUpdate: String?) = apply { userDTO.password = passwordUpdate }
+        fun withCVU(cvuUpdate: String?) = apply { userDTO.cvump = cvuUpdate }
         fun whitCyptoWallet(cryptoWallet: Int?) = apply { userDTO.cryptoWalletAddress = cryptoWallet }
         fun build() = userDTO
     }

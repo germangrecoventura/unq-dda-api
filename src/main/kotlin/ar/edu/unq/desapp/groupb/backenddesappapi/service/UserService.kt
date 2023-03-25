@@ -20,11 +20,11 @@ class UserService {
         if (user.firstName.isNullOrBlank()) {
             throw RuntimeException("The firstname cannot be empty")
         }
-        if (ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator.containsNumber(user.firstName)) {
+        if (Validator.containsNumber(user.firstName)) {
             throw RuntimeException("The firstname cannot contain numbers")
         }
-        if (ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator.containsSpecialCharacter(user.firstName)) {
-            throw RuntimeException("The firstname cannot contain special characters.")
+        if (Validator.containsSpecialCharacter(user.firstName)) {
+            throw RuntimeException("The firstname cannot contain special characters")
         }
         if (user.firstName!!.length < 3 || user.firstName!!.length > 30) {
             throw RuntimeException("The firstname must be between 3 and 30 characters")
@@ -35,11 +35,11 @@ class UserService {
         if (user.lastName.isNullOrBlank()) {
             throw RuntimeException("The lastname cannot be empty")
         }
-        if (ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator.containsNumber(user.lastName)) {
+        if (Validator.containsNumber(user.lastName)) {
             throw RuntimeException("The lastname cannot contain numbers")
         }
-        if (ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator.containsSpecialCharacter(user.lastName)) {
-            throw RuntimeException("The lastname cannot contain special characters.")
+        if (Validator.containsSpecialCharacter(user.lastName)) {
+            throw RuntimeException("The lastname cannot contain special characters")
         }
         if (user.lastName!!.length < 3 || user.lastName!!.length > 30) {
             throw RuntimeException("The lastname must be between 3 and 30 characters")
@@ -51,16 +51,16 @@ class UserService {
             throw RuntimeException("The email cannot be empty")
         }
 
-        if (!ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator.isValidEMail(user.emailAddress)) {
-            throw RuntimeException("It is not a valid email")
+        if (!Validator.isValidEMail(user.emailAddress)) {
+            throw RuntimeException("Is not a valid email")
         }
 
         // adresss
         if (user.address.isNullOrBlank()) {
             throw RuntimeException("The address cannot be empty")
         }
-        if (ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator.containsSpecialCharacter(user.address)) {
-            throw RuntimeException("The address cannot contain special characters.")
+        if (Validator.containsSpecialCharacter(user.address)) {
+            throw RuntimeException("The address cannot contain special characters")
         }
 
         if (user.address!!.length < 10 || user.address!!.length > 30) {
@@ -68,12 +68,16 @@ class UserService {
         }
 
         //password
+        if (user.password.isNullOrBlank()) {
+            throw RuntimeException("The password cannot be empty")
+        }
         if (user.password!!.length < 6) {
             throw RuntimeException("The password must be at least 6 characters")
         }
         if (!isValidPassword(user.password!!)) {
             throw RuntimeException("The password must have at least one lowercase letter, one uppercase letter, and a special character")
         }
+
         //password
 
         // cvu
@@ -81,8 +85,8 @@ class UserService {
             throw RuntimeException("The CVU cannot be empty")
         }
 
-        if (!ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator.isAllNumbers(user.cvump)) {
-            throw RuntimeException("The cvu can only contain numbers.")
+        if (!Validator.isAllNumbers(user.cvump)) {
+            throw RuntimeException("The cvu can only contain numbers")
         }
 
         if (user.cvump!!.length != 22) {
@@ -112,15 +116,15 @@ class UserService {
         if (password == null) {
             return false
         }
-        return areLowecase(password) && areCapitalLetters(password) && Validator.containsSpecialCharacter(password)
+        return (areLowecase(password) && areCapitalLetters(password)) && Validator.containsSpecialCharacter(password)
     }
 
     private fun isCapitalLetter(letter: Char): Boolean {
-        return letter === letter.toUpperCase();
+        return letter.isUpperCase()
     }
 
     private fun isMinuscule(letter: Char): Boolean {
-        return letter === letter.toLowerCase();
+        return letter.isLowerCase()
     }
 
     private fun areLowecase(password: String): Boolean {
