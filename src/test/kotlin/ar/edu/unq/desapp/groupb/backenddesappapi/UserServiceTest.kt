@@ -13,9 +13,12 @@ class UserServiceTest {
     lateinit var userService: UserService
 
     @Test
-    fun `should add a teacher`() {
+    fun `should add a user when you have valid credentials`() {
+        val userRequest = UserRequestDTO.BuilderUserDTO().whitFirstName("German").whitLastName("Greco Ventura").whitEmail("prueba@gmail.com")
+            .whitAddress("sas").whitPassword("s4asd").whitCVU(4564).whitCyptoWallet(4646).build()
+
         var user =
-            userService.save(UserRequestDTO("German", "Greco Ventura", "prueba@gmail.com", "sas", "sda4", 4564, 4646))
+            userService.save(userRequest)
         Assertions.assertTrue(user.getId() != null)
     }
 
