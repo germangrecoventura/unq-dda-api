@@ -4,17 +4,43 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "registered_user")
-class User{
+class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private var id: Long? = null
-    @Column(nullable = false, length = 30) private var firstName: String? = null
-    @Column(nullable = false,length = 30) private var lastName: String? = null
-    @Column(nullable = false, unique = true) private var emailAddress: String? = null
-    @Column(nullable = false, length = 30) private var address: String? = null
-    @Column(nullable = false) private var password: String? = null
-    @Column(nullable = false, length = 22) private var cvump: Int? = null
-    @Column(nullable = false, length = 8) private var cyptoWalletAddress: Int? = null
+
+    @Column(nullable = false, length = 30)
+    private var firstName: String? = null
+
+    @Column(nullable = false, length = 30)
+    private var lastName: String? = null
+
+    @Column(nullable = false, unique = true)
+    private var emailAddress: String? = null
+
+    @Column(nullable = false, length = 30)
+    private var address: String? = null
+
+    @Column(nullable = false)
+    private var password: String? = null
+
+    @Column(nullable = false, length = 22)
+    private var cvump: String? = null
+
+    @Column(nullable = false, length = 8)
+    private var cyptoWalletAddress: Int? = null
+
+    class Builder {
+        private val user = User()
+        fun whitFirstName(first_name: String) = apply { user.firstName = first_name }
+        fun whitLastName(last_name: String) = apply { user.lastName = last_name }
+        fun whitEmail(email: String) = apply { user.emailAddress = email }
+        fun whitAddress(addressUpdate: String) = apply { user.address = addressUpdate }
+        fun whitPassword(passwordUpdate: String) = apply { user.password = passwordUpdate }
+        fun whitCVU(cvuUpdate: String) = apply { user.cvump = cvuUpdate }
+        fun whitCyptoWallet(cryptoWallet: Int) = apply { user.cyptoWalletAddress = cryptoWallet }
+        fun build() = user
+    }
 
     fun getId(): Long? {
         return id
@@ -60,11 +86,11 @@ class User{
         password = passwordUpdate
     }
 
-    fun getCvu(): Int? {
+    fun getCvu(): String? {
         return cvump
     }
 
-    fun setCvu(cvuUpdate: Int?) {
+    fun setCvu(cvuUpdate: String?) {
         cvump = cvuUpdate
     }
 
@@ -77,7 +103,15 @@ class User{
         cyptoWalletAddress = cryptoWallet
     }
 
-    fun fromModel(first_name: String?, last_name: String?, email: String?, addressUpdated: String?, passwordUpdated: String?, cvumpUpdated: Int?, cyptoWalletUpdated: Int?) {
+    fun fromModel(
+        first_name: String?,
+        last_name: String?,
+        email: String?,
+        addressUpdated: String?,
+        passwordUpdated: String?,
+        cvumpUpdated: String?,
+        cyptoWalletUpdated: Int?
+    ) {
         setFirstName(first_name!!)
         setLastName(last_name!!)
         setEmailAddress(email!!)

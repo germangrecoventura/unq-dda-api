@@ -19,12 +19,9 @@ class UserController {
     lateinit var userService: UserService
 
     @PostMapping
-    fun createTeacher(@RequestBody userRequestDTO: UserRequestDTO): User {
+    fun createUser(@RequestBody userRequestDTO: UserRequestDTO): User {
         return userService.save(userRequestDTO)
     }
-
-
-
 
 
 }
