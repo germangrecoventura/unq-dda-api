@@ -35,7 +35,7 @@ class UserServiceTest {
     fun `should throw an exception when a user doesn't have firstname`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName(null).build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The firstname cannot be empty", thrown.message)
     }
@@ -44,7 +44,7 @@ class UserServiceTest {
     fun `should throw an exception when a user has an empty firstname field`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The firstname cannot be empty", thrown.message)
     }
@@ -53,7 +53,7 @@ class UserServiceTest {
     fun `should throw an exception when a user has the field firstname numbers`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("456").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The firstname cannot contain numbers", thrown.message)
     }
@@ -63,7 +63,7 @@ class UserServiceTest {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("Germ@n").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The firstname cannot contain special characters", thrown.message)
     }
@@ -72,7 +72,7 @@ class UserServiceTest {
     fun `should throw an exception when firstname has less than 3 characters`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("G").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The firstname must be between 3 and 30 characters", thrown.message)
     }
@@ -81,7 +81,7 @@ class UserServiceTest {
     fun `should throw an exception when firstname has more than 30 characters`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The firstname must be between 3 and 30 characters", thrown.message)
     }
@@ -91,7 +91,7 @@ class UserServiceTest {
     fun `should throw an exception when a user doesn't have lastname`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName(null).build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The lastname cannot be empty", thrown.message)
     }
@@ -100,7 +100,7 @@ class UserServiceTest {
     fun `should throw an exception when a user has an empty lastname field`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The lastname cannot be empty", thrown.message)
     }
@@ -109,7 +109,7 @@ class UserServiceTest {
     fun `should throw an exception when a user has the field lastname numbers`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Grec0 Ventura").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The lastname cannot contain numbers", thrown.message)
     }
@@ -118,7 +118,7 @@ class UserServiceTest {
     fun `should throw an exception when a user has the field lastname special characters`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Grec# Ventura").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The lastname cannot contain special characters", thrown.message)
     }
@@ -128,7 +128,7 @@ class UserServiceTest {
     fun `should throw an exception when lastname has less than 3 characters`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Gr").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The lastname must be between 3 and 30 characters", thrown.message)
     }
@@ -139,7 +139,7 @@ class UserServiceTest {
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Geeeeeeeeeeee eeeeeee eeeeeeeess")
                 .build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The lastname must be between 3 and 30 characters", thrown.message)
     }
@@ -149,7 +149,7 @@ class UserServiceTest {
         val userRequest =
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco").withEmail(null).build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The email cannot be empty", thrown.message)
     }
@@ -159,7 +159,7 @@ class UserServiceTest {
         val userRequest =
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco").withEmail("").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The email cannot be empty", thrown.message)
     }
@@ -170,7 +170,7 @@ class UserServiceTest {
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco").withEmail("pruebagmailcom")
                 .build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("Is not a valid email", thrown.message)
     }
@@ -182,7 +182,7 @@ class UserServiceTest {
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco")
                 .withEmail("prueba@gmail.com").withAddress(null).build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The address cannot be empty", thrown.message)
     }
@@ -193,7 +193,7 @@ class UserServiceTest {
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco")
                 .withEmail("prueba@gmail.com").withAddress("").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The address cannot be empty", thrown.message)
     }
@@ -204,7 +204,7 @@ class UserServiceTest {
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco")
                 .withEmail("prueba@gmail.com").withAddress("sas@").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The address cannot contain special characters", thrown.message)
     }
@@ -216,7 +216,7 @@ class UserServiceTest {
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco")
                 .withEmail("prueba@gmail.com").withAddress("sas").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The address must be between 3 and 30 characters", thrown.message)
     }
@@ -227,7 +227,7 @@ class UserServiceTest {
             UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco")
                 .withEmail("prueba@gmail.com").withAddress("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The address must be between 3 and 30 characters", thrown.message)
     }
@@ -239,7 +239,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword(null).build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The password cannot be empty", thrown.message)
     }
@@ -251,7 +251,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The password cannot be empty", thrown.message)
     }
@@ -263,7 +263,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("1").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The password must be at least 6 characters", thrown.message)
     }
@@ -278,7 +278,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11A1@1").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals(
             "The password must have at least one lowercase letter, one uppercase letter, and a special character",
@@ -293,7 +293,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11a1@1").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals(
             "The password must have at least one lowercase letter, one uppercase letter, and a special character",
@@ -311,7 +311,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11a1A1").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals(
             "The password must have at least one lowercase letter, one uppercase letter, and a special character",
@@ -328,7 +328,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11a@A1").withCVU(null).build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The CVU cannot be empty", thrown.message)
     }
@@ -341,7 +341,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The CVU cannot be empty", thrown.message)
     }
@@ -353,7 +353,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("111111111a111111111111").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The cvu can only contain numbers", thrown.message)
     }
@@ -365,7 +365,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("11111111111").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The cvu must have 22 digits", thrown.message)
     }
@@ -377,7 +377,7 @@ class UserServiceTest {
             .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("111111111111111111111111").build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The cvu must have 22 digits", thrown.message)
     }
@@ -401,7 +401,7 @@ class UserServiceTest {
             .build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The crypto wallet must have 8 digits", thrown.message)
     }
@@ -414,7 +414,7 @@ class UserServiceTest {
             .whitCryptoWallet(464646465).build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The crypto wallet must have 8 digits", thrown.message)
     }
