@@ -55,7 +55,7 @@ class UserService {
             throw RuntimeException("Is not a valid email")
         }
 
-        // adresss
+        // address
         if (user.address.isNullOrBlank()) {
             throw RuntimeException("The address cannot be empty")
         }
@@ -67,7 +67,7 @@ class UserService {
             throw RuntimeException("The address must be between 3 and 30 characters")
         }
 
-        //password
+        // password
         if (user.password.isNullOrBlank()) {
             throw RuntimeException("The password cannot be empty")
         }
@@ -77,8 +77,6 @@ class UserService {
         if (!isValidPassword(user.password!!)) {
             throw RuntimeException("The password must have at least one lowercase letter, one uppercase letter, and a special character")
         }
-
-        //password
 
         // cvu
         if (user.cvump.isNullOrBlank()) {
@@ -93,7 +91,7 @@ class UserService {
             throw RuntimeException("The cvu must have 22 digits")
         }
 
-        // CRYPTO
+        // crypto address
         if (user.cryptoWalletAddress!!.toString().length != 8) {
             throw RuntimeException("The crypto wallet must have 8 digits")
         }

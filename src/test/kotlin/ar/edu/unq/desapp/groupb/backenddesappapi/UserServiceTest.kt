@@ -16,10 +16,15 @@ class UserServiceTest {
 
     @Test
     fun `should add a user when you have valid credentials`() {
-        val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco Ventura")
+        val userRequest = UserRequestDTO.BuilderUserDTO()
+            .withFirstName("German")
+            .withLastName("Greco Ventura")
             .withEmail("prueba@gmail.com")
-            .withAddress("Andrade 1235").withPassword("sM#456").withCVU("1111111111111111111111")
-            .whitCyptoWallet(46464646).build()
+            .withAddress("Andrade 1235")
+            .withPassword("sM#456")
+            .withCVU("1111111111111111111111")
+            .whitCryptoWallet(46464646)
+            .build()
 
         var user = userService.save(userRequest)
 
@@ -382,7 +387,7 @@ class UserServiceTest {
     fun `should throw an exception when a user doesn't have crypto wallet`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco Ventura")
             .withEmail("prueba@gmail.com")
-            .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("1111111111111111111111").whitCyptoWallet(null)
+            .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("1111111111111111111111").whitCryptoWallet(null)
             .build()
 
         assertThrows<RuntimeException> { userService.save(userRequest) }
@@ -392,7 +397,7 @@ class UserServiceTest {
     fun `should throw an exception when crypto wallet has less than 8 characters`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco Ventura")
             .withEmail("prueba@gmail.com")
-            .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("1111111111111111111111").whitCyptoWallet(4646)
+            .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("1111111111111111111111").whitCryptoWallet(4646)
             .build()
 
         val thrown: RuntimeException =
@@ -406,7 +411,7 @@ class UserServiceTest {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco Ventura")
             .withEmail("prueba@gmail.com")
             .withAddress("Andrade 1235").withPassword("11a@A1").withCVU("1111111111111111111111")
-            .whitCyptoWallet(464646465).build()
+            .whitCryptoWallet(464646465).build()
 
         val thrown: RuntimeException =
             Assertions.assertThrows(RuntimeException::class.java, { userService.save(userRequest) })

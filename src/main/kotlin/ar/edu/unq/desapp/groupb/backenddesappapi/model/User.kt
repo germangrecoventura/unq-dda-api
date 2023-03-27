@@ -28,17 +28,17 @@ class User {
     private var cvump: String? = null
 
     @Column(nullable = false, length = 8)
-    private var cyptoWalletAddress: Int? = null
+    private var cryptoWalletAddress: Int? = null
 
     class Builder {
         private val user = User()
-        fun whitFirstName(first_name: String) = apply { user.firstName = first_name }
-        fun whitLastName(last_name: String) = apply { user.lastName = last_name }
+        fun whitFirstName(firstName: String) = apply { user.firstName = firstName }
+        fun whitLastName(lastName: String) = apply { user.lastName = lastName }
         fun whitEmail(email: String) = apply { user.emailAddress = email }
-        fun whitAddress(addressUpdate: String) = apply { user.address = addressUpdate }
-        fun whitPassword(passwordUpdate: String) = apply { user.password = passwordUpdate }
+        fun whitAddress(address: String) = apply { user.address = address }
+        fun whitPassword(password: String) = apply { user.password = password }
         fun whitCVU(cvuUpdate: String) = apply { user.cvump = cvuUpdate }
-        fun whitCyptoWallet(cryptoWallet: Int) = apply { user.cyptoWalletAddress = cryptoWallet }
+        fun whitCryptoWallet(cryptoWalletAddress: Int) = apply { user.cryptoWalletAddress = cryptoWalletAddress }
         fun build() = user
     }
 
@@ -50,75 +50,75 @@ class User {
         return firstName
     }
 
-    fun setFirstName(firstname: String) {
-        firstName = firstname
+    fun setFirstName(firstName: String) {
+        this.firstName = firstName
     }
 
     fun getLastName(): String? {
         return lastName
     }
 
-    fun setLastName(lastname: String) {
-        lastName = lastname
+    fun setLastName(lastName: String) {
+        this.lastName = lastName
     }
 
     fun getEmailAddress(): String? {
         return emailAddress
     }
 
-    fun setEmailAddress(email: String) {
-        emailAddress = email
+    fun setEmailAddress(emailAddress: String) {
+        this.emailAddress = emailAddress
     }
 
     fun getAddress(): String? {
         return address
     }
 
-    fun setAddress(addressUpdate: String) {
-        address = addressUpdate
+    fun setAddress(address: String) {
+        this.address = address
     }
 
     fun getPassword(): String? {
         return password
     }
 
-    fun setPassword(passwordUpdate: String) {
-        password = passwordUpdate
+    fun setPassword(password: String) {
+        this.password = password
     }
 
-    fun getCvu(): String? {
+    fun getCvump(): String? {
         return cvump
     }
 
-    fun setCvu(cvuUpdate: String?) {
-        cvump = cvuUpdate
+    fun setCvump(cvu: String?) {
+        this.cvump = cvu
     }
 
-    fun getCyptoWalletAddress(): Int? {
-        return cyptoWalletAddress
+    fun getCryptoWalletAddress(): Int? {
+        return cryptoWalletAddress
 
     }
 
-    fun setCyptoWalletAddress(cryptoWallet: Int?) {
-        cyptoWalletAddress = cryptoWallet
+    fun setCryptoWalletAddress(cryptoWalletAddress: Int?) {
+        this.cryptoWalletAddress = cryptoWalletAddress
     }
 
     fun fromModel(
-        first_name: String?,
-        last_name: String?,
+        firstName: String?,
+        lastName: String?,
         email: String?,
-        addressUpdated: String?,
-        passwordUpdated: String?,
-        cvumpUpdated: String?,
-        cyptoWalletUpdated: Int?
+        address: String?,
+        password: String?,
+        cvump: String?,
+        cryptoWalletAddress: Int?
     ) {
-        setFirstName(first_name!!)
-        setLastName(last_name!!)
+        setFirstName(firstName!!)
+        setLastName(lastName!!)
         setEmailAddress(email!!)
-        setAddress(addressUpdated!!)
-        setPassword(passwordUpdated!!)
-        setCvu(cvumpUpdated)
-        setCyptoWalletAddress(cyptoWalletUpdated)
+        setAddress(address!!)
+        setPassword(password!!)
+        setCvump(cvump!!)
+        setCryptoWalletAddress(cryptoWalletAddress!!)
     }
 
 }
