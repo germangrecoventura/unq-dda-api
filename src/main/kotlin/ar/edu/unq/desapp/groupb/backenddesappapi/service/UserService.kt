@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service
 
 @Service
 @Transactional
-class UserService {
-    @Autowired
-    lateinit var userRepository: UserRepository
+class UserService(val userRepository: UserRepository) {
 
     fun save(user: UserRequestDTO): User {
 
