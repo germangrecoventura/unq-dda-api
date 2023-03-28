@@ -1,4 +1,4 @@
-name: SonarCloud
+name: Test and Analyze
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ on:
     types: [ opened, synchronize, reopened ]
 jobs:
   build:
-    name: Build and Analyze
+    name: Test and Analyze
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -32,8 +32,25 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
-      - name: Build and Analyze
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b
+      - name: Test
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f
+        with:
+          arguments: test
+      - name: Report Coverage
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f
+        with:
+          arguments: jacocoTestReport
+      - name: Analyze with SonarCloud
+        uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew test jacocoTestReport sonar --info
+        with:
+          arguments: sonar --info
+#      - name: Analyze with SonarCloud
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        run: ./gradlew test jacocoTestReport sonar --info
