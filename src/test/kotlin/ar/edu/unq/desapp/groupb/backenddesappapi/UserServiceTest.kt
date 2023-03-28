@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.groupb.backenddesappapi
 
 import ar.edu.unq.desapp.groupb.backenddesappapi.service.UserService
 import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.UserRequestDTO
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class UserServiceTest {
     @Autowired
     lateinit var userService: UserService
+
 
     @Test
     fun `should add a user when you have valid credentials`() {
@@ -172,7 +174,34 @@ class UserServiceTest {
         val thrown: RuntimeException =
             Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("Is not a valid email", thrown.message)
+        assertEquals("The email is not valid", thrown.message)
+    }
+
+    @Test
+    fun `should throw an exception if you register with an already registered email`() {
+        val userRequest1 =
+            UserRequestDTO.BuilderUserDTO().withFirstName("German")
+                .withLastName("Greco Ventura")
+                .withEmail("prueba@gmail.com")
+                .withAddress("Andrade 1235")
+                .withPassword("sM#456")
+                .withCVU("1111111111111111111111")
+                .whitCryptoWallet(46464646)
+                .build()
+        val userRequest2 =
+            UserRequestDTO.BuilderUserDTO().withFirstName("Pablo")
+                .withLastName("Spizzamiglio")
+                .withEmail("prueba@gmail.com")
+                .withAddress("Andrade 1235")
+                .withPassword("sM#456")
+                .withCVU("1111111111111111111111")
+                .whitCryptoWallet(46464646)
+                .build()
+        userService.save(userRequest1)
+        val thrown: RuntimeException =
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest2) }
+
+        assertEquals("The email is already registered", thrown.message)
     }
 
 
@@ -218,7 +247,7 @@ class UserServiceTest {
         val thrown: RuntimeException =
             Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("The address must be between 3 and 30 characters", thrown.message)
+        assertEquals("The address must be between 10 and 30 characters", thrown.message)
     }
 
     @Test
@@ -229,7 +258,7 @@ class UserServiceTest {
         val thrown: RuntimeException =
             Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("The address must be between 3 and 30 characters", thrown.message)
+        assertEquals("The address must be between 10 and 30 characters", thrown.message)
     }
 
     @Test
@@ -269,8 +298,6 @@ class UserServiceTest {
     }
 
 
-    // CORREGIR MAYUSCULAS Y MINUSCULAS
-
     @Test
     fun `should throw an exception when the password does not have a lower case`() {
         val userRequest = UserRequestDTO.BuilderUserDTO().withFirstName("German").withLastName("Greco Ventura")
@@ -300,9 +327,6 @@ class UserServiceTest {
             thrown.message
         )
     }
-
-
-    // CORREGIR MAYUSCULAS Y MINUSCULAS
 
     @Test
     fun `should throw an exception when the password does not have a special character`() {
@@ -355,7 +379,7 @@ class UserServiceTest {
         val thrown: RuntimeException =
             Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("The cvu can only contain numbers", thrown.message)
+        assertEquals("The CVU can only contain numbers", thrown.message)
     }
 
     @Test
@@ -367,7 +391,7 @@ class UserServiceTest {
         val thrown: RuntimeException =
             Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("The cvu must have 22 digits", thrown.message)
+        assertEquals("The CVU must have 22 digits", thrown.message)
     }
 
     @Test
@@ -379,7 +403,7 @@ class UserServiceTest {
         val thrown: RuntimeException =
             Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("The cvu must have 22 digits", thrown.message)
+        assertEquals("The CVU must have 22 digits", thrown.message)
     }
 
 
@@ -417,6 +441,11 @@ class UserServiceTest {
             Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("The crypto wallet must have 8 digits", thrown.message)
+    }
+
+    @AfterEach
+    fun clear(){
+        userService.clear()
     }
 
 }
