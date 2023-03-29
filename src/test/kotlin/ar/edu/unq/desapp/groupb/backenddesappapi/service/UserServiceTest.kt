@@ -1,6 +1,5 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi
+package ar.edu.unq.desapp.groupb.backenddesappapi.service
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.service.UserService
 import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.builder.BuilderUserDTO.Companion.aUserDTO
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -289,7 +288,6 @@ class UserServiceTest {
         )
     }
 
-    //PASSWORD
 
     @Test
     fun `should throw an exception when a user doesn't have cvu`() {
@@ -348,7 +346,10 @@ class UserServiceTest {
         val userRequest = aUserDTO().withCryptoWallet(null)
             .build()
 
-        assertThrows<RuntimeException> { userService.save(userRequest) }
+        val thrown: RuntimeException =
+            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
+
+        assertEquals("The crypto wallet must have 8 digits", thrown.message)
     }
 
     @Test

@@ -7,7 +7,7 @@ class BuilderUserDTO {
     private var lastName: String? = "Fernandez"
     private var emailAddress: String? = "german@gmail.com"
     private var address: String? = "Andrade 456482"
-    private var password: String? = "aA#1sa"
+    private var password: String? = System.getenv("PASSWORD_USER")
     private var cvump: String? = "1111111111111111111111"
     private var cryptoWalletAddress: Int? = 11111111
 
