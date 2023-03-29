@@ -1,33 +1,44 @@
 package ar.edu.unq.desapp.groupb.backenddesappapi.model
 
 import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "registered_user")
+@JsonPropertyOrder("id", "firstname", "lastname", "emailAddress", "address", "password", "cvump", "cyptoWalletAddress")
 class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty("id")
     private var id: Long? = null
 
+    @JsonProperty("firstname")
     @Column(nullable = false, length = 30)
     private var firstName: String? = null
 
+    @JsonProperty("lastname")
     @Column(nullable = false, length = 30)
     private var lastName: String? = null
 
+    @JsonProperty("emailAddress")
     @Column(nullable = false, unique = true)
     private var emailAddress: String? = null
 
+    @JsonProperty("address")
     @Column(nullable = false, length = 30)
     private var address: String? = null
 
+    @JsonProperty("password")
     @Column(nullable = false)
     private var password: String? = null
 
+    @JsonProperty("cvump")
     @Column(nullable = false, length = 22)
     private var cvump: String? = null
 
+    @JsonProperty("cyptoWalletAddress")
     @Column(nullable = false, length = 8)
     private var cryptoWalletAddress: Int? = null
 
