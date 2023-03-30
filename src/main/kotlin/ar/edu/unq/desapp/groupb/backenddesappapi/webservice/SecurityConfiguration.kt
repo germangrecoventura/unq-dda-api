@@ -12,7 +12,7 @@ class SecurityConfiguration {
     @Throws(Exception::class)
     fun configure(http: HttpSecurity): SecurityFilterChain? {
         http.cors().and().csrf().disable()
-            .authorizeRequests().requestMatchers("/**").permitAll()
+            .authorizeHttpRequests().requestMatchers("/**").permitAll()
         http.headers().frameOptions().disable()
         return http.build()
     }

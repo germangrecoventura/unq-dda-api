@@ -4,35 +4,32 @@ import ar.edu.unq.desapp.groupb.backenddesappapi.model.User
 import ar.edu.unq.desapp.groupb.backenddesappapi.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.UserRequestDTO
 import jakarta.transaction.Transactional
+import jakarta.validation.Valid
+import jakarta.validation.Validator
 import org.springframework.stereotype.Service
+import org.springframework.validation.annotation.Validated
 
 @Service
+@Validated
 @Transactional
-class UserService(val userRepository: UserRepository) {
+class UserService(val userRepository: UserRepository, val validator: Validator) {
 
-    fun save(user: UserRequestDTO): User {
-        if (user.emailAddress != null) {
-            var emailFound = userRepository.findByEmailAddress(user.emailAddress!!)
-            if (!emailFound.isEmpty) {
-                throw RuntimeException("The email is already registered")
-            }
+    fun save(@Valid user: UserRequestDTO): User {
+        val emailFound = userRepository.findByEmailAddress(user.emailAddress!!)
+        if (!emailFound.isEmpty) {
+            throw UserEmailAddressAlreadyRegisteredException()
         }
-        var newUser = User()
-        newUser.fromModel(
-            user.firstName,
-            user.lastName,
-            user.emailAddress,
-            user.address,
-            user.password,
-            user.cvump,
-            user.cryptoWalletAddress
-        )
+        val newUser = User.fromDTO(user)
         return userRepository.save(newUser)
     }
 
-    fun clear(){
+    fun clear() {
         userRepository.deleteAll()
     }
+}
+
+class UserEmailAddressAlreadyRegisteredException : RuntimeException("The email address is already registered") {
+    val source = "user.email"
 }
 
 

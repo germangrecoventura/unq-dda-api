@@ -1,315 +1,276 @@
 package ar.edu.unq.desapp.groupb.backenddesappapi.model
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.model.builder.BuilderUser.Companion.aUser
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertEquals
+import ar.edu.unq.desapp.groupb.backenddesappapi.model.builders.UserBuilder
+import jakarta.validation.Validator
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 class UserTest {
+    @Autowired
+    lateinit var validator: Validator
 
-    @Test
-    fun `should create the user when it has valid credentials`() {
-        assertDoesNotThrow { aUser() }
+    fun anyUser(): UserBuilder {
+        return UserBuilder()
+            .withFirstName("Homero")
+            .withLastName("Simpson")
+            .withEmail("homero.simpson@sprinfield.com")
+            .withAddress("Evergreen 123")
+            .withPassword("Super!")
+            .withCVU("0011223344556677889900")
+            .withCryptoWallet("12345678")
     }
 
     @Test
-    fun `should throw an exception when a user doesn't have firstname`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withFirstName(null).build() }
-
-        assertEquals("The firstname cannot be empty", thrown.message)
+    fun `should create a user when it has valid data`() {
+        assertDoesNotThrow { anyUser().build() }
     }
 
     @Test
-    fun `should throw an exception when a user has an empty firstname field`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withFirstName("").build() }
-
-        assertEquals("The firstname cannot be empty", thrown.message)
+    fun `should throw an exception when a user's first name is null`() {
+        val user = anyUser().withFirstName(null).build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has the field firstname numbers`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withFirstName("456").build() }
-
-        assertEquals("The firstname cannot contain numbers", thrown.message)
+    fun `should throw an exception when a user's first name is blank`() {
+        val user = anyUser().withFirstName("").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has the field firstname special characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withFirstName("Germ@n").build() }
-
-        assertEquals("The firstname cannot contain special characters", thrown.message)
+    fun `should throw an exception when a user's first name has numbers`() {
+        val user = anyUser().withFirstName("456").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when firstname has less than 3 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withFirstName("G").build() }
-
-        assertEquals("The firstname must be between 3 and 30 characters", thrown.message)
+    fun `should throw an exception when a user's first name has special characters`() {
+        val user = anyUser().withFirstName("Germ@n").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when firstname has more than 30 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) {
-                aUser().withFirstName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
-            }
-
-        assertEquals("The firstname must be between 3 and 30 characters", thrown.message)
-    }
-
-
-    @Test
-    fun `should throw an exception when a user doesn't have lastname`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withLastName(null).build() }
-
-        assertEquals("The lastname cannot be empty", thrown.message)
+    fun `should throw an exception when a user's first name has less than 3 characters`() {
+        val user = anyUser().withFirstName("G").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has an empty lastname field`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withLastName("").build() }
-
-        assertEquals("The lastname cannot be empty", thrown.message)
-    }
-
-    @Test
-    fun `should throw an exception when a user has the field lastname numbers`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withLastName("Grec0 Ventura").build() }
-
-        assertEquals("The lastname cannot contain numbers", thrown.message)
-    }
-
-    @Test
-    fun `should throw an exception when a user has the field lastname special characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withLastName("Grec# Ventura").build() }
-
-        assertEquals("The lastname cannot contain special characters", thrown.message)
+    fun `should throw an exception when a user's first name has more than 30 characters`() {
+        val user = anyUser().withFirstName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
 
     @Test
-    fun `should throw an exception when lastname has less than 3 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withLastName("Gr").build() }
-
-        assertEquals("The lastname must be between 3 and 30 characters", thrown.message)
+    fun `should throw an exception when a user's las name is null`() {
+        val user = anyUser().withLastName(null).build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when lastname has more than 30 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) {
-                aUser().withLastName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
-            }
-
-        assertEquals("The lastname must be between 3 and 30 characters", thrown.message)
+    fun `should throw an exception when a user's las name is blank`() {
+        val user = anyUser().withLastName("").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user doesn't have email`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withEmail(null).build() }
-
-        assertEquals("The email cannot be empty", thrown.message)
+    fun `should throw an exception when a user's last name contains numbers`() {
+        val user = anyUser().withLastName("Grec0 Ventura").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has an empty email field`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withEmail("").build() }
-
-        assertEquals("The email cannot be empty", thrown.message)
-    }
-
-    @Test
-    fun `should throw an exception when it is not a valid mail`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withEmail("pruebagmailcom").build() }
-
-        assertEquals("The email is not valid", thrown.message)
+    fun `should throw an exception when a user's last name contains special characters`() {
+        val user = anyUser().withLastName("Grec# Ventura").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
 
     @Test
-    fun `should throw an exception when a user doesn't have empty address`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withAddress(null).build() }
-
-        assertEquals("The address cannot be empty", thrown.message)
+    fun `should throw an exception when a user's last name has less than 3 characters`() {
+        val user = anyUser().withLastName("Gr").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has an empty address field`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withAddress("").build() }
+    fun `should throw an exception when a user's last name has more than 30 characters`() {
+        val user = anyUser().withLastName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
+    }
 
-        assertEquals("The address cannot be empty", thrown.message)
+    @Test
+    fun `should throw an exception when a user's email address is null`() {
+        val user = anyUser().withEmail(null).build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when a user's email address is blank`() {
+        val user = anyUser().withEmail("").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when a user's address is null`() {
+        val user = anyUser().withAddress(null).build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
+    }
+
+
+    @Test
+    fun `should throw an exception when a user's email address is not valid`() {
+        val user = anyUser().withEmail("testgmailcom").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when a user's address is blank`() {
+        val user = anyUser().withAddress("").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when a user has the field address special characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withAddress("sas@").build() }
-
-        assertEquals("The address cannot contain special characters", thrown.message)
+        val user = anyUser().withAddress("sas@").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
 
     @Test
-    fun `should throw an exception when address has less than 10 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withAddress("sas").build() }
-
-        assertEquals("The address must be between 10 and 30 characters", thrown.message)
+    fun `should throw an exception when a user's address has less than 10 characters`() {
+        val user = anyUser().withAddress("sas").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when address has more than 30 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) {
-                aUser().withAddress("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
-            }
-
-        assertEquals("The address must be between 10 and 30 characters", thrown.message)
+    fun `should throw an exception when a user's address has more than 30 characters`() {
+        val user = anyUser().withAddress("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user doesn't have password`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withPassword(null).build() }
-
-        assertEquals("The password cannot be empty", thrown.message)
+    fun `should throw an exception when a user's password is null`() {
+        val user = anyUser().withPassword(null).build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has an empty password field`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withPassword("").build() }
-
-        assertEquals("The password cannot be empty", thrown.message)
+    fun `should throw an exception when a user's password is blank`() {
+        val user = anyUser().withPassword("").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when password has less than 6 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withPassword("1").build() }
-
-        assertEquals("The password must be at least 6 characters", thrown.message)
+    fun `should throw an exception when a user's password has less than 6 characters`() {
+        val user = anyUser().withPassword("1").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
 
     @Test
-    fun `should throw an exception when the password does not have a lower case`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withPassword("11A1@1").build() }
-
-        assertEquals(
-            "The password must have at least one lowercase letter, one uppercase letter, and a special character",
-            thrown.message
-        )
+    fun `should throw an exception when a user's password does not have a lower case letter`() {
+        val user = anyUser().withPassword("11A1@1").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the password does not have a capital letter`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withPassword("11a1@1").build() }
-
-        assertEquals(
-            "The password must have at least one lowercase letter, one uppercase letter, and a special character",
-            thrown.message
-        )
+    fun `should throw an exception when a user's password does not have an upper case letter`() {
+        val user = anyUser().withPassword("11a1@1").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the password does not have a special character`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withPassword("11a1A1").build() }
-
-        assertEquals(
-            "The password must have at least one lowercase letter, one uppercase letter, and a special character",
-            thrown.message
-        )
+    fun `should throw an exception when a user's password does not have a special character`() {
+        val user = anyUser().withPassword("11a1A1").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user doesn't have cvu`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withCvu(null).build() }
-
-        assertEquals("The CVU cannot be empty", thrown.message)
+    fun `should throw an exception when a user's CVU is null`() {
+        val user = anyUser().withCVU(null).build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
 
     @Test
-    fun `should throw an exception when a user has an empty cvu field`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withCvu("").build() }
-
-        assertEquals("The CVU cannot be empty", thrown.message)
+    fun `should throw an exception when a user's CVU is blank`() {
+        val user = anyUser().withCVU("").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has the cvu does not only have numbers`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) {
-                aUser().withCvu("111111111a111111111111").build()
-            }
-
-        assertEquals("The CVU can only contain numbers", thrown.message)
+    fun `should throw an exception when a user's CVU contains characters`() {
+        val user = anyUser().withCVU("111111111a111111111111").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when cvu has less than 22 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withCvu("11111111111").build() }
-
-        assertEquals("The CVU must have 22 digits", thrown.message)
+    fun `should throw an exception when a user's CVU has less than 22 characters`() {
+        val user = anyUser().withCVU("11111111111").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when address has more than 22 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) {
-                aUser().withCvu("111111111111111111111111").build()
-            }
-
-        assertEquals("The CVU must have 22 digits", thrown.message)
+    fun `should throw an exception when a user's CVU has more than 22 characters`() {
+        val user = anyUser().withCVU("111111111111111111111111").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
 
     @Test
-    fun `should throw an exception when a user doesn't have crypto wallet`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withCryptoWallet(null).build() }
-
-        assertEquals("The crypto wallet must have 8 digits", thrown.message)
+    fun `should throw an exception when a user's crypto wallet address is null`() {
+        val user = anyUser().withCryptoWallet(null).build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when crypto wallet has less than 8 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withCryptoWallet(4646).build() }
-
-        assertEquals("The crypto wallet must have 8 digits", thrown.message)
+    fun `should throw an exception when a user's crypto wallet has less than 8 characters`() {
+        val user = anyUser().withCryptoWallet("4646").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when address has more than 8 characters`() {
-        val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { aUser().withCryptoWallet(464646465).build() }
-
-        assertEquals("The crypto wallet must have 8 digits", thrown.message)
+    fun `should throw an exception when a user's crypt wallet has more than 8 characters`() {
+        val user = anyUser().withCryptoWallet("464646465").build()
+        val violations = validator.validate(user)
+        assertTrue(violations.isNotEmpty())
     }
 }

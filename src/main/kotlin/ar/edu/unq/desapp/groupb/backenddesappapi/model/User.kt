@@ -1,234 +1,91 @@
 package ar.edu.unq.desapp.groupb.backenddesappapi.model
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.Validator
+import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.UserRequestDTO
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
+import jakarta.validation.constraints.*
 
 @Entity
 @Table(name = "registered_user")
-@JsonPropertyOrder("id", "firstname", "lastname", "emailAddress", "address", "password", "cvump", "cyptoWalletAddress")
+@JsonPropertyOrder("id", "emailAddress", "firstname", "lastname")
 class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonProperty("id")
-    private var id: Long? = null
+    @Schema(example = "1")
+    @JsonProperty
+    var id: Long? = null
 
-    @JsonProperty("firstname")
     @Column(nullable = false, length = 30)
-    private var firstName: String? = null
+    @NotBlank(message = "The first name cannot be blank")
+    @Size(min = 3, max = 30, message = "The first name must be between 3 and 30 characters long")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "The first name cannot contain special characters")
+    @Schema(example = "Homero")
+    @JsonProperty
+    var firstName: String? = null
 
-    @JsonProperty("lastname")
     @Column(nullable = false, length = 30)
-    private var lastName: String? = null
+    @NotBlank(message = "The last name cannot be blank")
+    @Size(min = 3, max = 30, message = "The last name must be between 3 and 30 characters long")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "The last name cannot contain special characters or numbers")
+    @Schema(example = "Simpson")
+    @JsonProperty
+    var lastName: String? = null
 
-    @JsonProperty("emailAddress")
     @Column(nullable = false, unique = true)
-    private var emailAddress: String? = null
+    @Email(message = "The email address is not valid")
+    @NotBlank(message = "The email address cannot be blank")
+    @Schema(example = "homero.simpson@springfield.com")
+    @JsonProperty
+    var emailAddress: String? = null
 
-    @JsonProperty("address")
     @Column(nullable = false, length = 30)
-    private var address: String? = null
+    @NotBlank(message = "The address cannot be blank")
+    @Size(min = 10, max = 30, message = "The address must be between 10 and 30 characters long")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "The address cannot contain special characters")
+    @Schema(example = "Evergreen 123")
+    @JsonProperty
+    var address: String? = null
 
-    @JsonProperty("password")
     @Column(nullable = false)
-    private var password: String? = null
+    @NotBlank(message = "The password cannot be blank")
+    @Size(min = 6, message = "The password must be at least 6 characters long")
+    @Pattern(
+        regexp = "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[-+_!@#\$%^&*.,? ])[a-zA-Z0-9-+_!@#\$%^&*.,? ]{6,}$",
+        message = "The password must have at least one lowercase letter, one uppercase letter and a special character"
+    )
+    @JsonIgnore
+    var password: String? = null
 
-    @JsonProperty("cvump")
     @Column(nullable = false, length = 22)
-    private var cvump: String? = null
+    @NotBlank(message = "The CVU cannot be blank")
+    @Size(min = 22, max = 22, message = "The CVU must be 22 digits long")
+    @Pattern(regexp = "[0-9]+", message = " The CVU can only contain numbers")
+    @Schema(example = "0011223344556677889900")
+    @JsonProperty
+    var cvu: String? = null
 
-    @JsonProperty("cyptoWalletAddress")
     @Column(nullable = false, length = 8)
-    private var cryptoWalletAddress: Int? = null
+    @NotNull(message = "The crypto wallet address cannot be blank")
+    @Size(min = 8, max = 8, message = "The crypto wallet address must be 8 digits long")
+    @Pattern(regexp = "[0-9]+", message = " The crypto wallet address can only contain numbers")
+    @Schema(example = "12345678")
+    @JsonProperty
+    var cryptoWalletAddress: String? = null
 
-    fun getId(): Long? {
-        return id
-    }
-
-    fun getFirstName(): String? {
-        return firstName
-    }
-
-    fun setFirstName(firstName: String?) {
-        validatePerson(firstName, "firstname")
-        this.firstName = firstName
-    }
-
-    fun getLastName(): String? {
-        return lastName
-    }
-
-    fun setLastName(lastName: String?) {
-        validatePerson(lastName, "lastname")
-        this.lastName = lastName
-    }
-
-    fun getEmailAddress(): String? {
-        return emailAddress
-    }
-
-    fun setEmailAddress(emailAddress: String?) {
-        validateEmail(emailAddress)
-        this.emailAddress = emailAddress
-    }
-
-    fun getAddress(): String? {
-        return address
-    }
-
-    fun setAddress(address: String?) {
-        validateAddress(address)
-        this.address = address
-    }
-
-    fun getPassword(): String? {
-        return password
-    }
-
-    fun setPassword(password: String?) {
-        validatePassword(password)
-        this.password = password
-    }
-
-    fun getCvump(): String? {
-        return cvump
-    }
-
-    fun setCvump(cvu: String?) {
-        validateCVU(cvu)
-        this.cvump = cvu
-    }
-
-    fun getCryptoWalletAddress(): Int? {
-        return cryptoWalletAddress
-
-    }
-
-    fun setCryptoWalletAddress(cryptoWalletAddress: Int?) {
-        validateCryptoWallet(cryptoWalletAddress)
-        this.cryptoWalletAddress = cryptoWalletAddress
-    }
-
-    fun fromModel(
-        firstName: String?,
-        lastName: String?,
-        email: String?,
-        address: String?,
-        password: String?,
-        cvump: String?,
-        cryptoWalletAddress: Int?
-    ) {
-        setFirstName(firstName)
-        setLastName(lastName)
-        setEmailAddress(email)
-        setAddress(address)
-        setPassword(password)
-        setCvump(cvump)
-        setCryptoWalletAddress(cryptoWalletAddress)
-    }
-
-    private fun validatePerson(element: String?, field: String) {
-        if (element.isNullOrBlank()) {
-            throw RuntimeException("The $field cannot be empty")
+    companion object {
+        fun fromDTO(userRequest: UserRequestDTO): User {
+            val user = User()
+            user.firstName = userRequest.firstName
+            user.lastName = userRequest.lastName
+            user.emailAddress = userRequest.emailAddress
+            user.address = userRequest.address
+            user.password = userRequest.password
+            user.cvu = userRequest.cvu
+            user.cryptoWalletAddress = userRequest.cryptoWalletAddress
+            return user
         }
-        if (Validator.containsNumber(element)) {
-            throw RuntimeException("The $field cannot contain numbers")
-        }
-        if (Validator.containsSpecialCharacter(element)) {
-            throw RuntimeException("The $field cannot contain special characters")
-        }
-        if (element.length < 3 || element.length > 30) {
-            throw RuntimeException("The $field must be between 3 and 30 characters")
-        }
-    }
-
-    private fun validateEmail(email_address: String?) {
-        if (email_address.isNullOrBlank()) {
-            throw RuntimeException("The email cannot be empty")
-        }
-        if (!Validator.isValidEMail(email_address)) {
-            throw RuntimeException("The email is not valid")
-        }
-    }
-
-    private fun validateAddress(address: String?) {
-        if (address.isNullOrBlank()) {
-            throw RuntimeException("The address cannot be empty")
-        }
-        if (Validator.containsSpecialCharacter(address)) {
-            throw RuntimeException("The address cannot contain special characters")
-        }
-        if (address.length < 10 || address.length > 30) {
-            throw RuntimeException("The address must be between 10 and 30 characters")
-        }
-    }
-
-    private fun validatePassword(password: String?) {
-        if (password.isNullOrBlank()) {
-            throw RuntimeException("The password cannot be empty")
-        }
-        if (password.length < 6) {
-            throw RuntimeException("The password must be at least 6 characters")
-        }
-        if (!isValidPassword(password)) {
-            throw RuntimeException("The password must have at least one lowercase letter, one uppercase letter, and a special character")
-        }
-    }
-
-    private fun validateCVU(cvu: String?) {
-        if (cvu.isNullOrBlank()) {
-            throw RuntimeException("The CVU cannot be empty")
-        }
-
-        if (!Validator.isAllNumbers(cvu)) {
-            throw RuntimeException("The CVU can only contain numbers")
-        }
-
-        if (cvu.length != 22) {
-            throw RuntimeException("The CVU must have 22 digits")
-        }
-    }
-
-    private fun validateCryptoWallet(cryptoWalletAddress: Int?) {
-        if (cryptoWalletAddress.toString().length != 8) {
-            throw RuntimeException("The crypto wallet must have 8 digits")
-        }
-    }
-
-    private fun isValidPassword(password: String): Boolean {
-        if (password == null) {
-            return false
-        }
-        return (areLowecase(password) && areCapitalLetters(password)) && Validator.containsSpecialCharacter(password)
-    }
-
-    private fun isCapitalLetter(letter: Char): Boolean {
-        return letter.isUpperCase()
-    }
-
-    private fun isMinuscule(letter: Char): Boolean {
-        return letter.isLowerCase()
-    }
-
-    private fun areLowecase(password: String): Boolean {
-        return password.find { letter -> isMinuscule(letter) } != null
-    }
-
-    private fun areCapitalLetters(password: String): Boolean {
-        return password.find { letter -> isCapitalLetter(letter) } != null
-    }
-
-
-    class Builder {
-        private val user = User()
-        fun whitFirstName(firstName: String) = apply { user.setFirstName(firstName) }
-        fun whitLastName(lastName: String) = apply { user.setLastName(lastName) }
-        fun whitEmail(email: String) = apply { user.setEmailAddress(email) }
-        fun whitAddress(address: String) = apply { user.setAddress(address) }
-        fun whitPassword(password: String) = apply { user.setPassword(password) }
-        fun whitCVU(cvuUpdate: String) = apply { user.setCvump(cvuUpdate) }
-        fun whitCryptoWallet(cryptoWalletAddress: Int) = apply { user.setCryptoWalletAddress(cryptoWalletAddress) }
-        fun build() = user
     }
 }
