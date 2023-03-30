@@ -1,8 +1,8 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.service
+package ar.edu.unq.desapp.groupb.cryptop2p.service
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.model.User
-import ar.edu.unq.desapp.groupb.backenddesappapi.persistence.UserRepository
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.UserRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.model.User
+import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import jakarta.validation.Validator
@@ -31,5 +31,3 @@ class UserService(val userRepository: UserRepository, val validator: Validator) 
 class UserEmailAddressAlreadyRegisteredException : RuntimeException("The email address is already registered") {
     val source = "user.email"
 }
-
-

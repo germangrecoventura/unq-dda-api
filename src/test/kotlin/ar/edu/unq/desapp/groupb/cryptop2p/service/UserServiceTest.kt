@@ -1,8 +1,7 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.service
+package ar.edu.unq.desapp.groupb.cryptop2p.service
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.builders.UserDTOBuilder
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserDTOBuilder
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -151,7 +150,7 @@ class UserServiceTest {
     fun `should throw an exception when a user has an empty email field`() {
         val userRequest = anyUser().withEmail("").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
+            assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("save.user.emailAddress: The email address cannot be blank", thrown.message)
     }
@@ -160,7 +159,7 @@ class UserServiceTest {
     fun `should throw an exception when a user's email address is not valid`() {
         val userRequest = anyUser().withEmail("pruebagmailcom").build()
         val thrown: RuntimeException =
-            Assertions.assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
+            assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals("save.user.emailAddress: The email address is not valid", thrown.message)
     }
@@ -366,5 +365,4 @@ class UserServiceTest {
     fun clear() {
         userService.clear()
     }
-
 }

@@ -1,9 +1,9 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.webservice
+package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.model.User
-import ar.edu.unq.desapp.groupb.backenddesappapi.service.UserService
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.UserRequestDTO
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.ValidationErrorResponseDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.model.User
+import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema

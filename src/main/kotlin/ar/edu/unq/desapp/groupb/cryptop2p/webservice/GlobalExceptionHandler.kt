@@ -1,8 +1,8 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.webservice
+package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.service.UserEmailAddressAlreadyRegisteredException
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.ValidationErrorDTO
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.ValidationErrorResponseDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.service.UserEmailAddressAlreadyRegisteredException
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

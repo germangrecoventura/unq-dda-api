@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.webservice.builders
+package ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.UserRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
 
 class UserDTOBuilder {
     private var firstName: String? = null

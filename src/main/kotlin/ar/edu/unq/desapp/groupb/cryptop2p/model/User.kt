@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.model
+package ar.edu.unq.desapp.groupb.cryptop2p.model
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos.UserRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder

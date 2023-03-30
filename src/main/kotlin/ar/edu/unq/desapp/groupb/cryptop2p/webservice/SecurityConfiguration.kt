@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.webservice
+package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -16,5 +16,4 @@ class SecurityConfiguration {
         http.headers().frameOptions().disable()
         return http.build()
     }
-
 }

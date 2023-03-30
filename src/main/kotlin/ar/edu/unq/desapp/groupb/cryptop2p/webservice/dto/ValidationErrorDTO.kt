@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.webservice.dtos
+package ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.ConstraintViolation

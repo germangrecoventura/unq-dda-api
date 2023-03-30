@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.model.builders
+package ar.edu.unq.desapp.groupb.cryptop2p.model.builder
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.model.User
+import ar.edu.unq.desapp.groupb.cryptop2p.model.User
 
 class UserBuilder {
     private var firstName: String? = null

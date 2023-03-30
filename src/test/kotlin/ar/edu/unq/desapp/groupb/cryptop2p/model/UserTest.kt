@@ -1,6 +1,6 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi.model
+package ar.edu.unq.desapp.groupb.cryptop2p.model
 
-import ar.edu.unq.desapp.groupb.backenddesappapi.model.builders.UserBuilder
+import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.UserBuilder
 import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
