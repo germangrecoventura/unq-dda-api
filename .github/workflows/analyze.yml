@@ -35,11 +35,11 @@ jobs:
       - name: Set up Gradle
         uses: gradle/gradle-build-action@6095a76664413da4c8c134ee32e8a8ae900f0f1f  # v2.4.0
       - name: Run Unit Tests
-        run: gradle test
+        run: ./gradlew test
       - name: Generate Coverage Report
-        run: gradle jacocoTestReport
+        run: ./gradlew jacocoTestReport
       - name: Analyze with SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: gradle sonar --info
+        run: ./gradlew sonar --info
