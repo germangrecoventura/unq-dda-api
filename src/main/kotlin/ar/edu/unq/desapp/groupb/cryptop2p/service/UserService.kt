@@ -5,14 +5,13 @@ import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
-import jakarta.validation.Validator
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
 @Service
 @Validated
 @Transactional
-class UserService(val userRepository: UserRepository, val validator: Validator) {
+class UserService(val userRepository: UserRepository) {
 
     fun save(@Valid user: UserRequestDTO): User {
         val emailFound = userRepository.findByEmailAddress(user.emailAddress!!)
