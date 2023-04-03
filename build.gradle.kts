@@ -66,4 +66,6 @@ tasks.jacocoTestReport {
     }
 }
 
+tasks.jar { enabled = false }
+
 
