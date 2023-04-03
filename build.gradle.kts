@@ -65,7 +65,3 @@ tasks.jacocoTestReport {
         html.required.set(false)
     }
 }
-
-tasks.jar { enabled = false }
-
-
