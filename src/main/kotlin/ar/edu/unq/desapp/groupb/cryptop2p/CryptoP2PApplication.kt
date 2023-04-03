@@ -1,11 +1,12 @@
-package ar.edu.unq.desapp.groupb.backenddesappapi
+package ar.edu.unq.desapp.groupb.cryptop2p
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
+
 @SpringBootApplication
-class BackendDesappApiApplication
+class CryptoP2PApplication
 
 fun main(args: Array<String>) {
-	runApplication<BackendDesappApiApplication>(*args)
+    runApplication<CryptoP2PApplication>(*args)
 }

@@ -1,1 +1,1 @@
-rootProject.name = "backend-desapp-api"
+rootProject.name = "unq-dda-api"
