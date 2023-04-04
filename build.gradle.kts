@@ -1,3 +1,5 @@
+import groovy.xml.dom.DOMCategory.attributes
+import org.jetbrains.kotlin.com.intellij.openapi.vfs.StandardFileSystems.jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -63,5 +65,11 @@ tasks.jacocoTestReport {
         xml.required.set(true)
         csv.required.set(false)
         html.required.set(false)
+    }
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "ar.edu.unq.desapp.groupb.cryptop2p.Main"
     }
 }
