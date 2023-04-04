@@ -2,13 +2,12 @@ package ar.edu.unq.desapp.groupb.cryptop2p.model
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.AssetBuilder
 import jakarta.validation.Validator
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 @SpringBootTest
 class AssetTest {
@@ -16,12 +15,11 @@ class AssetTest {
     lateinit var validator: Validator
 
     fun anyAsset(): AssetBuilder {
-        var time = LocalTime.now()
+        var time = LocalDateTime.now()
         return AssetBuilder()
             .withName("ALICEUSDT")
             .withUnitPrice(200.00)
-            .withCreated(time)
-            .withUpdated(time.plusNanos(1))
+            .withDay(time)
     }
 
     @Test
@@ -80,29 +78,8 @@ class AssetTest {
 
     @Test
     fun `should throw an exception when the creation date is empty`() {
-        val user = anyAsset().withCreated(null).build()
+        val user = anyAsset().withDay(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
-    }
-
-    @Test
-    fun `should throw an exception when the update date is empty`() {
-        val user = anyAsset().withUpdated(null).build()
-        val violations = validator.validate(user)
-        assertTrue(violations.isNotEmpty())
-    }
-
-    @Test
-    fun `should throw an exception when the update cannot occur before its creation date`() {
-        var localtime = LocalTime.now()
-
-        val thrown = Assertions.assertThrows(RuntimeException::class.java) {
-            anyAsset().withCreated(localtime).withUpdated(localtime.minusNanos(1)).build()
-        }
-
-        Assertions.assertEquals(
-            "The update cannot occur before its creation date",
-            thrown.message
-        )
     }
 }
