@@ -68,8 +68,12 @@ tasks.jacocoTestReport {
     }
 }
 
-tasks.withType<War> {
+tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "ar.edu.unq.desapp.groupb.cryptop2p.CryptoP2PApplication.kt"
     }
+}
+
+task("stage") {
+    dependsOn("shadowJar")
 }
