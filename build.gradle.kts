@@ -68,10 +68,10 @@ tasks.jacocoTestReport {
     }
 }
 
-
+/*
 springBoot {
     mainClass.set("ar.edu.unq.desapp.groupb.cryptop2p.CryptoP2PApplicationKt")
-}
+}*/
 
 
 tasks.withType<Jar> {
@@ -80,6 +80,31 @@ tasks.withType<Jar> {
     }
 }
 
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "17"
+    }
+}
+/*
+tasks.withType<Jar> {
+    // Otherwise you'll get a "No main manifest attribute" error
+    manifest {
+        attributes["Main-Class"] = "ar.edu.unq.desapp.groupb.cryptop2p.CryptoP2PApplicationKt"
+    }
+
+    // To avoid the duplicate handling strategy error
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // To add all of the dependencies
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
+*/
 task("stage") {
     dependsOn("shadowJar")
 }
