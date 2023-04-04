@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated
 @Validated
 @Transactional
 class UserService {
-    @Autowired
+    @Autowired(required=true)
     lateinit var userRepository: UserRepository
 
     fun save(@Valid user: UserRequestDTO): User {

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "users", description = "Endpoints for managing users")
 @RequestMapping("users")
 class UserController {
-    @Autowired
+    @Autowired(required=true)
     lateinit var userService: UserService
     @PostMapping
     @Operation(
