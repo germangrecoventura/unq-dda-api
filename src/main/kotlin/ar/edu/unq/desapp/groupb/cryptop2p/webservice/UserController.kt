@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 @Tag(name = "users", description = "Endpoints for managing users")
 @RequestMapping("users")
-class UserController(@Autowired val userService: UserService) {
+class UserController {
+    @Autowired
+    lateinit var userService: UserService
     @PostMapping
     @Operation(
         summary = "Registers a user",

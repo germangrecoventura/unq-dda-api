@@ -12,7 +12,9 @@ import org.springframework.validation.annotation.Validated
 @Service
 @Validated
 @Transactional
-class UserService(@Autowired val userRepository: UserRepository) {
+class UserService {
+    @Autowired
+    lateinit var userRepository: UserRepository
 
     fun save(@Valid user: UserRequestDTO): User {
         val emailFound = userRepository.findByEmailAddress(user.emailAddress!!)
