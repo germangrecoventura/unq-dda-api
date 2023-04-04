@@ -16,6 +16,7 @@ class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Schema(example = "1")
     @JsonProperty
+
     var id: Long? = null
 
     @Column(nullable = false, length = 30)
