@@ -68,7 +68,7 @@ tasks.jacocoTestReport {
     }
 }
 
-tasks.withType<Jar> {
+tasks.withType<War> {
     manifest {
         attributes["Main-Class"] = "ar.edu.unq.desapp.groupb.cryptop2p.CryptoP2PApplication.kt"
     }
