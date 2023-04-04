@@ -70,6 +70,6 @@ tasks.jacocoTestReport {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "ar.edu.unq.desapp.groupb.cryptop2p.Main"
+        attributes["Main-Class"] = "ar.edu.unq.desapp.groupb.cryptop2p.CryptoP2PApplication.kt"
     }
 }
