@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 @Tag(name = "users", description = "Endpoints for managing users")
 @RequestMapping("users")
-class UserController(val userService: UserService) {
+class UserController(@Autowired val userService: UserService) {
     @PostMapping
     @Operation(
         summary = "Registers a user",
