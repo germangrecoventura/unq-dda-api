@@ -68,11 +68,17 @@ tasks.jacocoTestReport {
     }
 }
 
+
+springBoot {
+    mainClass.set("ar.edu.unq.desapp.groupb.cryptop2p.CryptoP2PApplicationKt")
+}
+
+/*
 tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "ar.edu.unq.desapp.groupb.cryptop2p.CryptoP2PApplication.kt"
     }
-}
+}*/
 
 task("stage") {
     dependsOn("shadowJar")
