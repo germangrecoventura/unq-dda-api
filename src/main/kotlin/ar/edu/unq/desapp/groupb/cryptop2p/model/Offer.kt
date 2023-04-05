@@ -55,11 +55,13 @@ class Offer {
     var operation: OfferType? = null
 
     @Column(nullable = false)
+    @NotNull
     @JsonProperty
     var isActive: Boolean? = null
 
     @Column(nullable = false)
     @DateTimeFormat
+    @NotNull
     @JsonProperty
     var created: LocalDateTime? = null
 }

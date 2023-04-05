@@ -171,4 +171,49 @@ class OfferTest {
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
     }
+
+    @Test
+    fun `should throw an exception when the user is null in the shop`() {
+        val user = anyOfferBuy().withUser(null).build()
+        val violations = validator.validate(user)
+        Assertions.assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when the user is null in the sale`() {
+        val user = anyOfferSell().withUser(null).build()
+        val violations = validator.validate(user)
+        Assertions.assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when the active is null in the shop`() {
+        val user = anyOfferBuy().withActive(null).build()
+        val violations = validator.validate(user)
+        Assertions.assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when the active is null in the sale`() {
+        val user = anyOfferSell().withActive(null).build()
+        val violations = validator.validate(user)
+        Assertions.assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when the created is null in the shop`() {
+        val user = anyOfferBuy().withCreated(null).build()
+        val violations = validator.validate(user)
+        Assertions.assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when the created is null in the sale`() {
+        val user = anyOfferSell().withCreated(null).build()
+        val violations = validator.validate(user)
+        Assertions.assertTrue(violations.isNotEmpty())
+    }
+
+
+
 }
