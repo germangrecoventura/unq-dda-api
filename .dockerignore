@@ -1,0 +1,6 @@
+# exclude hidden dirs .git etc.
+.*
+*.iml
+gradle
+# exclude build binaries
+build/*
