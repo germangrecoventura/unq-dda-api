@@ -62,158 +62,155 @@ class OfferTest {
 
     @Test
     fun `should throw an exception when asset name is null in shop`() {
-        val user = anyOfferBuy().withAsset(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withAsset(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when asset name is null in sale`() {
-        val user = anyOfferSell().withAsset(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withAsset(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when asset name is empty in shop`() {
-        val user = anyOfferBuy().withAsset("").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withAsset("").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when asset name is empty in sale`() {
-        val user = anyOfferSell().withAsset("").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withAsset("").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the asset name has numbers in the shop`() {
-        val user = anyOfferBuy().withAsset("AA5").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withAsset("AA5").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the asset name has numbers in the sale`() {
-        val user = anyOfferSell().withAsset("AA5").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withAsset("AA5").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the asset name has special characters in the shop`() {
-        val user = anyOfferBuy().withAsset("AA@").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withAsset("AA@").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the asset name has special characters in the sale`() {
-        val user = anyOfferSell().withAsset("AA@").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withAsset("AA@").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the asset name has lower case in the shop`() {
-        val user = anyOfferBuy().withAsset("AAa").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withAsset("AAa").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the asset name has lower case in the sale`() {
-        val user = anyOfferSell().withAsset("AAa").build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withAsset("AAa").build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the nominal amount is negative in the shop`() {
-        val user = anyOfferBuy().withQuantity(-50.00).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withQuantity(-50.00).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the nominal amount is negative in the sale`() {
-        val user = anyOfferSell().withQuantity(-50.00).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withQuantity(-50.00).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the crypto price is negative in the shop`() {
-        val user = anyOfferBuy().withUnitPrice(-50.00).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withUnitPrice(-50.00).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the crypto price is negative in the sale`() {
-        val user = anyOfferSell().withUnitPrice(-50.00).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withUnitPrice(-50.00).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the amount in pesos is negative in the shop`() {
-        val user = anyOfferBuy().withTotalAmount(-50.00).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withTotalAmount(-50.00).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the amount in pesos is negative in the sale`() {
-        val user = anyOfferSell().withTotalAmount(-50.00).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withTotalAmount(-50.00).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the user is null in the shop`() {
-        val user = anyOfferBuy().withUser(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withUser(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the user is null in the sale`() {
-        val user = anyOfferSell().withUser(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withUser(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the active is null in the shop`() {
-        val user = anyOfferBuy().withActive(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withActive(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the active is null in the sale`() {
-        val user = anyOfferSell().withActive(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withActive(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the created is null in the shop`() {
-        val user = anyOfferBuy().withCreated(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferBuy().withCreated(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the created is null in the sale`() {
-        val user = anyOfferSell().withCreated(null).build()
-        val violations = validator.validate(user)
+        val offer = anyOfferSell().withCreated(null).build()
+        val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
-
-
-
 }
