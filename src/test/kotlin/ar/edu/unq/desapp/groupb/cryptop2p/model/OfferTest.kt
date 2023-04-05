@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
-import ar.edu.unq.desapp.groupb.cryptop2p.OfferType
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.OfferBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.UserBuilder
 import jakarta.validation.Validator
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 class OfferTest {
@@ -29,21 +29,25 @@ class OfferTest {
     fun anyOfferBuy(): OfferBuilder {
         return OfferBuilder()
             .withAsset("ALICEUSDT")
-            .withNominalAmount(20.00)
-            .withPriceOfAsset(40.00)
-            .withAmountOfPesos(400.00)
+            .withQuantity(20.00)
+            .withUnitPrice(40.00)
+            .withTotalAmount(400.00)
             .withUser(anyUser().build())
             .withOperation(OfferType.BUY)
+            .withActive(true)
+            .withCreated(LocalDateTime.now())
     }
 
     fun anyOfferSell(): OfferBuilder {
         return OfferBuilder()
             .withAsset("ALICEUSDT")
-            .withNominalAmount(20.00)
-            .withPriceOfAsset(40.00)
-            .withAmountOfPesos(400.00)
+            .withQuantity(20.00)
+            .withUnitPrice(40.00)
+            .withTotalAmount(400.00)
             .withUser(anyUser().build())
             .withOperation(OfferType.SELL)
+            .withActive(true)
+            .withCreated(LocalDateTime.now())
     }
 
     @Test
@@ -128,42 +132,42 @@ class OfferTest {
 
     @Test
     fun `should throw an exception when the nominal amount is negative in the shop`() {
-        val user = anyOfferBuy().withNominalAmount(-50.00).build()
+        val user = anyOfferBuy().withQuantity(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the nominal amount is negative in the sale`() {
-        val user = anyOfferSell().withNominalAmount(-50.00).build()
+        val user = anyOfferSell().withQuantity(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the crypto price is negative in the shop`() {
-        val user = anyOfferBuy().withPriceOfAsset(-50.00).build()
+        val user = anyOfferBuy().withUnitPrice(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the crypto price is negative in the sale`() {
-        val user = anyOfferSell().withPriceOfAsset(-50.00).build()
+        val user = anyOfferSell().withUnitPrice(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the amount in pesos is negative in the shop`() {
-        val user = anyOfferBuy().withAmountOfPesos(-50.00).build()
+        val user = anyOfferBuy().withTotalAmount(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
     fun `should throw an exception when the amount in pesos is negative in the sale`() {
-        val user = anyOfferSell().withAmountOfPesos(-50.00).build()
+        val user = anyOfferSell().withTotalAmount(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
     }
