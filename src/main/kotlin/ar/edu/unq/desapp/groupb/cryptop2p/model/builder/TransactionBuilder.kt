@@ -18,7 +18,7 @@ class TransactionBuilder {
     private var status: TransactionStatus? = null
 
     fun build(): Transaction {
-        var transaction = Transaction().fromModel(
+        return Transaction().fromModel(
             asset!!,
             quantity!!,
             unitPrice!!,
@@ -27,7 +27,6 @@ class TransactionBuilder {
             seller!!,
             buyer!!
         )
-        return transaction
     }
 
     fun withAsset(asset: String?): TransactionBuilder {

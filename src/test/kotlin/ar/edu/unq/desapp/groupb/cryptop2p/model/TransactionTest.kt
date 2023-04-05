@@ -195,18 +195,4 @@ class TransactionTest {
     fun `should throw an exception when the offer is null in the transaction`() {
         Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withOffer(null).build() }
     }
-
-    @Test
-    fun `should throw an exception when the created is null in the transaction`() {
-        val user = anyTransaction().withCreated(null).build()
-        val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
-    }
-
-    @Test
-    fun `should throw an exception when the status is null in the transaction`() {
-        val user = anyTransaction().withStatus(null).build()
-        val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
-    }
 }

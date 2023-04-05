@@ -75,6 +75,11 @@ class Transaction {
     @JsonProperty
     var created: LocalDateTime? = null
 
+    @Column(nullable = true)
+    @NotNull
+    @JsonProperty
+    var addressee: String? = null
+
     @Column(nullable = false)
     @NotNull
     @JsonProperty
@@ -116,11 +121,25 @@ class Transaction {
         transaction.quantity = quantity
         transaction.unitPrice = unitPrice
         transaction.totalAmount = totalAmount
+        transaction.offer = offer
         transaction.seller = seller
         transaction.buyer = buyer
         transaction.created = LocalDateTime.now()
         transaction.status = TransactionStatus.WAITING
+        if (offer.operation == OfferType.BUY) {
+            transaction.addressee = buyer.cryptoWalletAddress
+        } else {
+            transaction.addressee = seller.cvu
+        }
         return transaction
+    }
+
+    fun transfered() {
+        this.status = TransactionStatus.TRANSFERRED
+    }
+
+    fun confirmed() {
+        this.status = TransactionStatus.CONFIRMED
     }
 }
 
