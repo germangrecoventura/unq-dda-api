@@ -215,5 +215,4 @@ class OfferTest {
     }
 
 
-
 }
