@@ -7,7 +7,7 @@ class Report {
     var quotationAmountInPesos: Double? = null
 
     companion object {
-        fun fromModel(asset: String,nominalAmountAsset: Double,currentPriceAsset: Double,quotationAmountInPesos: Double): Report {
+        fun toTradedReport(asset: String,nominalAmountAsset: Double,currentPriceAsset: Double,quotationAmountInPesos: Double): Report {
             var report = Report()
             report.nameAsset = asset
             report.nominalAmountAsset = nominalAmountAsset
