@@ -46,6 +46,12 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+// Disables building `-plain.jar` file
+// https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#packaging-executable.and-plain-archives
+tasks.named<Jar>("jar") {
+    enabled = false
+}
+
 sonarqube {
     properties {
         property("sonar.projectKey", "germangrecoventura_unq-dda-api")
