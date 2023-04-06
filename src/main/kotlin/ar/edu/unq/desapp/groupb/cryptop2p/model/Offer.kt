@@ -20,30 +20,30 @@ class Offer {
     var id: Long? = null
 
     @Column(nullable = false)
-    @NotBlank(message = "The first name cannot be blank")
-    @Pattern(regexp = "[A-Z]+", message = "The name can only contain capital letters")
+    @NotBlank(message = "The asset name cannot be blank")
+    @Pattern(regexp = "[A-Z]+", message = "The asset name can only contain capital letters")
     @JsonProperty
     var asset: String? = null
 
     @Column(nullable = false)
-    @NotNull
-    @DecimalMin("0.0")
+    @NotNull(message = "The quantity cannot be blank")
+    @DecimalMin("0.0", message = "The quantity can't be negative")
     @JsonProperty
     var quantity: Double? = null
 
     @Column(nullable = false)
-    @NotNull
-    @DecimalMin("0.0")
+    @NotNull(message = "The unit price cannot be blank")
+    @DecimalMin("0.0", message = "The unit price can't be negative")
     @JsonProperty
     var unitPrice: Double? = null
 
     @Column(nullable = false)
-    @NotNull
-    @DecimalMin("0.0")
+    @NotNull(message = "The total amount cannot be blank")
+    @DecimalMin("0.0", message = "The total amount can't be negative")
     @JsonProperty
     var totalAmount: Double? = null
 
-    @NotNull
+    @NotNull(message = "The user cannot be blank")
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "offerUser")
     @JsonProperty
@@ -55,13 +55,13 @@ class Offer {
     var operation: OfferType? = null
 
     @Column(nullable = false)
-    @NotNull
+    @NotNull(message = "The active cannot be blank")
     @JsonProperty
     var isActive: Boolean? = null
 
     @Column(nullable = false)
     @DateTimeFormat
-    @NotNull
+    @NotNull(message = "The dateTime cannot be blank")
     @JsonProperty
     var created: LocalDateTime? = null
 }
