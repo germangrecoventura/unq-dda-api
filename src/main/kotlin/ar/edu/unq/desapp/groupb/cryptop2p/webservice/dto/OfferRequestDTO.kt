@@ -1,14 +1,16 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto
 
-import ar.edu.unq.desapp.groupb.cryptop2p.model.Offer
 import ar.edu.unq.desapp.groupb.cryptop2p.model.User
-import jakarta.validation.constraints.*
+import jakarta.validation.constraints.DecimalMin
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
-class OfferActiveUserDTO {
+class OfferRequestDTO {
     @DateTimeFormat
-    @NotNull(message = "The dateTime cannot be blank")
+    @NotNull(message = "The created date time cannot be blank")
     var created: LocalDateTime? = null
 
     @NotBlank(message = "The asset name cannot be blank")
@@ -29,25 +31,4 @@ class OfferActiveUserDTO {
 
     @NotNull(message = "The user cannot be blank")
     var user: User? = null
-
-    @Min(value = 0, message = "The operation count can't be negative")
-    @NotNull(message = "The operation count cannot be blank")
-    var operationCount: Int? = null
-
-    @NotBlank(message = "The reputation cannot be blank")
-    var reputation: String? = null
-
-    fun toOfferActive(offer: Offer, operationCount: Int, reputation: String): OfferActiveUserDTO {
-        var offerActive = OfferActiveUserDTO()
-        offerActive.created = offer.created
-        offerActive.asset = offer.asset
-        offerActive.quantity = offer.quantity
-        offerActive.unitPrice = offer.unitPrice
-        offerActive.totalAmount = offer.totalAmount
-        offerActive.user = offer.user
-        offerActive.operationCount = operationCount
-        offerActive.reputation = reputation
-        return offerActive
-    }
-
 }

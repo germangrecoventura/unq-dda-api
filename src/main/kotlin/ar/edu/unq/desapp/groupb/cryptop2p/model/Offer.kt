@@ -44,11 +44,10 @@ class Offer {
     var totalAmount: Double? = null
 
     @NotNull(message = "The user cannot be blank")
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "offerUser")
     @JsonProperty
     var user: User? = null
-
 
     @Column(nullable = false)
     @JsonProperty
