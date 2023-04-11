@@ -19,7 +19,8 @@ class AssetTest {
         return AssetBuilder()
             .withName("ALICEUSDT")
             .withUnitPrice(200.00)
-            .withDay(time)
+            .withCreated(time)
+            .withUpdated(time)
     }
 
     @Test
@@ -78,7 +79,14 @@ class AssetTest {
 
     @Test
     fun `should throw an exception when the creation date is empty`() {
-        val asset = anyAsset().withDay(null).build()
+        val asset = anyAsset().withCreated(null).build()
+        val violations = validator.validate(asset)
+        assertTrue(violations.isNotEmpty())
+    }
+
+    @Test
+    fun `should throw an exception when the updated date is empty`() {
+        val asset = anyAsset().withUpdated(null).build()
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }

@@ -6,19 +6,15 @@ import java.time.LocalDateTime
 class AssetBuilder {
     private var name: String? = null
     private var unitPrice: Double? = null
-    private var dayTime: LocalDateTime? = null
+    private var created: LocalDateTime? = null
+    private var updated: LocalDateTime? = null
 
     fun build(): Asset {
-        return Asset(name, dayTime, unitPrice)
+        return Asset(name, unitPrice, created, updated)
     }
 
     fun withName(name: String?): AssetBuilder {
         this.name = name
-        return this
-    }
-
-    fun withDay(date: LocalDateTime?): AssetBuilder {
-        this.dayTime = date
         return this
     }
 
@@ -27,5 +23,13 @@ class AssetBuilder {
         return this
     }
 
+    fun withCreated(date: LocalDateTime?): AssetBuilder {
+        this.created = date
+        return this
+    }
 
+    fun withUpdated(date: LocalDateTime?): AssetBuilder {
+        this.updated = date
+        return this
+    }
 }
