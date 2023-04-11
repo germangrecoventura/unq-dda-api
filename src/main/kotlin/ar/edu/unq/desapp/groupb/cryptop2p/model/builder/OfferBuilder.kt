@@ -48,7 +48,6 @@ class OfferBuilder {
         return this
     }
 
-
     fun withUser(user: User?): OfferBuilder {
         this.user = user
         return this
