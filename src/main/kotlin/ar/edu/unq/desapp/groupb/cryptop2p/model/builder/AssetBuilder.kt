@@ -10,7 +10,12 @@ class AssetBuilder {
     private var updated: LocalDateTime? = null
 
     fun build(): Asset {
-        return Asset(name, unitPrice, created, updated)
+        val asset = Asset()
+        asset.name = name
+        asset.unitPrice = unitPrice
+        asset.created = created
+        asset.updated = updated
+        return asset
     }
 
     fun withName(name: String?): AssetBuilder {
