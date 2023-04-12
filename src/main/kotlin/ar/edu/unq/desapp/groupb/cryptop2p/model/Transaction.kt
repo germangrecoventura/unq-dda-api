@@ -19,8 +19,8 @@ class Transaction {
     var id: Long? = null
 
     @Column(nullable = false)
-    @NotBlank(message = "The first name cannot be blank")
-    @Pattern(regexp = "[A-Z]+", message = "The name can only contain capital letters")
+    @NotBlank(message = "The asset name cannot be blank")
+    @Pattern(regexp = "[A-Z]+", message = "The asset name can only contain capital letters")
     @JsonProperty
     var asset: String? = null
 
