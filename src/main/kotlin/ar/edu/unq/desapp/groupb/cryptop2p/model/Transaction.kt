@@ -1,16 +1,17 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
-import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Pattern
+import org.hibernate.annotations.CreationTimestamp
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
-@Entity(name = "transaction")
+@Entity
+@JsonPropertyOrder("id", "asset", "seller", "buyer")
 class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,11 +19,10 @@ class Transaction {
     @JsonProperty
     var id: Long? = null
 
-    @Column(nullable = false)
-    @NotBlank(message = "The asset name cannot be blank")
-    @Pattern(regexp = "[A-Z]+", message = "The asset name can only contain capital letters")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "The asset name cannot be blank")
     @JsonProperty
-    var asset: String? = null
+    var asset: Asset? = null
 
     @Column(nullable = false)
     @NotNull
@@ -44,13 +44,11 @@ class Transaction {
 
     @NotNull
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transactionOffer")
     @JsonProperty
     var offer: Offer? = null
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transactionSeller")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonProperty
     var seller: User? = null
         set(value) {
@@ -59,8 +57,7 @@ class Transaction {
         }
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "transactionBuyer")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonProperty
     var buyer: User? = null
         set(value) {
@@ -68,9 +65,9 @@ class Transaction {
             field = value
         }
 
-
     @Column(nullable = false)
     @DateTimeFormat
+    @CreationTimestamp
     @NotNull
     @JsonProperty
     var created: LocalDateTime? = null
@@ -78,7 +75,7 @@ class Transaction {
     @Column(nullable = true)
     @NotNull
     @JsonProperty
-    var addressee: String? = null
+    var address: String? = null
 
     @Column(nullable = false)
     @NotNull
@@ -98,7 +95,7 @@ class Transaction {
     }
 
     fun fromModel(
-        asset: String,
+        asset: Asset,
         quantity: Double,
         unitPrice: Double,
         totalAmount: Double,
@@ -116,7 +113,7 @@ class Transaction {
             throw RuntimeException("The buyer is not the same as the offer")
         }
 
-        var transaction = Transaction()
+        val transaction = Transaction()
         transaction.asset = asset
         transaction.quantity = quantity
         transaction.unitPrice = unitPrice
@@ -127,14 +124,14 @@ class Transaction {
         transaction.created = LocalDateTime.now()
         transaction.status = TransactionStatus.WAITING
         if (offer.operation == OfferType.BUY) {
-            transaction.addressee = buyer.cryptoWalletAddress
+            transaction.address = buyer.cryptoWalletAddress
         } else {
-            transaction.addressee = seller.cvu
+            transaction.address = seller.cvu
         }
         return transaction
     }
 
-    fun transfered() {
+    fun transferred() {
         this.status = TransactionStatus.TRANSFERRED
     }
 

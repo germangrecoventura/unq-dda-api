@@ -10,8 +10,8 @@ class TradedVolume {
 
     companion object {
         fun toTradedVolume(assets: List<String>): TradedVolume {
-            var traded = TradedVolume()
-            var list = listOf("Activo1", "Activo2")
+            val traded = TradedVolume()
+            val list = listOf("Activo1", "Activo2")
             traded.requestDateTime = LocalDateTime.now()
             traded.totalValueInDollars = 0.0 // Pegarle a API
             traded.totalValueInPesos = 0.0  // Pegarle a API

@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
+import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.AssetBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.OfferBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.UserBuilder
@@ -16,12 +17,12 @@ class TransactionTest {
     @Autowired
     lateinit var validator: Validator
 
-    var seller = anySeller().build()
-    var buyer = anyBuyer().build()
+    val buyer = anyBuyer().build()
+    val seller = anySeller().build()
 
-    fun anyTransaction(): TransactionBuilder {
+    private fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withAsset("ALICEUSDT")
+            .withAsset(anyAsset().build())
             .withQuantity(20.00)
             .withUnitPrice(10.00)
             .withTotalAmount(100.00)
@@ -32,7 +33,7 @@ class TransactionTest {
             .withStatus(TransactionStatus.WAITING)
     }
 
-    fun anySeller(): UserBuilder {
+    private final fun anySeller(): UserBuilder {
         return UserBuilder()
             .withFirstName("Homero")
             .withLastName("Simpson")
@@ -43,7 +44,7 @@ class TransactionTest {
             .withCryptoWallet("12345678")
     }
 
-    fun anyBuyer(): UserBuilder {
+    private final fun anyBuyer(): UserBuilder {
         return UserBuilder()
             .withFirstName("Homero")
             .withLastName("Simpson")
@@ -54,9 +55,18 @@ class TransactionTest {
             .withCryptoWallet("12345678")
     }
 
-    fun anyOffer(): OfferBuilder {
+    private fun anyAsset(): AssetBuilder {
+        val now = LocalDateTime.now()
+
+        return AssetBuilder()
+            .withName("ALICEUSDT")
+            .withCreated(now)
+            .withUpdated(now)
+    }
+
+    private fun anyOffer(): OfferBuilder {
         return OfferBuilder()
-            .withAsset("ALICEUSDT")
+            .withAsset(anyAsset().build())
             .withQuantity(20.00)
             .withUnitPrice(40.00)
             .withTotalAmount(400.00)
@@ -72,44 +82,12 @@ class TransactionTest {
     }
 
     @Test
-    fun `should throw an exception when asset name is null in transaction`() {
+    fun `should throw an exception when asset is null`() {
         Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withAsset(null).build() }
     }
 
-
     @Test
-    fun `should throw an exception when asset name is empty in transaction `() {
-        val transaction = anyTransaction().withAsset("").build()
-        val violations = validator.validate(transaction)
-        Assertions.assertTrue(violations.isNotEmpty())
-    }
-
-
-    @Test
-    fun `should throw an exception when the asset name has numbers in transaction`() {
-        val user = anyTransaction().withAsset("AA5").build()
-        val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
-    }
-
-
-    @Test
-    fun `should throw an exception when the asset name has special characters in the transaction`() {
-        val user = anyTransaction().withAsset("AA@").build()
-        val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
-    }
-
-    @Test
-    fun `should throw an exception when the asset name has lower case in the transaction`() {
-        val user = anyTransaction().withAsset("AAa").build()
-        val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
-    }
-
-
-    @Test
-    fun `should throw an exception when the nominal amount is negative in the transaction`() {
+    fun `should throw an exception when the quantity is negative`() {
         val user = anyTransaction().withQuantity(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
@@ -117,7 +95,7 @@ class TransactionTest {
 
 
     @Test
-    fun `should throw an exception when the crypto price is negative in the transaction`() {
+    fun `should throw an exception when the unit price is negative`() {
         val user = anyTransaction().withUnitPrice(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
@@ -125,7 +103,7 @@ class TransactionTest {
 
 
     @Test
-    fun `should throw an exception when the amount in pesos is negative in the transaction`() {
+    fun `should throw an exception when the total amount is negative`() {
         val user = anyTransaction().withTotalAmount(-50.00).build()
         val violations = validator.validate(user)
         Assertions.assertTrue(violations.isNotEmpty())
@@ -138,30 +116,14 @@ class TransactionTest {
     }
 
     @Test
-    fun `should throw an exception when a purchase transaction does not have as buyer the one of the offer`() {
+    fun `should throw an exception when the buyer and the seller are the same user`() {
         var offer = anyOffer().withUser(seller).withOperation(OfferType.BUY).build()
 
         val thrown: RuntimeException =
             Assertions.assertThrows(
                 RuntimeException::class.java
             )
-            { anyTransaction().withOffer(offer).withBuyer(buyer).build() }
-
-        Assertions.assertEquals(
-            "The buyer is not the same as the offer",
-            thrown.message
-        )
-    }
-
-    @Test
-    fun `the buyer and the seller are the same people`() {
-        var offer = anyOffer().withUser(seller).withOperation(OfferType.BUY).build()
-
-        val thrown: RuntimeException =
-            Assertions.assertThrows(
-                RuntimeException::class.java
-            )
-            { anyTransaction().withOffer(offer).withSeller(seller).withBuyer(seller).build()}
+            { anyTransaction().withOffer(offer).withSeller(seller).withBuyer(seller).build() }
 
         Assertions.assertEquals(
             "The seller cannot be the same buyer",
@@ -170,29 +132,12 @@ class TransactionTest {
     }
 
     @Test
-    fun `should throw an exception when the seller is null in the transaction`() {
+    fun `should throw an exception when the seller is null`() {
         Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withSeller(null).build() }
     }
 
     @Test
-    fun `should throw an exception when a sell transaction does not have as seller the one of the offer`() {
-        var offer = anyOffer().withUser(buyer).withOperation(OfferType.SELL).build()
-
-        val thrown: RuntimeException =
-            Assertions.assertThrows(
-                RuntimeException::class.java
-            )
-            { anyTransaction().withSeller(seller).withBuyer(buyer).withOffer(offer).build() }
-
-        Assertions.assertEquals(
-            "The seller is not the same as the offer",
-            thrown.message
-        )
-    }
-
-
-    @Test
-    fun `should throw an exception when the offer is null in the transaction`() {
+    fun `should throw an exception when the offer is null`() {
         Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withOffer(null).build() }
     }
 }

@@ -1,13 +1,10 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model.builder
 
-import ar.edu.unq.desapp.groupb.cryptop2p.model.Offer
-import ar.edu.unq.desapp.groupb.cryptop2p.model.Transaction
-import ar.edu.unq.desapp.groupb.cryptop2p.model.TransactionStatus
-import ar.edu.unq.desapp.groupb.cryptop2p.model.User
+import ar.edu.unq.desapp.groupb.cryptop2p.model.*
 import java.time.LocalDateTime
 
 class TransactionBuilder {
-    private var asset: String? = null
+    private var asset: Asset? = null
     private var quantity: Double? = null
     private var unitPrice: Double? = null
     private var totalAmount: Double? = null
@@ -29,7 +26,7 @@ class TransactionBuilder {
         )
     }
 
-    fun withAsset(asset: String?): TransactionBuilder {
+    fun withAsset(asset: Asset?): TransactionBuilder {
         this.asset = asset
         return this
     }

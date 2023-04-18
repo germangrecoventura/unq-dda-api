@@ -5,14 +5,12 @@ import java.time.LocalDateTime
 
 class AssetBuilder {
     private var name: String? = null
-    private var unitPrice: Double? = null
     private var created: LocalDateTime? = null
     private var updated: LocalDateTime? = null
 
     fun build(): Asset {
         val asset = Asset()
         asset.name = name
-        asset.unitPrice = unitPrice
         asset.created = created
         asset.updated = updated
         return asset
@@ -20,11 +18,6 @@ class AssetBuilder {
 
     fun withName(name: String?): AssetBuilder {
         this.name = name
-        return this
-    }
-
-    fun withUnitPrice(unitPrice: Double?): AssetBuilder {
-        this.unitPrice = unitPrice
         return this
     }
 

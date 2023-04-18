@@ -15,10 +15,9 @@ class AssetTest {
     lateinit var validator: Validator
 
     fun anyAsset(): AssetBuilder {
-        var time = LocalDateTime.now()
+        val time = LocalDateTime.now()
         return AssetBuilder()
             .withName("ALICEUSDT")
-            .withUnitPrice(200.00)
             .withCreated(time)
             .withUpdated(time)
     }
@@ -59,20 +58,6 @@ class AssetTest {
     @Test
     fun `should throw an exception when the name has any lower case`() {
         val asset = anyAsset().withName("NUevo").build()
-        val violations = validator.validate(asset)
-        assertTrue(violations.isNotEmpty())
-    }
-
-    @Test
-    fun `should throw an exception when the unit price is null`() {
-        val asset = anyAsset().withUnitPrice(null).build()
-        val violations = validator.validate(asset)
-        assertTrue(violations.isNotEmpty())
-    }
-
-    @Test
-    fun `should throw an exception when the price is negative`() {
-        val asset = anyAsset().withUnitPrice(-50.00).build()
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }

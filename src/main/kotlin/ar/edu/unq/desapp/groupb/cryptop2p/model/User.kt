@@ -8,9 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
 
-@Entity
-@Table(name = "registered_user")
-@JsonPropertyOrder("id", "emailAddress", "firstname", "lastname")
+@Entity(name = "registered_user")
+@JsonPropertyOrder("id", "emailAddress", "firstName", "lastName")
 class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
