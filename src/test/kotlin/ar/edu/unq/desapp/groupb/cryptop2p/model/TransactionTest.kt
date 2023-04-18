@@ -5,7 +5,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.OfferBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.UserBuilder
 import jakarta.validation.Validator
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,12 +25,11 @@ class TransactionTest {
             .withAsset(anyAsset().build())
             .withQuantity(20.00)
             .withUnitPrice(10.00)
-            .withTotalAmount(100.00)
             .withSeller(seller)
             .withBuyer(buyer)
             .withOffer(anyOffer().build())
             .withCreated(LocalDateTime.now())
-            .withStatus(TransactionStatus.WAITING)
+            .withStatus(TransactionStatus.PENDING)
     }
 
     private final fun anySeller(): UserBuilder {
@@ -68,7 +67,6 @@ class TransactionTest {
             .withAsset(anyAsset().build())
             .withQuantity(20.00)
             .withUnitPrice(40.00)
-            .withTotalAmount(400.00)
             .withUser(buyer)
             .withOperation(OfferType.BUY)
             .withActive(true)
@@ -82,61 +80,58 @@ class TransactionTest {
 
     @Test
     fun `should throw an exception when asset is null`() {
-        Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withAsset(null).build() }
+        assertThrows(RuntimeException::class.java) { anyTransaction().withAsset(null).build() }
     }
 
     @Test
     fun `should throw an exception when the quantity is negative`() {
         val user = anyTransaction().withQuantity(-50.00).build()
         val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
+        assertTrue(violations.isNotEmpty())
     }
 
 
     @Test
     fun `should throw an exception when the unit price is negative`() {
-        val user = anyTransaction().withUnitPrice(-50.00).build()
-        val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
+        val transaction = anyTransaction().withUnitPrice(-50.00).build()
+        val violations = validator.validate(transaction)
+        assertTrue(violations.isNotEmpty())
     }
-
 
     @Test
-    fun `should throw an exception when the total amount is negative`() {
-        val user = anyTransaction().withTotalAmount(-50.00).build()
-        val violations = validator.validate(user)
-        Assertions.assertTrue(violations.isNotEmpty())
+    fun `should have a total amount equal to 200`() {
+        val transaction = anyTransaction().build()
+        assertEquals(200.0, transaction.totalAmount)
     }
-
 
     @Test
     fun `should throw an exception when the buyer is null in the transaction`() {
-        Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withBuyer(null).build() }
+        assertThrows(RuntimeException::class.java) { anyTransaction().withBuyer(null).build() }
     }
 
     @Test
     fun `should throw an exception when the buyer and the seller are the same user`() {
-        var offer = anyOffer().withUser(seller).withOperation(OfferType.BUY).build()
+        val offer = anyOffer().withUser(seller).withOperation(OfferType.BUY).build()
 
         val thrown: RuntimeException =
-            Assertions.assertThrows(
+            assertThrows(
                 RuntimeException::class.java
             )
             { anyTransaction().withOffer(offer).withSeller(seller).withBuyer(seller).build() }
 
-        Assertions.assertEquals(
-            "The seller cannot be the same buyer",
+        assertEquals(
+            "The buyer and the seller cannot be the same user",
             thrown.message
         )
     }
 
     @Test
     fun `should throw an exception when the seller is null`() {
-        Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withSeller(null).build() }
+        assertThrows(RuntimeException::class.java) { anyTransaction().withSeller(null).build() }
     }
 
     @Test
     fun `should throw an exception when the offer is null`() {
-        Assertions.assertThrows(RuntimeException::class.java) { anyTransaction().withOffer(null).build() }
+        assertThrows(RuntimeException::class.java) { anyTransaction().withOffer(null).build() }
     }
 }
