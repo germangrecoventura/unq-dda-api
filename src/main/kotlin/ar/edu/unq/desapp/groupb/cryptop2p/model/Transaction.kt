@@ -86,7 +86,7 @@ class Transaction {
 }
 
 enum class TransactionStatus {
-    PENDING, TRANSFER_COMPLETED, RECEPTION_COMPLETED, CANCELED
+    PENDING, TRANSFER_COMPLETED, RECEPTION_COMPLETED, USER_CANCELED, SYSTEM_CANCELED
 }
 
 class SameTraderException(source: String) :
