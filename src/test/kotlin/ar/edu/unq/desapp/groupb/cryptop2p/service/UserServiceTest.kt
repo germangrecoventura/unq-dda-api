@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.service
 
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserDTOBuilder
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -12,8 +12,8 @@ class UserServiceTest {
     @Autowired
     lateinit var userService: UserService
 
-    fun anyUser(): UserDTOBuilder {
-        return UserDTOBuilder()
+    fun anyUser(): UserCreateRequestDTOBuilder {
+        return UserCreateRequestDTOBuilder()
             .withFirstName("Homero")
             .withLastName("Simpson")
             .withEmail("homero.simpson@sprinfield.com")
@@ -25,8 +25,7 @@ class UserServiceTest {
 
     @Test
     fun `should create a user when it has valid data`() {
-        var user = userService.save(anyUser().build())
-
+        val user = userService.save(anyUser().build())
         assertTrue(user.id != null)
     }
 
@@ -35,7 +34,7 @@ class UserServiceTest {
         val userRequest = anyUser().withFirstName(null).build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.firstName: The first name cannot be blank", thrown.message)
+        assertEquals("save.userCreateRequest.firstName: The first name cannot be blank", thrown.message)
     }
 
     @Test
@@ -44,9 +43,9 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         val expected = listOf(
-            "save.user.firstName: The first name must be between 3 and 30 characters long",
-            "save.user.firstName: The first name cannot contain special characters or numbers",
-            "save.user.firstName: The first name cannot be blank",
+            "save.userCreateRequest.firstName: The first name must be between 3 and 30 characters long",
+            "save.userCreateRequest.firstName: The first name cannot contain special characters or numbers",
+            "save.userCreateRequest.firstName: The first name cannot be blank",
         )
         assertTrue(expected.all { thrown.message!!.contains(it) })
     }
@@ -56,7 +55,10 @@ class UserServiceTest {
         val userRequest = anyUser().withFirstName("456").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.firstName: The first name cannot contain special characters or numbers", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.firstName: The first name cannot contain special characters or numbers",
+            thrown.message
+        )
     }
 
     @Test
@@ -64,7 +66,10 @@ class UserServiceTest {
         val userRequest = anyUser().withFirstName("Germ@n").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.firstName: The first name cannot contain special characters or numbers", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.firstName: The first name cannot contain special characters or numbers",
+            thrown.message
+        )
     }
 
     @Test
@@ -72,7 +77,10 @@ class UserServiceTest {
         val userRequest = anyUser().withFirstName("G").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.firstName: The first name must be between 3 and 30 characters long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.firstName: The first name must be between 3 and 30 characters long",
+            thrown.message
+        )
     }
 
     @Test
@@ -80,7 +88,10 @@ class UserServiceTest {
         val userRequest = anyUser().withFirstName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.firstName: The first name must be between 3 and 30 characters long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.firstName: The first name must be between 3 and 30 characters long",
+            thrown.message
+        )
     }
 
 
@@ -89,7 +100,7 @@ class UserServiceTest {
         val userRequest = anyUser().withLastName(null).build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.lastName: The last name cannot be blank", thrown.message)
+        assertEquals("save.userCreateRequest.lastName: The last name cannot be blank", thrown.message)
     }
 
     @Test
@@ -98,9 +109,9 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         val expected = listOf(
-            "save.user.lastName: The last name cannot contain special characters or numbers",
-            "save.user.lastName: The last name must be between 3 and 30 characters long",
-            "save.user.lastName: The last name cannot be blank",
+            "save.userCreateRequest.lastName: The last name cannot contain special characters or numbers",
+            "save.userCreateRequest.lastName: The last name must be between 3 and 30 characters long",
+            "save.userCreateRequest.lastName: The last name cannot be blank",
         )
         assertTrue(expected.all { thrown.message!!.contains(it) })
     }
@@ -110,7 +121,10 @@ class UserServiceTest {
         val userRequest = anyUser().withLastName("Grec0 Ventura").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.lastName: The last name cannot contain special characters or numbers", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.lastName: The last name cannot contain special characters or numbers",
+            thrown.message
+        )
     }
 
     @Test
@@ -118,7 +132,10 @@ class UserServiceTest {
         val userRequest = anyUser().withLastName("Grec# Ventura").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.lastName: The last name cannot contain special characters or numbers", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.lastName: The last name cannot contain special characters or numbers",
+            thrown.message
+        )
     }
 
 
@@ -127,7 +144,10 @@ class UserServiceTest {
         val userRequest = anyUser().withLastName("Gr").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.lastName: The last name must be between 3 and 30 characters long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.lastName: The last name must be between 3 and 30 characters long",
+            thrown.message
+        )
     }
 
     @Test
@@ -135,7 +155,10 @@ class UserServiceTest {
         val userRequest = anyUser().withLastName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.lastName: The last name must be between 3 and 30 characters long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.lastName: The last name must be between 3 and 30 characters long",
+            thrown.message
+        )
     }
 
     @Test
@@ -143,7 +166,7 @@ class UserServiceTest {
         val userRequest = anyUser().withEmail(null).build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.emailAddress: The email address cannot be blank", thrown.message)
+        assertEquals("save.userCreateRequest.emailAddress: The email address cannot be blank", thrown.message)
     }
 
     @Test
@@ -152,7 +175,7 @@ class UserServiceTest {
         val thrown: RuntimeException =
             assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.emailAddress: The email address cannot be blank", thrown.message)
+        assertEquals("save.userCreateRequest.emailAddress: The email address cannot be blank", thrown.message)
     }
 
     @Test
@@ -161,7 +184,7 @@ class UserServiceTest {
         val thrown: RuntimeException =
             assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.emailAddress: The email address is not valid", thrown.message)
+        assertEquals("save.userCreateRequest.emailAddress: The email address is not valid", thrown.message)
     }
 
     @Test
@@ -181,7 +204,7 @@ class UserServiceTest {
         val userRequest = anyUser().withAddress(null).build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.address: The address cannot be blank", thrown.message)
+        assertEquals("save.userCreateRequest.address: The address cannot be blank", thrown.message)
     }
 
     @Test
@@ -190,9 +213,9 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         val expected = listOf(
-            "save.user.address: The address must be between 10 and 30 characters long",
-            "save.user.address: The address cannot contain special characters or numbers",
-            "save.user.address: The address cannot be blank",
+            "save.userCreateRequest.address: The address must be between 10 and 30 characters long",
+            "save.userCreateRequest.address: The address cannot contain special characters or numbers",
+            "save.userCreateRequest.address: The address cannot be blank",
         )
         assertTrue(expected.all { thrown.message!!.contains(it) })
     }
@@ -202,7 +225,10 @@ class UserServiceTest {
         val userRequest = anyUser().withAddress("Evergreen 1234@").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.address: The address cannot contain special characters or numbers", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.address: The address cannot contain special characters or numbers",
+            thrown.message
+        )
     }
 
 
@@ -211,7 +237,10 @@ class UserServiceTest {
         val userRequest = anyUser().withAddress("Ever").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.address: The address must be between 10 and 30 characters long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.address: The address must be between 10 and 30 characters long",
+            thrown.message
+        )
     }
 
     @Test
@@ -219,7 +248,10 @@ class UserServiceTest {
         val userRequest = anyUser().withAddress("Evergreen 1234 Evergreen 1234 Evergreen 1234").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.address: The address must be between 10 and 30 characters long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.address: The address must be between 10 and 30 characters long",
+            thrown.message
+        )
     }
 
     @Test
@@ -227,7 +259,7 @@ class UserServiceTest {
         val userRequest = anyUser().withPassword(null).build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.password: The password cannot be blank", thrown.message)
+        assertEquals("save.userCreateRequest.password: The password cannot be blank", thrown.message)
     }
 
     @Test
@@ -236,9 +268,9 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         val expected = listOf(
-            "save.user.password: The password cannot be blank",
-            "save.user.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
-            "save.user.password: The password must be at least 6 characters long",
+            "save.userCreateRequest.password: The password cannot be blank",
+            "save.userCreateRequest.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
+            "save.userCreateRequest.password: The password must be at least 6 characters long",
         )
         assertTrue(expected.all { thrown.message!!.contains(it) })
     }
@@ -249,8 +281,8 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         val expected = listOf(
-            "save.user.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
-            "save.user.password: The password must be at least 6 characters long",
+            "save.userCreateRequest.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
+            "save.userCreateRequest.password: The password must be at least 6 characters long",
         )
         assertTrue(expected.all { thrown.message!!.contains(it) })
     }
@@ -262,7 +294,7 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals(
-            "save.user.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
+            "save.userCreateRequest.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
             thrown.message
         )
     }
@@ -273,7 +305,7 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals(
-            "save.user.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
+            "save.userCreateRequest.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
             thrown.message
         )
     }
@@ -284,7 +316,7 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         assertEquals(
-            "save.user.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
+            "save.userCreateRequest.password: The password must have at least one lowercase letter, one uppercase letter and a special character",
             thrown.message
         )
     }
@@ -295,7 +327,7 @@ class UserServiceTest {
         val userRequest = anyUser().withCVU(null).build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.cvu: The CVU cannot be blank", thrown.message)
+        assertEquals("save.userCreateRequest.cvu: The CVU cannot be blank", thrown.message)
     }
 
 
@@ -305,9 +337,9 @@ class UserServiceTest {
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
         val expected = listOf(
-            "save.user.cvu: The CVU must be 22 digits long",
-            "save.user.cvu: The CVU cannot be blank",
-            "save.user.cvu: The CVU can only contain numbers"
+            "save.userCreateRequest.cvu: The CVU must be 22 digits long",
+            "save.userCreateRequest.cvu: The CVU cannot be blank",
+            "save.userCreateRequest.cvu: The CVU can only contain numbers"
         )
         assertTrue(expected.all { thrown.message!!.contains(it) })
     }
@@ -317,7 +349,7 @@ class UserServiceTest {
         val userRequest = anyUser().withCVU("111111111a111111111111").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.cvu: The CVU can only contain numbers", thrown.message)
+        assertEquals("save.userCreateRequest.cvu: The CVU can only contain numbers", thrown.message)
     }
 
     @Test
@@ -325,7 +357,7 @@ class UserServiceTest {
         val userRequest = anyUser().withCVU("11111111111").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.cvu: The CVU must be 22 digits long", thrown.message)
+        assertEquals("save.userCreateRequest.cvu: The CVU must be 22 digits long", thrown.message)
     }
 
     @Test
@@ -333,7 +365,7 @@ class UserServiceTest {
         val userRequest = anyUser().withCVU("111111111111111111111111").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.cvu: The CVU must be 22 digits long", thrown.message)
+        assertEquals("save.userCreateRequest.cvu: The CVU must be 22 digits long", thrown.message)
     }
 
     @Test
@@ -341,7 +373,10 @@ class UserServiceTest {
         val userRequest = anyUser().withCryptoWallet(null).build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.cryptoWalletAddress: The crypto wallet address cannot be blank", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.cryptoWalletAddress: The crypto wallet address cannot be blank",
+            thrown.message
+        )
     }
 
     @Test
@@ -349,7 +384,10 @@ class UserServiceTest {
         val userRequest = anyUser().withCryptoWallet("4646").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.cryptoWalletAddress: The crypto wallet address must be 8 digits long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.cryptoWalletAddress: The crypto wallet address must be 8 digits long",
+            thrown.message
+        )
     }
 
     @Test
@@ -357,7 +395,10 @@ class UserServiceTest {
         val userRequest = anyUser().withCryptoWallet("464646465").build()
         val thrown = assertThrows(RuntimeException::class.java) { userService.save(userRequest) }
 
-        assertEquals("save.user.cryptoWalletAddress: The crypto wallet address must be 8 digits long", thrown.message)
+        assertEquals(
+            "save.userCreateRequest.cryptoWalletAddress: The crypto wallet address must be 8 digits long",
+            thrown.message
+        )
     }
 
     @AfterEach

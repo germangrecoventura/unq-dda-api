@@ -1,9 +1,10 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto
 
+import ar.edu.unq.desapp.groupb.cryptop2p.model.User
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.*
 
-class UserRequestDTO {
+class UserCreateRequestDTO {
     @NotBlank(message = "The first name cannot be blank")
     @Size(min = 3, max = 30, message = "The first name must be between 3 and 30 characters long")
     @Pattern(regexp = "[a-zA-Z ]+", message = "The first name cannot contain special characters or numbers")
@@ -47,4 +48,16 @@ class UserRequestDTO {
     @Pattern(regexp = "[0-9]+", message = " The crypto wallet address can only contain numbers")
     @Schema(example = "12345678")
     var cryptoWalletAddress: String? = null
+
+    fun toDomain(): User {
+        val user = User()
+        user.firstName = this.firstName
+        user.lastName = this.lastName
+        user.emailAddress = this.emailAddress
+        user.address = this.address
+        user.password = this.password
+        user.cvu = this.cvu
+        user.cryptoWalletAddress = this.cryptoWalletAddress
+        return user
+    }
 }

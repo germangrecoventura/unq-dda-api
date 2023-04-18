@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.User
 import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserCreateRequestDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -48,8 +48,8 @@ class UserController(private val userService: UserService) {
             )
         ]
     )
-    fun createUser(@RequestBody userRequestDTO: UserRequestDTO): ResponseEntity<User> {
-        val user = userService.save(userRequestDTO)
+    fun createUser(@RequestBody userCreateRequestDTO: UserCreateRequestDTO): ResponseEntity<User> {
+        val user = userService.save(userCreateRequestDTO)
         return ResponseEntity.ok().body(user)
     }
 }
