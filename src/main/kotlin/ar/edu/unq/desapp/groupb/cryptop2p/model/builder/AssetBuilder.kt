@@ -9,7 +9,7 @@ class AssetBuilder {
 
     fun build(): Asset {
         val asset = Asset()
-        asset.name = name
+        asset.symbol = name
         asset.created = created
         return asset
     }

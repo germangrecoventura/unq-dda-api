@@ -14,7 +14,7 @@ class AssetTest {
 
     fun anyAsset(): Asset {
         val now = LocalDateTime.now()
-        return Asset(id = 1, name = "ALICEUSDT", created = now)
+        return Asset(id = 1, symbol = "ALICEUSDT", created = now)
     }
 
     @Test
@@ -25,41 +25,41 @@ class AssetTest {
     }
 
     @Test
-    fun `should have an error when the name is null`() {
+    fun `should have an error when the symbol is null`() {
         val asset = anyAsset()
-        asset.name = null
+        asset.symbol = null
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should have an error when the name is empty`() {
+    fun `should have an error when the symbol is empty`() {
         val asset = anyAsset()
-        asset.name = ""
+        asset.symbol = ""
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should have an error when the name has numbers`() {
+    fun `should have an error when the symbol has numbers`() {
         val asset = anyAsset()
-        asset.name = "NEW0"
+        asset.symbol = "NEW0"
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should have an error when the name has a special character`() {
+    fun `should have an error when the symbol has any special character`() {
         val asset = anyAsset()
-        asset.name = "NEW@"
+        asset.symbol = "NEW@"
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should have an error when the name has any lower case`() {
+    fun `should have an error when the symbol has any lower case character`() {
         val asset = anyAsset()
-        asset.name = "New"
+        asset.symbol = "New"
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }

@@ -13,7 +13,7 @@ class AssetPriceTest {
     lateinit var validator: Validator
 
     fun anyAsset(): Asset {
-        return Asset(id = 1, name = "ALICEUSDT")
+        return Asset(id = 1, symbol = "ALICEUSDT")
     }
 
     fun anyAssetPrice(): AssetPrice {
