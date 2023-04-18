@@ -33,7 +33,6 @@ class OfferTest {
         return AssetBuilder()
             .withName("ALICEUSDT")
             .withCreated(now)
-            .withUpdated(now)
     }
 
     fun anyOfferBuy(): OfferBuilder {
@@ -71,49 +70,49 @@ class OfferTest {
     }
 
     @Test
-    fun `should throw an exception when asset name is null`() {
+    fun `should have an error when asset name is null`() {
         val offer = anyOfferBuy().withAsset(null).build()
         val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the quantity is negative`() {
+    fun `should have an error when the quantity is negative`() {
         val offer = anyOfferBuy().withQuantity(-50.00).build()
         val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the unit price is negative`() {
+    fun `should have an error when the unit price is negative`() {
         val offer = anyOfferBuy().withUnitPrice(-50.00).build()
         val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the total amount is negative`() {
+    fun `should have an error when the total amount is negative`() {
         val offer = anyOfferBuy().withTotalAmount(-50.00).build()
         val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the user is null`() {
+    fun `should have an error when the user is null`() {
         val offer = anyOfferBuy().withUser(null).build()
         val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the active flag is null`() {
+    fun `should have an error when the active flag is null`() {
         val offer = anyOfferBuy().withActive(null).build()
         val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when the created date is null`() {
+    fun `should have an error when the created date is null`() {
         val offer = anyOfferBuy().withCreated(null).build()
         val violations = validator.validate(offer)
         Assertions.assertTrue(violations.isNotEmpty())

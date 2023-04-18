@@ -61,7 +61,6 @@ class TransactionTest {
         return AssetBuilder()
             .withName("ALICEUSDT")
             .withCreated(now)
-            .withUpdated(now)
     }
 
     private fun anyOffer(): OfferBuilder {

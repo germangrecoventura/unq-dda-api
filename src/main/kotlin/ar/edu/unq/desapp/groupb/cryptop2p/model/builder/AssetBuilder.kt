@@ -6,13 +6,11 @@ import java.time.LocalDateTime
 class AssetBuilder {
     private var name: String? = null
     private var created: LocalDateTime? = null
-    private var updated: LocalDateTime? = null
 
     fun build(): Asset {
         val asset = Asset()
         asset.name = name
         asset.created = created
-        asset.updated = updated
         return asset
     }
 
@@ -23,11 +21,6 @@ class AssetBuilder {
 
     fun withCreated(date: LocalDateTime?): AssetBuilder {
         this.created = date
-        return this
-    }
-
-    fun withUpdated(date: LocalDateTime?): AssetBuilder {
-        this.updated = date
         return this
     }
 }

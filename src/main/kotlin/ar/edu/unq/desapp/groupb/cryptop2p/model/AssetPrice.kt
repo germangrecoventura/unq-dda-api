@@ -22,7 +22,7 @@ class AssetPrice(
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(name = "asset_id", nullable = false)
     @field:JsonProperty
-    var asset: Asset,
+    var asset: Asset?,
 
     @field:Column(nullable = false)
     @field:NotNull(message = "The unit price cannot be blank")

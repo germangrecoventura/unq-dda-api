@@ -23,13 +23,6 @@ class Asset(
     @field:DateTimeFormat
     var created: LocalDateTime? = null,
 
-    @field:Column(nullable = false)
-    @field:NotNull
-    @field:DateTimeFormat
-    var updated: LocalDateTime? = null,
-
-    @field:Column(nullable = false)
-    @field:NotNull
     @field:OneToMany(mappedBy = "asset")
-    val prices: List<AssetPrice>? = null,
+    val prices: MutableSet<AssetPrice> = mutableSetOf(),
 )
