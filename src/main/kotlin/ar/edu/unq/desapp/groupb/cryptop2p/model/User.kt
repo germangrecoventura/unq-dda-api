@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
@@ -8,9 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
 
-@Entity
-@Table(name = "registered_user")
-@JsonPropertyOrder("id", "emailAddress", "firstname", "lastname")
+@Entity(name = "registered_user")
+@JsonPropertyOrder("id", "emailAddress", "firstName", "lastName")
 class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -74,18 +72,4 @@ class User {
     @Schema(example = "12345678")
     @JsonProperty
     var cryptoWalletAddress: String? = null
-
-    companion object {
-        fun fromDTO(userRequest: UserRequestDTO): User {
-            val user = User()
-            user.firstName = userRequest.firstName
-            user.lastName = userRequest.lastName
-            user.emailAddress = userRequest.emailAddress
-            user.address = userRequest.address
-            user.password = userRequest.password
-            user.cvu = userRequest.cvu
-            user.cryptoWalletAddress = userRequest.cryptoWalletAddress
-            return user
-        }
-    }
 }

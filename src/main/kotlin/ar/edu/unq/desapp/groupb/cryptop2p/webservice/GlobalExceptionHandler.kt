@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
-import ar.edu.unq.desapp.groupb.cryptop2p.service.UserEmailAddressAlreadyRegisteredException
+import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import jakarta.validation.ConstraintViolationException
@@ -33,9 +33,9 @@ class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(body)
     }
 
-    @ExceptionHandler(UserEmailAddressAlreadyRegisteredException::class)
+    @ExceptionHandler(ModelException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleUserEmailAddressAlreadyRegisteredException(ex: UserEmailAddressAlreadyRegisteredException): ResponseEntity<*> {
+    fun handleUserEmailAddressAlreadyRegisteredException(ex: ModelException): ResponseEntity<*> {
         val error = ValidationErrorDTO(ex.source, ex.message ?: "")
         val body = ValidationErrorResponseDTO(listOf(error))
         return ResponseEntity.badRequest().body(body)

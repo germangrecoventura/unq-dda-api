@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserDTOBuilder
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -30,8 +30,8 @@ class UserControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
     }
 
-    fun anyUser(): UserDTOBuilder {
-        return UserDTOBuilder()
+    fun anyUser(): UserCreateRequestDTOBuilder {
+        return UserCreateRequestDTOBuilder()
             .withFirstName("Homero")
             .withLastName("Simpson")
             .withEmail("homero.simpson@sprinfield.com")

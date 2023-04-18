@@ -1,8 +1,8 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder
 
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserCreateRequestDTO
 
-class UserDTOBuilder {
+class UserCreateRequestDTOBuilder {
     private var firstName: String? = null
     private var lastName: String? = null
     private var emailAddress: String? = null
@@ -11,8 +11,8 @@ class UserDTOBuilder {
     private var cvu: String? = null
     private var cryptoWalletAddress: String? = null
 
-    fun build(): UserRequestDTO {
-        var userRequest = UserRequestDTO()
+    fun build(): UserCreateRequestDTO {
+        val userRequest = UserCreateRequestDTO()
         userRequest.firstName = firstName
         userRequest.lastName = lastName
         userRequest.emailAddress = emailAddress
@@ -23,38 +23,38 @@ class UserDTOBuilder {
         return userRequest
     }
 
-    fun withFirstName(name: String?): UserDTOBuilder {
+    fun withFirstName(name: String?): UserCreateRequestDTOBuilder {
         this.firstName = name
         return this
     }
 
-    fun withLastName(lastname: String?): UserDTOBuilder {
+    fun withLastName(lastname: String?): UserCreateRequestDTOBuilder {
         this.lastName = lastname
         return this
     }
 
-    fun withEmail(email: String?): UserDTOBuilder {
+    fun withEmail(email: String?): UserCreateRequestDTOBuilder {
         this.emailAddress = email
         return this
     }
 
-    fun withAddress(address: String?): UserDTOBuilder {
+    fun withAddress(address: String?): UserCreateRequestDTOBuilder {
         this.address = address
         return this
     }
 
-    fun withPassword(password: String?): UserDTOBuilder {
+    fun withPassword(password: String?): UserCreateRequestDTOBuilder {
         this.password = password
         return this
     }
 
 
-    fun withCVU(cvu: String?): UserDTOBuilder {
+    fun withCVU(cvu: String?): UserCreateRequestDTOBuilder {
         this.cvu = cvu
         return this
     }
 
-    fun withCryptoWallet(cryptoWallet: String?): UserDTOBuilder {
+    fun withCryptoWallet(cryptoWallet: String?): UserCreateRequestDTOBuilder {
         this.cryptoWalletAddress = cryptoWallet
         return this
     }

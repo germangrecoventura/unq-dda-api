@@ -30,42 +30,42 @@ class UserTest {
     }
 
     @Test
-    fun `should throw an exception when a user's first name is null`() {
+    fun `should have an error when a user's first name is null`() {
         val user = anyUser().withFirstName(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's first name is blank`() {
+    fun `should have an error when a user's first name is blank`() {
         val user = anyUser().withFirstName("").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's first name has numbers`() {
+    fun `should have an error when a user's first name has numbers`() {
         val user = anyUser().withFirstName("456").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's first name has special characters`() {
+    fun `should have an error when a user's first name has special characters`() {
         val user = anyUser().withFirstName("Germ@n").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's first name has less than 3 characters`() {
+    fun `should have an error when a user's first name has less than 3 characters`() {
         val user = anyUser().withFirstName("G").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's first name has more than 30 characters`() {
+    fun `should have an error when a user's first name has more than 30 characters`() {
         val user = anyUser().withFirstName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
@@ -73,28 +73,28 @@ class UserTest {
 
 
     @Test
-    fun `should throw an exception when a user's las name is null`() {
+    fun `should have an error when a user's las name is null`() {
         val user = anyUser().withLastName(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's las name is blank`() {
+    fun `should have an error when a user's las name is blank`() {
         val user = anyUser().withLastName("").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's last name contains numbers`() {
+    fun `should have an error when a user's last name contains numbers`() {
         val user = anyUser().withLastName("Grec0 Ventura").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's last name contains special characters`() {
+    fun `should have an error when a user's last name contains special characters`() {
         val user = anyUser().withLastName("Grec# Ventura").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
@@ -102,35 +102,35 @@ class UserTest {
 
 
     @Test
-    fun `should throw an exception when a user's last name has less than 3 characters`() {
+    fun `should have an error when a user's last name has less than 3 characters`() {
         val user = anyUser().withLastName("Gr").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's last name has more than 30 characters`() {
+    fun `should have an error when a user's last name has more than 30 characters`() {
         val user = anyUser().withLastName("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's email address is null`() {
+    fun `should have an error when a user's email address is null`() {
         val user = anyUser().withEmail(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's email address is blank`() {
+    fun `should have an error when a user's email address is blank`() {
         val user = anyUser().withEmail("").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's address is null`() {
+    fun `should have an error when a user's address is null`() {
         val user = anyUser().withAddress(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
@@ -138,21 +138,21 @@ class UserTest {
 
 
     @Test
-    fun `should throw an exception when a user's email address is not valid`() {
+    fun `should have an error when a user's email address is not valid`() {
         val user = anyUser().withEmail("testgmailcom").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's address is blank`() {
+    fun `should have an error when a user's address is blank`() {
         val user = anyUser().withAddress("").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user has the field address special characters`() {
+    fun `should have an error when a user has the field address special characters`() {
         val user = anyUser().withAddress("sas@").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
@@ -160,35 +160,35 @@ class UserTest {
 
 
     @Test
-    fun `should throw an exception when a user's address has less than 10 characters`() {
+    fun `should have an error when a user's address has less than 10 characters`() {
         val user = anyUser().withAddress("sas").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's address has more than 30 characters`() {
+    fun `should have an error when a user's address has more than 30 characters`() {
         val user = anyUser().withAddress("Geeeeeeeeeeee eeeeeee eeeeeeeess").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's password is null`() {
+    fun `should have an error when a user's password is null`() {
         val user = anyUser().withPassword(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's password is blank`() {
+    fun `should have an error when a user's password is blank`() {
         val user = anyUser().withPassword("").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's password has less than 6 characters`() {
+    fun `should have an error when a user's password has less than 6 characters`() {
         val user = anyUser().withPassword("1").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
@@ -196,28 +196,28 @@ class UserTest {
 
 
     @Test
-    fun `should throw an exception when a user's password does not have a lower case letter`() {
+    fun `should have an error when a user's password does not have a lower case letter`() {
         val user = anyUser().withPassword("11A1@1").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's password does not have an upper case letter`() {
+    fun `should have an error when a user's password does not have an upper case letter`() {
         val user = anyUser().withPassword("11a1@1").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's password does not have a special character`() {
+    fun `should have an error when a user's password does not have a special character`() {
         val user = anyUser().withPassword("11a1A1").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's CVU is null`() {
+    fun `should have an error when a user's CVU is null`() {
         val user = anyUser().withCVU(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
@@ -225,28 +225,28 @@ class UserTest {
 
 
     @Test
-    fun `should throw an exception when a user's CVU is blank`() {
+    fun `should have an error when a user's CVU is blank`() {
         val user = anyUser().withCVU("").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's CVU contains characters`() {
+    fun `should have an error when a user's CVU contains characters`() {
         val user = anyUser().withCVU("111111111a111111111111").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's CVU has less than 22 characters`() {
+    fun `should have an error when a user's CVU has less than 22 characters`() {
         val user = anyUser().withCVU("11111111111").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's CVU has more than 22 characters`() {
+    fun `should have an error when a user's CVU has more than 22 characters`() {
         val user = anyUser().withCVU("111111111111111111111111").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
@@ -254,21 +254,21 @@ class UserTest {
 
 
     @Test
-    fun `should throw an exception when a user's crypto wallet address is null`() {
+    fun `should have an error when a user's crypto wallet address is null`() {
         val user = anyUser().withCryptoWallet(null).build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's crypto wallet has less than 8 characters`() {
+    fun `should have an error when a user's crypto wallet has less than 8 characters`() {
         val user = anyUser().withCryptoWallet("4646").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
     }
 
     @Test
-    fun `should throw an exception when a user's crypt wallet has more than 8 characters`() {
+    fun `should have an error when a user's crypt wallet has more than 8 characters`() {
         val user = anyUser().withCryptoWallet("464646465").build()
         val violations = validator.validate(user)
         assertTrue(violations.isNotEmpty())
