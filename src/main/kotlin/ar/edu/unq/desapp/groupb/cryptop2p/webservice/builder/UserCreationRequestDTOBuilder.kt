@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder
 
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserCreationRequestDTO
 
 class UserDTOBuilder {
     private var firstName: String? = null
@@ -11,8 +11,8 @@ class UserDTOBuilder {
     private var cvu: String? = null
     private var cryptoWalletAddress: String? = null
 
-    fun build(): UserRequestDTO {
-        var userRequest = UserRequestDTO()
+    fun build(): UserCreationRequestDTO {
+        var userRequest = UserCreationRequestDTO()
         userRequest.firstName = firstName
         userRequest.lastName = lastName
         userRequest.emailAddress = emailAddress
