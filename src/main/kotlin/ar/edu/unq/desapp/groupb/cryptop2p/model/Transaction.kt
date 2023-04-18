@@ -10,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
+val ERROR_MESSAGE = "The seller is not the same as the offer"
+
 @Entity
 @JsonPropertyOrder("id", "asset", "seller", "buyer")
 class Transaction {
@@ -84,13 +86,13 @@ class Transaction {
 
     private fun validateSeller(value: User?) {
         if (offer != null && offer!!.operation == OfferType.SELL && offer!!.user != value) {
-            throw RuntimeException("The seller is not the same as the offer")
+            throw RuntimeException(ERROR_MESSAGE)
         }
     }
 
     private fun validateBuyer(value: User?) {
         if (offer != null && offer!!.operation == OfferType.BUY && offer!!.user != value) {
-            throw RuntimeException("The seller is not the same as the offer")
+            throw RuntimeException(ERROR_MESSAGE)
         }
     }
 
@@ -107,7 +109,7 @@ class Transaction {
             throw RuntimeException("The seller cannot be the same buyer")
         }
         if (offer.operation == OfferType.SELL && offer.user != seller) {
-            throw RuntimeException("The seller is not the same as the offer")
+            throw RuntimeException(ERROR_MESSAGE)
         }
         if (offer.operation == OfferType.BUY && offer.user != buyer) {
             throw RuntimeException("The buyer is not the same as the offer")
