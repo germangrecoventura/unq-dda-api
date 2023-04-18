@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.OfferBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.UserBuilder
 import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,7 +41,6 @@ class OfferTest {
             .withAsset(anyAsset().build())
             .withQuantity(20.00)
             .withUnitPrice(40.00)
-            .withTotalAmount(400.00)
             .withUser(anyUser().build())
             .withOperation(OfferType.BUY)
             .withActive(true)
@@ -52,7 +52,6 @@ class OfferTest {
             .withAsset(anyAsset().build())
             .withQuantity(20.00)
             .withUnitPrice(40.00)
-            .withTotalAmount(400.00)
             .withUser(anyUser().build())
             .withOperation(OfferType.SELL)
             .withActive(true)
@@ -91,10 +90,9 @@ class OfferTest {
     }
 
     @Test
-    fun `should have an error when the total amount is negative`() {
-        val offer = anyOfferBuy().withTotalAmount(-50.00).build()
-        val violations = validator.validate(offer)
-        Assertions.assertTrue(violations.isNotEmpty())
+    fun `should have a total amount equal to 800`() {
+        val offer = anyOfferBuy().build()
+        assertEquals(800.0, offer.totalAmount)
     }
 
     @Test

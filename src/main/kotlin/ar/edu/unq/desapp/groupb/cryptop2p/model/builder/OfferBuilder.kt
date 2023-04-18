@@ -21,7 +21,6 @@ class OfferBuilder {
         offer.asset = asset
         offer.quantity = quantity
         offer.unitPrice = unitPrice
-        offer.totalAmount = totalAmount
         offer.user = user
         offer.operation = operation
         offer.isActive = isActive
@@ -41,11 +40,6 @@ class OfferBuilder {
 
     fun withUnitPrice(amount: Double?): OfferBuilder {
         this.unitPrice = amount
-        return this
-    }
-
-    fun withTotalAmount(amount: Double?): OfferBuilder {
-        this.totalAmount = amount
         return this
     }
 

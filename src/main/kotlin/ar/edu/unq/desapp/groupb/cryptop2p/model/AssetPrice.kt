@@ -18,9 +18,9 @@ class AssetPrice(
     @field:JsonProperty
     var id: Long? = null,
 
-    @field:NotNull(message = "The asset cannot be blank")
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(name = "asset_id", nullable = false)
+    @field:NotNull(message = "The asset cannot be blank")
     @field:JsonProperty
     var asset: Asset?,
 

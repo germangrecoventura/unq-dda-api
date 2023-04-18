@@ -17,13 +17,13 @@ class UserTransactionRating(
     @field:JsonProperty
     var id: Long? = null,
 
-    @field:NotNull
     @field:OneToOne(fetch = FetchType.LAZY)
+    @field:NotNull
     @field:JsonProperty
     var user: User? = null,
 
-    @field:NotNull
     @field:OneToOne(fetch = FetchType.LAZY)
+    @field:NotNull
     @field:JsonProperty
     var transaction: Transaction? = null,
 

@@ -17,9 +17,9 @@ class Offer(
     @field:JsonProperty
     var id: Long? = null,
 
-    @field:NotNull(message = "The asset cannot be blank")
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(name = "asset_id", nullable = false)
+    @field:NotNull(message = "The asset cannot be blank")
     @field:JsonProperty
     var asset: Asset? = null,
 
@@ -35,14 +35,8 @@ class Offer(
     @field:JsonProperty
     var unitPrice: Double? = null,
 
-    @field:Column(nullable = false)
-    @field:NotNull(message = "The total amount cannot be blank")
-    @field:DecimalMin("0.0", message = "The total amount cannot be negative")
-    @field:JsonProperty
-    var totalAmount: Double? = null,
-
-    @field:NotNull(message = "The user cannot be blank")
     @field:ManyToOne(fetch = FetchType.LAZY)
+    @field:NotNull(message = "The user cannot be blank")
     @field:JsonProperty
     var user: User? = null,
 
@@ -61,7 +55,11 @@ class Offer(
     @field:NotNull(message = "The created date time cannot be blank")
     @field:JsonProperty
     var created: LocalDateTime? = null,
-)
+) {
+    @get:JsonProperty
+    val totalAmount: Double
+        get() = unitPrice?.let { quantity?.times(it) } ?: 0.0
+}
 
 enum class OfferType {
     BUY, SELL
