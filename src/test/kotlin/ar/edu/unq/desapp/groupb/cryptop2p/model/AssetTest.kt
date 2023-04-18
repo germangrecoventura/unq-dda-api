@@ -14,7 +14,7 @@ class AssetTest {
 
     fun anyAsset(): Asset {
         val now = LocalDateTime.now()
-        return Asset(name = "ALICEUSDT", created = now)
+        return Asset(id = 1, name = "ALICEUSDT", created = now)
     }
 
     @Test
