@@ -83,6 +83,15 @@ class Transaction {
             throw SameTraderException(source)
         }
     }
+
+    fun isClosed(): Boolean {
+        return listOf(
+            TransactionStatus.TRANSFER_COMPLETED,
+            TransactionStatus.RECEPTION_COMPLETED,
+            TransactionStatus.USER_CANCELED,
+            TransactionStatus.SYSTEM_CANCELED
+        ).contains(this.status)
+    }
 }
 
 enum class TransactionStatus {
