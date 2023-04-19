@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model.validator
 
+import ar.edu.unq.desapp.groupb.cryptop2p.model.builder.UserBuilder
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -22,11 +22,13 @@ class UserValidatorTest {
     @Autowired
     lateinit var userValidator: UserValidator
 
-    fun anyUserCreationRequest(): UserCreateRequestDTOBuilder {
-        return UserCreateRequestDTOBuilder()
+    fun anyEmailAddress(): String = "homero.simpson@sprinfield.com"
+
+    fun anyUser(): UserBuilder {
+        return UserBuilder()
             .withFirstName("Homero")
             .withLastName("Simpson")
-            .withEmail("homero.simpson@sprinfield.com")
+            .withEmail(anyEmailAddress())
             .withAddress("Evergreen 123")
             .withPassword("Super!")
             .withCVU("0011223344556677889900")
@@ -36,21 +38,20 @@ class UserValidatorTest {
     @Test
     fun `should verify that the creation request is valid`() {
         assertDoesNotThrow {
-            userValidator.isCreationRequestValid(anyUserCreationRequest().build())
+            userValidator.isCreationRequestValid(anyEmailAddress())
         }
     }
 
     @Test
     fun `should throw an exception when the user is already registered`() {
-        val userCreationRequest = anyUserCreationRequest().build()
-        val optionalUser = Optional.of(userCreationRequest.toDomain())
+        val optionalUser = Optional.of(anyUser().build())
 
         Mockito
-            .`when`(userRepository.findByEmailAddress(userCreationRequest.emailAddress!!))
+            .`when`(userRepository.findByEmailAddress(anyEmailAddress()))
             .thenReturn(optionalUser)
 
         assertThrows(UserEmailAddressAlreadyRegisteredException::class.java) {
-            userValidator.isCreationRequestValid(anyUserCreationRequest().build())
+            userValidator.isCreationRequestValid(anyEmailAddress())
         }
     }
 }

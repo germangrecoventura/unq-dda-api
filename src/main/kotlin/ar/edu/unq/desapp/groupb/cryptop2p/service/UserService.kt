@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated
 @Transactional
 class UserService(private val userRepository: UserRepository, private val userValidator: UserValidator) {
     fun save(@Valid userCreateRequest: UserCreateRequestDTO): User {
-        userValidator.isCreationRequestValid(userCreateRequest)
+        userValidator.isCreationRequestValid(userCreateRequest.emailAddress!!)
         val newUser = userCreateRequest.toDomain()
         return userRepository.save(newUser)
     }
