@@ -134,4 +134,16 @@ class TransactionTest {
     fun `should throw an exception when the offer is null`() {
         assertThrows(RuntimeException::class.java) { anyTransaction().withOffer(null).build() }
     }
+
+    @Test
+    fun `should not be closed when the status is not final`() {
+        val transaction = anyTransaction().build()
+        assertFalse(transaction.isClosed())
+    }
+
+    @Test
+    fun `should be closed when the status is final`() {
+        val transaction = anyTransaction().withStatus(TransactionStatus.TRANSFER_COMPLETED).build()
+        assertTrue(transaction.isClosed())
+    }
 }
