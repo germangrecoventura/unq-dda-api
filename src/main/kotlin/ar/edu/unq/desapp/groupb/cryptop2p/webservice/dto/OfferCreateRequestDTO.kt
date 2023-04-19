@@ -26,6 +26,6 @@ class OfferCreateRequestDTO(
     var type: OfferType? = null,
 
     @field:DateTimeFormat
-    @field:NotNull(message = "The created date time cannot be blank")
+    @field:NotNull(message = "The created date cannot be blank")
     var created: LocalDateTime? = null,
 )
