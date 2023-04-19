@@ -60,7 +60,7 @@ sonarqube {
         property("sonar.host.url", "https://sonarcloud.io")
         property("sonar.coverage.jacoco.xmlReportPaths", "$buildDir/reports/jacoco/test")
         property(
-            "sonar.exclusions",
+            "sonar.coverage.exclusions",
             "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/webservice/**, src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/service/**, src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/persistance/**"
         )
     }
