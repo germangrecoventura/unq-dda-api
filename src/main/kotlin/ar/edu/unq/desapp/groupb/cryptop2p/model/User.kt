@@ -65,7 +65,7 @@ class User {
     @JsonProperty
     var cvu: String? = null
 
-    @Column(nullable = false, length = 8)
+    @Column(nullable = false, unique = true, length = 8)
     @NotNull(message = "The crypto wallet address cannot be blank")
     @Size(min = 8, max = 8, message = "The crypto wallet address must be 8 digits long")
     @Pattern(regexp = "[0-9]+", message = " The crypto wallet address can only contain numbers")
