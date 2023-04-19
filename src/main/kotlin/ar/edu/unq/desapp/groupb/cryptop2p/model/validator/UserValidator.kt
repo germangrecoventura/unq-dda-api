@@ -17,4 +17,4 @@ class UserValidator(val userRepository: UserRepository) {
 }
 
 class UserEmailAddressAlreadyRegisteredException :
-    ModelException("The email address is already registered", "user.email")
+    ModelException("The email address is already registered", "user.emailAddress")
