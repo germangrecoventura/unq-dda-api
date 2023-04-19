@@ -1,0 +1,15 @@
+---------------------------------------------------------------------
+TAG ENTREGA-1-1.0
+---------------------------------------------------------------------
+NEW FEATURES:
+* Added POST /users functionality
+* Domain models were added along with their respective tests
+* Added an integration test for user creation
+* Added unit tests for domain models
+* Added integration with sonarcloud and deploy
+
+NOTES:
+* Everything working correctly
+
+KNOWN ISSUES:
+* So far no problems found
