@@ -10,9 +10,8 @@ class OfferBuilder {
     private var asset: Asset? = null
     private var quantity: Double? = null
     private var unitPrice: Double? = null
-    private var totalAmount: Double? = null
     private var user: User? = null
-    private var operation: OfferType? = null
+    private var type: OfferType? = null
     private var isActive: Boolean? = null
     private var created: LocalDateTime? = null
 
@@ -22,7 +21,7 @@ class OfferBuilder {
         offer.quantity = quantity
         offer.unitPrice = unitPrice
         offer.user = user
-        offer.operation = operation
+        offer.type = type
         offer.isActive = isActive
         offer.created = created
         return offer
@@ -48,8 +47,8 @@ class OfferBuilder {
         return this
     }
 
-    fun withOperation(operation: OfferType?): OfferBuilder {
-        this.operation = operation
+    fun withType(type: OfferType?): OfferBuilder {
+        this.type = type
         return this
     }
 

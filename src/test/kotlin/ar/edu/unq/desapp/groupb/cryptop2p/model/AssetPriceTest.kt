@@ -37,14 +37,6 @@ class AssetPriceTest {
     }
 
     @Test
-    fun `should have an error when unit price is null`() {
-        val assetPrice = anyAssetPrice()
-        assetPrice.unitPrice = null
-        val validations = validator.validate(assetPrice)
-        assertTrue(validations.isNotEmpty())
-    }
-
-    @Test
     fun `should have an error when unit price is negative`() {
         val assetPrice = anyAssetPrice()
         assetPrice.unitPrice = -3.14

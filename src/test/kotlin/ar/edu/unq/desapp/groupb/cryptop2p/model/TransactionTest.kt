@@ -68,7 +68,7 @@ class TransactionTest {
             .withQuantity(20.00)
             .withUnitPrice(40.00)
             .withUser(buyer)
-            .withOperation(OfferType.BUY)
+            .withType(OfferType.BUY)
             .withActive(true)
             .withCreated(LocalDateTime.now())
     }
@@ -111,7 +111,7 @@ class TransactionTest {
 
     @Test
     fun `should throw an exception when the buyer and the seller are the same user`() {
-        val offer = anyOffer().withUser(seller).withOperation(OfferType.BUY).build()
+        val offer = anyOffer().withUser(seller).withType(OfferType.BUY).build()
 
         val thrown: RuntimeException =
             assertThrows(

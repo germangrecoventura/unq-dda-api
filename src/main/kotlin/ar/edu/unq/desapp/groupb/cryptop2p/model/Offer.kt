@@ -41,8 +41,9 @@ class Offer(
     var user: User? = null,
 
     @field:Column(nullable = false)
+    @field:NotNull(message = "The type cannot be blank")
     @field:JsonProperty
-    var operation: OfferType? = null,
+    var type: OfferType? = null,
 
     @field:Column(nullable = false)
     @field:NotNull(message = "The active flag cannot be blank")

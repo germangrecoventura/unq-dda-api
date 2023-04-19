@@ -42,7 +42,7 @@ class OfferTest {
             .withQuantity(20.00)
             .withUnitPrice(40.00)
             .withUser(anyUser().build())
-            .withOperation(OfferType.BUY)
+            .withType(OfferType.BUY)
             .withActive(true)
             .withCreated(LocalDateTime.now())
     }
@@ -53,7 +53,7 @@ class OfferTest {
             .withQuantity(20.00)
             .withUnitPrice(40.00)
             .withUser(anyUser().build())
-            .withOperation(OfferType.SELL)
+            .withType(OfferType.SELL)
             .withActive(true)
             .withCreated(LocalDateTime.now())
     }

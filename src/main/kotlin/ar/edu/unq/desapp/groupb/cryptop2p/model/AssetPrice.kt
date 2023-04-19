@@ -28,7 +28,7 @@ class AssetPrice(
     @field:NotNull(message = "The unit price cannot be blank")
     @field:DecimalMin(value = "0.0", message = "The unit price cannot be less than zero")
     @field:JsonProperty
-    var unitPrice: Double? = null,
+    var unitPrice: Double = 0.0,
 
     @field:Column(nullable = false)
     @field:NotNull(message = "The create date cannot be blank")
