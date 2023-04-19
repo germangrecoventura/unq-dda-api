@@ -43,4 +43,10 @@ class AssetPrice(
     @field:UpdateTimestamp
     @field:JsonProperty
     var updated: LocalDateTime? = null,
-)
+) {
+    fun isPriceWithinThreshold(unitPrice: Double): Boolean {
+        val minPrice = this.unitPrice * 0.95
+        val maxPrice = this.unitPrice * 1.05
+        return unitPrice in minPrice..maxPrice
+    }
+}

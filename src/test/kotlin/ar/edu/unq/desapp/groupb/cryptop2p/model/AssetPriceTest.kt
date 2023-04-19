@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
 import jakarta.validation.Validator
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +19,7 @@ class AssetPriceTest {
 
     fun anyAssetPrice(): AssetPrice {
         val now = LocalDateTime.now()
-        return AssetPrice(id = 1, asset = anyAsset(), unitPrice = 3.14, created = now, updated = now)
+        return AssetPrice(id = 1, asset = anyAsset(), unitPrice = 100.0, created = now, updated = now)
     }
 
     @Test
@@ -39,7 +40,7 @@ class AssetPriceTest {
     @Test
     fun `should have an error when unit price is negative`() {
         val assetPrice = anyAssetPrice()
-        assetPrice.unitPrice = -3.14
+        assetPrice.unitPrice = -100.0
         val validations = validator.validate(assetPrice)
         assertTrue(validations.isNotEmpty())
     }
@@ -58,5 +59,23 @@ class AssetPriceTest {
         assetPrice.updated = null
         val validations = validator.validate(assetPrice)
         assertTrue(validations.isNotEmpty())
+    }
+
+    @Test
+    fun `should verify that the unit price is within the threshold`() {
+        val assetPrice = anyAssetPrice()
+        assertTrue(assetPrice.isPriceWithinThreshold(100.0))
+    }
+
+    @Test
+    fun `should throw an exception when the offer price is under five percent than the asset price`() {
+        val assetPrice = anyAssetPrice()
+        assertFalse(assetPrice.isPriceWithinThreshold(90.0))
+    }
+
+    @Test
+    fun `should throw an exception when the offer price is over five percent than the asset price`() {
+        val assetPrice = anyAssetPrice()
+        assertFalse(assetPrice.isPriceWithinThreshold(110.0))
     }
 }
