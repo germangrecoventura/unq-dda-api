@@ -51,7 +51,12 @@ class AssetController(private val assetService: AssetService) {
             )
         ]
     )
-    fun createAsset(@RequestParam @NotBlank @Pattern(regexp = "^[A-Z0-9-_.]{1,20}$") assetName: String): ResponseEntity<Asset> {
+    fun createAsset(
+        @RequestParam @NotBlank(message = "The name cannot be blank") @Pattern(
+            regexp = "^[A-Z0-9-_.]{1,20}$",
+            message = "The asset name is not in a valid format"
+        ) assetName: String
+    ): ResponseEntity<Asset> {
         val user = assetService.save(assetName)
         return ResponseEntity.ok().body(user)
     }
