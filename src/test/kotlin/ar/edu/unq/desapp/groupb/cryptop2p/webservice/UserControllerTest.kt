@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
+import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach
@@ -24,9 +25,12 @@ class UserControllerTest {
     lateinit var context: WebApplicationContext
     private var mockServer: MockRestServiceServer? = null
     private val mapper = ObjectMapper()
+    @Autowired
+    lateinit var userService: UserService
 
     @BeforeEach
     fun setUp() {
+        userService.clear()
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
     }
 

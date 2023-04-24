@@ -26,10 +26,12 @@ class OfferValidator(
         if (offer.quantity!! < 0) throw QuantityException()
         if (offer.unitPrice!! < 0) throw UnitPriceException()
         if (offer.totalAmount!! < 0) throw TotalAmountException()
-        if (!OfferType.values()
-                .contains(OfferType.valueOf(offer.operation!!))
-        ) throw TypeOperationException()
-        return true
+        try {
+            OfferType.valueOf(offer.operation!!)
+            return true
+        } catch (e: IllegalArgumentException) {
+            throw TypeOperationException()
+        }
     }
 }
 
