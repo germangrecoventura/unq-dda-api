@@ -1,20 +1,18 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto
 
-import ar.edu.unq.desapp.groupb.cryptop2p.model.User
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
-import org.springframework.format.annotation.DateTimeFormat
-import java.time.LocalDateTime
 
 class OfferRequestDTO {
-    @DateTimeFormat
-    @NotNull(message = "The created date time cannot be blank")
-    var created: LocalDateTime? = null
-
-    @NotBlank(message = "The asset name cannot be blank")
-    @Pattern(regexp = "[A-Z]+", message = "The asset name can only contain capital letters")
+    @NotBlank(message = "The name cannot be blank")
+    @Pattern(
+        regexp = "^[A-Z0-9-_.]{1,20}$",
+        message = "The asset name is not in a valid format"
+    )
+    @Schema(example = "ALICEUSDT")
     var asset: String? = null
 
     @NotNull(message = "The quantity cannot be blank")
@@ -30,5 +28,8 @@ class OfferRequestDTO {
     var totalAmount: Double? = null
 
     @NotNull(message = "The user cannot be blank")
-    var user: User? = null
+    var user: Long? = null
+
+    @NotBlank(message = "The operation type cannot be blank")
+    var operation: String? = null
 }

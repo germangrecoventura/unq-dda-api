@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.groupb.cryptop2p
 
 import ar.edu.unq.desapp.groupb.cryptop2p.service.AssetService
+import ar.edu.unq.desapp.groupb.cryptop2p.service.OfferService
 import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,9 +14,12 @@ class Initializer {
 
     @Autowired
     lateinit var userService: UserService
+    @Autowired
+    lateinit var offerService: OfferService
 
     fun cleanDataBase() {
         assetService.clear()
+        offerService.clear()
         userService.clear()
     }
 
