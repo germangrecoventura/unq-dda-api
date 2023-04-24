@@ -35,6 +35,13 @@ class AssetService(
         return assetRepository.save(asset)
     }
 
+    fun getAssetPrices(): MutableSet<AssetPrice>? {
+        val assets = assetRepository.findAll()
+        var list = mutableSetOf<AssetPrice>()
+        assets.map { asset -> list.add(asset.prices.last()) }
+        return list
+    }
+
     fun clear() {
         assetRepository.deleteAll()
     }

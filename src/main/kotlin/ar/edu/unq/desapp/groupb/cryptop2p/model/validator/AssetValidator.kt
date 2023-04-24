@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class AssetValidator(val assetRepository: AssetRepository) {
-    private val cryptos = mutableSetOf(
+    private val assets = mutableSetOf(
         "ALICEUSDT",
         "MATICUSDT",
         "AXSUSDT",
@@ -24,7 +24,7 @@ class AssetValidator(val assetRepository: AssetRepository) {
     )
 
     fun isCreationRequestValid(assetName: String): Boolean {
-        if (!cryptos.contains(assetName)) throw AssetNotBelongingToSystemException()
+        if (!assets.contains(assetName)) throw AssetNotBelongingToSystemException()
         val optionalAsset = assetRepository.findByName(assetName)
         if (!optionalAsset.isEmpty) {
             throw AssetNameAlreadyRegisteredException()

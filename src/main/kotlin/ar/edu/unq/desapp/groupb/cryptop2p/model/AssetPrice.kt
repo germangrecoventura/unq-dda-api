@@ -13,7 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
 @Entity
-@JsonPropertyOrder("id",/*"asset", */"unitPrice")
+@JsonPropertyOrder("id","name", "unitPrice")
 class AssetPrice(
     /*@field:NotNull(message = "The asset cannot be blank")
     @field:ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Asset
+import ar.edu.unq.desapp.groupb.cryptop2p.model.AssetPrice
 import ar.edu.unq.desapp.groupb.cryptop2p.service.AssetService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -47,5 +48,9 @@ class AssetController(private val assetService: AssetService) {
     fun createAsset(@RequestParam @NotBlank @Pattern(regexp ="^[A-Z0-9-_.]{1,20}$" ) assetName: String): ResponseEntity<Asset> {
         val user = assetService.save(assetName)
         return ResponseEntity.ok().body(user)
+    }
+@GetMapping("prices")
+    fun getAssetsPrices(): ResponseEntity<MutableSet<AssetPrice>> {
+        return ResponseEntity.ok().body(assetService.getAssetPrices())
     }
 }
