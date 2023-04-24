@@ -16,6 +16,7 @@ class Initializer {
 
     fun cleanDataBase() {
         assetService.clear()
+        userService.clear()
     }
 
     fun loadData() {
@@ -49,34 +50,25 @@ class Initializer {
 
 
     private fun loadUsers() {
-        fun anyUser(): UserCreateRequestDTOBuilder {
-            return UserCreateRequestDTOBuilder()
+        /*val user1 = UserCreateRequestDTOBuilder()
+            .withFirstName("Homero")
+            .withLastName("Simpson")
+            .withEmail("homero.simpson@sprinfield.com")
+            .withAddress("Evergreen 123")
+            .withPassword("Homeroo!")
+            .withCVU("0011223344556677889900")
+            .withCryptoWallet("12345678").build()
+        userService.save(user1)
+*/
+       /* userService.save(
+            UserCreateRequestDTOBuilder()
                 .withFirstName("Homero")
                 .withLastName("Simpson")
                 .withEmail("homero.simpson@sprinfield.com")
                 .withAddress("Evergreen 123")
                 .withPassword("Super!")
                 .withCVU("0011223344556677889900")
-                .withCryptoWallet("12345678")
-        }
-        userService.save(anyUser().build())
-        userService.save(
-            anyUser().withFirstName("German")
-                .withLastName("Greco")
-                .withEmail("german@gmail.com")
-                .withAddress("Andrade 40")
-                .withPassword("Super!")
-                .withCVU("0011223344556677289900")
-                .withCryptoWallet("12355678").build()
-        )
-        userService.save(
-            anyUser().withFirstName("Jose")
-                .withLastName("Fernandez")
-                .withEmail("fer@gmail.com")
-                .withAddress("Sarmiento 820")
-                .withPassword("Super!")
-                .withCVU("0011222344556677289900")
-                .withCryptoWallet("12355638").build()
-        )
+                .withCryptoWallet("12345678").build()
+        )*/
     }
 }

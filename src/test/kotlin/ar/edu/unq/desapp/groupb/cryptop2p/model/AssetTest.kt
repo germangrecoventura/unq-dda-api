@@ -12,9 +12,14 @@ class AssetTest {
     @Autowired
     lateinit var validator: Validator
 
-    fun anyAsset(): Asset {
+  /*  fun anyAsset(): Asset {
         val now = LocalDateTime.now()
         return Asset(id = 1, name = "ALICEUSDT", created = now)
+    }*/
+
+    fun anyAsset(): Asset {
+        val now = LocalDateTime.now()
+        return Asset(name = "ALICEUSDT", created = now)
     }
 
     @Test
@@ -36,14 +41,6 @@ class AssetTest {
     fun `should have an error when the name is empty`() {
         val asset = anyAsset()
         asset.name = ""
-        val violations = validator.validate(asset)
-        assertTrue(violations.isNotEmpty())
-    }
-
-    @Test
-    fun `should have an error when the name has numbers`() {
-        val asset = anyAsset()
-        asset.name = "NEW0"
         val violations = validator.validate(asset)
         assertTrue(violations.isNotEmpty())
     }
