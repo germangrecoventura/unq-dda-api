@@ -1,8 +1,10 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model.validator
 
+import ar.edu.unq.desapp.groupb.cryptop2p.Initializer
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,6 +23,9 @@ class UserValidatorTest {
 
     @Autowired
     lateinit var userValidator: UserValidator
+
+    @Autowired
+    private lateinit var initializer: Initializer
 
     fun anyUserCreationRequest(): UserCreateRequestDTOBuilder {
         return UserCreateRequestDTOBuilder()

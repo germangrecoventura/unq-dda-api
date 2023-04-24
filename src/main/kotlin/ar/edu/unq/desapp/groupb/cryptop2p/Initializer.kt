@@ -14,6 +14,7 @@ class Initializer {
 
     @Autowired
     lateinit var userService: UserService
+
     @Autowired
     lateinit var offerService: OfferService
 
@@ -24,8 +25,8 @@ class Initializer {
     }
 
     fun loadData() {
+        //loadUsers()
         loadAssets()
-        loadUsers()
     }
 
 
@@ -52,27 +53,18 @@ class Initializer {
         }
     }
 
-
-    private fun loadUsers() {
-        /*val user1 = UserCreateRequestDTOBuilder()
+    private fun anyUser(): UserCreateRequestDTOBuilder {
+        return UserCreateRequestDTOBuilder()
             .withFirstName("Homero")
             .withLastName("Simpson")
             .withEmail("homero.simpson@sprinfield.com")
             .withAddress("Evergreen 123")
-            .withPassword("Homeroo!")
+            .withPassword("Hom#ero")
             .withCVU("0011223344556677889900")
-            .withCryptoWallet("12345678").build()
-        userService.save(user1)
-*/
-       /* userService.save(
-            UserCreateRequestDTOBuilder()
-                .withFirstName("Homero")
-                .withLastName("Simpson")
-                .withEmail("homero.simpson@sprinfield.com")
-                .withAddress("Evergreen 123")
-                .withPassword("Super!")
-                .withCVU("0011223344556677889900")
-                .withCryptoWallet("12345678").build()
-        )*/
+            .withCryptoWallet("12345678")
+    }
+
+    private fun loadUsers() {
+        userService.save(anyUser().build())
     }
 }
