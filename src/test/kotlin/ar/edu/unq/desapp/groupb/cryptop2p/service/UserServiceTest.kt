@@ -1,8 +1,10 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.service
 
+import ar.edu.unq.desapp.groupb.cryptop2p.Initializer
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -11,6 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest
 class UserServiceTest {
     @Autowired
     lateinit var userService: UserService
+
+    @Autowired
+    lateinit var initializer: Initializer
+
+    @BeforeEach
+    fun setUp() {
+        initializer.cleanDataBase()
+    }
 
     fun anyUser(): UserCreateRequestDTOBuilder {
         return UserCreateRequestDTOBuilder()

@@ -13,19 +13,20 @@ class Initializer {
     lateinit var assetService: AssetService
 
     @Autowired
-    lateinit var userService: UserService
-
-    @Autowired
     lateinit var offerService: OfferService
 
+    @Autowired
+    lateinit var userService: UserService
+
+
     fun cleanDataBase() {
-        assetService.clear()
         offerService.clear()
         userService.clear()
+        assetService.clear()
     }
 
     fun loadData() {
-        //loadUsers()
+       // loadUsers()
         loadAssets()
     }
 
