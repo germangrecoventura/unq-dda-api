@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.groupb.cryptop2p.service
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Offer
 import ar.edu.unq.desapp.groupb.cryptop2p.model.OfferType
+import ar.edu.unq.desapp.groupb.cryptop2p.model.TransactionStatus
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.OfferValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
@@ -49,7 +50,8 @@ class OfferService(
             return offerRepository.findAll().filter { offer: Offer? -> offer!!.isActive == true }.map { offer ->
                 val offerActive = OfferActiveDTO()
                 val listUserRating =
-                    userTransactionRatingRepository.findAll().filter { user -> user.user!! == offer.user }
+                    userTransactionRatingRepository.findAll()
+                        .filter { userRating -> userRating.user!! == offer.user && userRating.transaction!!.status != TransactionStatus.CANCELED }
                 val rating =
                     if (listUserRating.isEmpty()) {
                         "Without operations"
@@ -73,7 +75,8 @@ class OfferService(
                 .filter { offer: Offer? -> offer!!.isActive == true && offer!!.asset!!.name == asset }.map { offer ->
                     val offerActive = OfferActiveDTO()
                     val listUserRating =
-                        userTransactionRatingRepository.findAll().filter { user -> user.user!! == offer.user }
+                        userTransactionRatingRepository.findAll()
+                            .filter { userRating -> userRating.user!! == offer.user && userRating.transaction!!.status != TransactionStatus.CANCELED }
                     val rating =
                         if (listUserRating.isEmpty()) {
                             "Without operations"
