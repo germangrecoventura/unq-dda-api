@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.service.AssetService
 import ar.edu.unq.desapp.groupb.cryptop2p.service.OfferService
 import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -25,8 +26,9 @@ class Initializer {
         assetService.clear()
     }
 
+    @PostConstruct
     fun loadData() {
-       // loadUsers()
+        //  loadUsers()
         loadAssets()
     }
 
@@ -67,5 +69,23 @@ class Initializer {
 
     private fun loadUsers() {
         userService.save(anyUser().build())
+        val user2 = anyUser()
+            .withFirstName("German")
+            .withLastName("Lopez")
+            .withEmail("german@gmail.com")
+            .withAddress("Andrade 123")
+            .withPassword("Cos!4")
+            .withCVU("0011223344556277889900")
+            .withCryptoWallet("12335678").build()
+        userService.save(user2)
+        val user3 = anyUser()
+            .withFirstName("Jose")
+            .withLastName("Fernandez")
+            .withEmail("fer@gmail.com")
+            .withAddress("Torcuato de Alvear 123")
+            .withPassword("Jos@ss1")
+            .withCVU("0011225344556277889900")
+            .withCryptoWallet("12335678").build()
+        userService.save(user3)
     }
 }
