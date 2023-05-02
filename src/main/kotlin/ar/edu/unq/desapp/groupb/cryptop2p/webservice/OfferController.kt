@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Offer
 import ar.edu.unq.desapp.groupb.cryptop2p.service.OfferService
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferActiveDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferRequestDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import io.swagger.v3.oas.annotations.Operation
@@ -116,7 +117,7 @@ class OfferController(private val offerService: OfferService) {
             )
         ]
     )
-    fun getOffersActive(): ResponseEntity<List<Offer>> {
+    fun getOffersActive(): ResponseEntity<List<OfferActiveDTO>> {
         return ResponseEntity.ok().body(offerService.getOffersActive())
     }
 }

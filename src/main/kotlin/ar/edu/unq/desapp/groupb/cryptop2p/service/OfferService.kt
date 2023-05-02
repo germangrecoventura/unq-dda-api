@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.OfferValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferActiveDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferRequestDTO
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -41,8 +42,21 @@ class OfferService(
         return offerRepository.save(offer)
     }
 
-    fun getOffersActive(): List<Offer> {
-        return offerRepository.findAll().filter { offer: Offer? -> offer!!.isActive == true }
+    fun getOffersActive(): List<OfferActiveDTO> {
+        return offerRepository.findAll().filter { offer: Offer? -> offer!!.isActive == true }.map { offer ->
+            val offerActive = OfferActiveDTO()
+            offerActive.date = offer.created
+            offerActive.asset = offer.asset
+            offerActive.quantity = offer.quantity
+            offerActive.unitPrice = offer.unitPrice
+            offerActive.totalAmount = offer.totalAmount
+            offerActive.firstName = offer.user!!.firstName
+            offerActive.lastName = offer.user!!.lastName
+            offerActive.operation = offer.operation
+            //offerActive.sizeOperations = offer.created
+            //offerActive.rating = offer.created
+            offerActive
+        }
     }
 
     fun clear() {
