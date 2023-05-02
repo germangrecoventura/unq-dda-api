@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.OfferValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
+import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserTransactionRatingRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferActiveDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferRequestDTO
 import jakarta.transaction.Transactional
@@ -18,6 +19,7 @@ class OfferService(
     private val offerRepository: OfferRepository,
     private val assetRepository: AssetRepository,
     private val userRepository: UserRepository,
+    private val userTransactionRatingRepository: UserTransactionRatingRepository,
     private val offerValidator: OfferValidator
 ) {
     fun save(offerRequestDTO: OfferRequestDTO): Offer {
@@ -46,6 +48,14 @@ class OfferService(
         if (asset == null) {
             return offerRepository.findAll().filter { offer: Offer? -> offer!!.isActive == true }.map { offer ->
                 val offerActive = OfferActiveDTO()
+                val listUserRating =
+                    userTransactionRatingRepository.findAll().filter { user -> user.user!! == offer.user }
+                val rating =
+                    if (listUserRating.isEmpty()) {
+                        "Without operations"
+                    } else {
+                        listUserRating.sumOf { user -> 0 + user.rating!! }.toString()
+                    }
                 offerActive.date = offer.created
                 offerActive.asset = offer.asset
                 offerActive.quantity = offer.quantity
@@ -54,14 +64,22 @@ class OfferService(
                 offerActive.firstName = offer.user!!.firstName
                 offerActive.lastName = offer.user!!.lastName
                 offerActive.operation = offer.operation
-                //offerActive.sizeOperations = offer.created    TODO: Busqueda de todos los UserTransactionRating.size
-                //offerActive.rating = offer.created  TODO: Busqueda de todos los UserTransactionRating.sum(rating)
+                offerActive.sizeOperations = listUserRating.size
+                offerActive.rating = rating
                 offerActive
             }
         } else {
             return offerRepository.findAll()
                 .filter { offer: Offer? -> offer!!.isActive == true && offer!!.asset!!.name == asset }.map { offer ->
                     val offerActive = OfferActiveDTO()
+                    val listUserRating =
+                        userTransactionRatingRepository.findAll().filter { user -> user.user!! == offer.user }
+                    val rating =
+                        if (listUserRating.isEmpty()) {
+                            "Without operations"
+                        } else {
+                            listUserRating.sumOf { user -> 0 + user.rating!! }.toString()
+                        }
                     offerActive.date = offer.created
                     offerActive.asset = offer.asset
                     offerActive.quantity = offer.quantity
@@ -70,8 +88,8 @@ class OfferService(
                     offerActive.firstName = offer.user!!.firstName
                     offerActive.lastName = offer.user!!.lastName
                     offerActive.operation = offer.operation
-                    //offerActive.sizeOperations = offer.created    TODO: Busqueda de todos los UserTransactionRating.size
-                    //offerActive.rating = offer.created  TODO: Busqueda de todos los UserTransactionRating.sum(rating)
+                    offerActive.sizeOperations = listUserRating.size
+                    offerActive.rating = rating
                     offerActive
                 }
         }
