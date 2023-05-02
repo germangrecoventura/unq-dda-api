@@ -42,20 +42,38 @@ class OfferService(
         return offerRepository.save(offer)
     }
 
-    fun getOffersActive(): List<OfferActiveDTO> {
-        return offerRepository.findAll().filter { offer: Offer? -> offer!!.isActive == true }.map { offer ->
-            val offerActive = OfferActiveDTO()
-            offerActive.date = offer.created
-            offerActive.asset = offer.asset
-            offerActive.quantity = offer.quantity
-            offerActive.unitPrice = offer.unitPrice
-            offerActive.totalAmount = offer.totalAmount
-            offerActive.firstName = offer.user!!.firstName
-            offerActive.lastName = offer.user!!.lastName
-            offerActive.operation = offer.operation
-            //offerActive.sizeOperations = offer.created
-            //offerActive.rating = offer.created
-            offerActive
+    fun getOffersActive(asset: String?): List<OfferActiveDTO> {
+        if (asset == null) {
+            return offerRepository.findAll().filter { offer: Offer? -> offer!!.isActive == true }.map { offer ->
+                val offerActive = OfferActiveDTO()
+                offerActive.date = offer.created
+                offerActive.asset = offer.asset
+                offerActive.quantity = offer.quantity
+                offerActive.unitPrice = offer.unitPrice
+                offerActive.totalAmount = offer.totalAmount
+                offerActive.firstName = offer.user!!.firstName
+                offerActive.lastName = offer.user!!.lastName
+                offerActive.operation = offer.operation
+                //offerActive.sizeOperations = offer.created    TODO: Busqueda de todos los UserTransactionRating.size
+                //offerActive.rating = offer.created  TODO: Busqueda de todos los UserTransactionRating.sum(rating)
+                offerActive
+            }
+        } else {
+            return offerRepository.findAll()
+                .filter { offer: Offer? -> offer!!.isActive == true && offer!!.asset!!.name == asset }.map { offer ->
+                    val offerActive = OfferActiveDTO()
+                    offerActive.date = offer.created
+                    offerActive.asset = offer.asset
+                    offerActive.quantity = offer.quantity
+                    offerActive.unitPrice = offer.unitPrice
+                    offerActive.totalAmount = offer.totalAmount
+                    offerActive.firstName = offer.user!!.firstName
+                    offerActive.lastName = offer.user!!.lastName
+                    offerActive.operation = offer.operation
+                    //offerActive.sizeOperations = offer.created    TODO: Busqueda de todos los UserTransactionRating.size
+                    //offerActive.rating = offer.created  TODO: Busqueda de todos los UserTransactionRating.sum(rating)
+                    offerActive
+                }
         }
     }
 
