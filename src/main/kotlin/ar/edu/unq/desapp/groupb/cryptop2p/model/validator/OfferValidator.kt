@@ -3,14 +3,12 @@ package ar.edu.unq.desapp.groupb.cryptop2p.model.validator
 import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
 import ar.edu.unq.desapp.groupb.cryptop2p.model.OfferType
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
-import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferRequestDTO
 import org.springframework.stereotype.Component
 
 @Component
 class OfferValidator(
-    val offerRepository: OfferRepository,
     val userRepository: UserRepository,
     val assetRepository: AssetRepository
 ) {
