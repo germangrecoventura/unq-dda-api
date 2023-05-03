@@ -29,7 +29,7 @@ class UserTransactionRating(
 
     @field:Column(nullable = false)
     @field:NotNull
-    @field:Min(value = 0, message = "The rating cannot be lower than zero")
+    @field:Min(value = -20, message = "The rating cannot be lower than zero")
     @field:Max(value = 10, message = "The rating cannot be greater than five")
     @field:JsonProperty
     var rating: Int? = null,

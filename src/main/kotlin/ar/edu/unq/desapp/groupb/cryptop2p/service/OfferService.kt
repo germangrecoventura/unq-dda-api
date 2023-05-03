@@ -56,7 +56,13 @@ class OfferService(
                     if (listUserRating.isEmpty()) {
                         "Without operations"
                     } else {
-                        listUserRating.sumOf { user -> 0 + user.rating!! }.toString()
+                        val result = listUserRating.sumOf { user -> 0 + user.rating!! }
+                        if (result < 0) {
+                            "0"
+                        } else {
+                            result.toString()
+                        }
+
                     }
                 offerActive.date = offer.created
                 offerActive.asset = offer.asset

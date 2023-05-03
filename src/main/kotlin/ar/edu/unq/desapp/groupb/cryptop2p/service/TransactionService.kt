@@ -3,12 +3,15 @@ package ar.edu.unq.desapp.groupb.cryptop2p.service
 import ar.edu.unq.desapp.groupb.cryptop2p.model.OfferType
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Transaction
 import ar.edu.unq.desapp.groupb.cryptop2p.model.TransactionStatus
+import ar.edu.unq.desapp.groupb.cryptop2p.model.UserTransactionRating
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.TransactionValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.TransactionRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
+import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserTransactionRatingRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 @Transactional
@@ -17,6 +20,7 @@ class TransactionService(
     private val userRepository: UserRepository,
     private val offerRepository: OfferRepository,
     private val transactionValidator: TransactionValidator,
+    private val userTransactionRatingRepository: UserTransactionRatingRepository
 ) {
     fun save(userId: Long, offerId: Long): Transaction {
         transactionValidator.isCreationRequestValid(userId, offerId)
@@ -62,6 +66,22 @@ class TransactionService(
             )
             return transactionRepository.save(transaction)
         }
+    }
+
+    fun cancelTransaction(userId: Long, transactionId: Long): Transaction {
+        transactionValidator.isCancelTransactionValid(userId, transactionId)
+        val transaction = transactionRepository.findById(transactionId).get()
+        val user = userRepository.findById(userId).get()
+        transaction.status = TransactionStatus.CANCELED
+        //TODO:  OFFER QUEDARIA COMO ACTIVA O SE SETEA FALSA?
+        val transactionUpdate = transactionRepository.save(transaction)
+        val rating = UserTransactionRating()
+        rating.transaction = transactionUpdate
+        rating.user = user
+        rating.created = LocalDateTime.now()
+        rating.rating = -20
+        userTransactionRatingRepository.save(rating)
+        return transaction
     }
 
 

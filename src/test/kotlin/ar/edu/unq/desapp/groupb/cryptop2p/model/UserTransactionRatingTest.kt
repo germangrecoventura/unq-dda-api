@@ -41,9 +41,9 @@ class UserTransactionRatingTest {
     }
 
     @Test
-    fun `should have an error when the rating is lower than zero`() {
+    fun `should have an error when the rating is lower than 20`() {
         val userTransactionRating = anyUserTransactionRating()
-        userTransactionRating.rating = -1
+        userTransactionRating.rating = -21
         val violations = validator.validate(userTransactionRating)
         assertTrue(violations.isNotEmpty())
     }
