@@ -70,17 +70,7 @@ class OfferController(private val offerService: OfferService) {
                     mediaType = "application/json", examples = [ExampleObject(
                         value = "[\n" +
                                 "  {\n" +
-                                "    \"id\": 1,\n" +
-                                "    \"user\": {\n" +
-                                "      \"id\": 1,\n" +
-                                "      \"emailAddress\": \"homero.simpson@springfield.com\",\n" +
-                                "      \"firstName\": \"Homero\",\n" +
-                                "      \"lastName\": \"Simpson\",\n" +
-                                "      \"address\": \"Evergreen 123\",\n" +
-                                "      \"cvu\": \"0011223344556677889900\",\n" +
-                                "      \"cryptoWalletAddress\": \"12345678\"\n" +
-                                "    },\n" +
-                                "    \"isActive\": true,\n" +
+                                "    \"date\": \"2023-05-03T14:06:26.895991\",\n" +
                                 "    \"asset\": {\n" +
                                 "      \"id\": 1,\n" +
                                 "      \"name\": \"ALICEUSDT\",\n" +
@@ -88,18 +78,21 @@ class OfferController(private val offerService: OfferService) {
                                 "        {\n" +
                                 "          \"id\": 1,\n" +
                                 "          \"name\": \"ALICEUSDT\",\n" +
-                                "          \"unitPrice\": 1.532,\n" +
-                                "          \"created\": \"2023-04-24T15:28:27.278749\",\n" +
-                                "          \"updated\": \"2023-04-24T15:28:27.278749\"\n" +
+                                "          \"unitPrice\": 1.488,\n" +
+                                "          \"created\": \"2023-05-03T14:06:08.090275\",\n" +
+                                "          \"updated\": \"2023-05-03T14:06:08.090275\"\n" +
                                 "        }\n" +
                                 "      ],\n" +
-                                "      \"created\": \"2023-04-24T15:28:27.255748\"\n" +
+                                "      \"created\": \"2023-05-03T14:06:08.063272\"\n" +
                                 "    },\n" +
-                                "    \"quantity\": 0,\n" +
-                                "    \"unitPrice\": 0,\n" +
-                                "    \"totalAmount\": 0,\n" +
+                                "    \"quantity\": 2,\n" +
+                                "    \"unitPrice\": 1.6,\n" +
+                                "    \"totalAmount\": 100,\n" +
+                                "    \"firstName\": \"Homero\",\n" +
+                                "    \"lastName\": \"Simpson\",\n" +
                                 "    \"operation\": \"BUY\",\n" +
-                                "    \"created\": \"2023-04-24T15:29:53.102573\"\n" +
+                                "    \"sizeOperations\": 0,\n" +
+                                "    \"rating\": \"Without operations\"\n" +
                                 "  }\n" +
                                 "]"
                     )]

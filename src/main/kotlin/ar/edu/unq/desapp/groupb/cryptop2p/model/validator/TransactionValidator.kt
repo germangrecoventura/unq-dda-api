@@ -19,9 +19,15 @@ class TransactionValidator(
         if (optionalOffer.isEmpty) {
             throw OfferRegisteredException()
         }
+        if (optionalOffer.get().isActive!!) {
+            throw OfferNotActiveException()
+        }
         return true
     }
 }
 
 class OfferRegisteredException :
     ModelException("The offer name is not registered", "offer.id")
+
+class OfferNotActiveException :
+    ModelException("The offer is not active", "offer.id")
