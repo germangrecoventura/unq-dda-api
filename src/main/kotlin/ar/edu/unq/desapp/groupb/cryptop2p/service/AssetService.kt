@@ -17,12 +17,12 @@ import java.time.LocalDateTime
 class AssetService(
     private val assetRepository: AssetRepository,
     private val assetPriceRepository: AssetPriceRepository,
-    private val assetValidator: AssetValidator
+    private val assetValidator: AssetValidator,
+    private val restTemplate: RestTemplate,
 ) {
     fun save(assetName: String): Asset {
         assetValidator.isCreationRequestValid(assetName)
 
-        val restTemplate = RestTemplate()
         val url = "https://api.binance.com/api/v3/ticker/price?symbol=$assetName"
         val response = restTemplate.getForEntity(url, String::class.java)
         val mapper = ObjectMapper()
@@ -37,7 +37,7 @@ class AssetService(
 
     fun getAssetPrices(): MutableSet<AssetPrice>? {
         val assets = assetRepository.findAll()
-        var list = mutableSetOf<AssetPrice>()
+        val list = mutableSetOf<AssetPrice>()
         assets.map { asset -> list.add(asset.prices.last()) }
         return list
     }

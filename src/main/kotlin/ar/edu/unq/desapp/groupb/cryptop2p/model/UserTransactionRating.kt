@@ -29,8 +29,8 @@ class UserTransactionRating(
 
     @field:Column(nullable = false)
     @field:NotNull
-    @field:Min(value = -20, message = "The rating cannot be lower than zero")
-    @field:Max(value = 10, message = "The rating cannot be greater than five")
+    @field:Min(value = -20, message = "The rating cannot be lower than -20")
+    @field:Max(value = 10, message = "The rating cannot be greater than 10")
     @field:JsonProperty
     var rating: Int? = null,
 
