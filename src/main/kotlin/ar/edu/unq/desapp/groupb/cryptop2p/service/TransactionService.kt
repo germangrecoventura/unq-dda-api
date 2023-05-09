@@ -80,12 +80,13 @@ class TransactionService(
         val transaction = transactionRepository.findById(transactionId).get()
         transaction.status = TransactionStatus.CONFIRMED
         val transactionCompleted = transactionRepository.save(transaction)
+        val points = if (LocalDateTime.now().isAfter(transaction.offer!!.created!!.minusMinutes(30))) 5 else 10
         val rating = UserTransactionRating()
         rating.transaction = transactionCompleted
         //TODO: ACA A QUIEN SE LE DA LOS PUNTOS?
         rating.user = transaction.buyer
         rating.created = LocalDateTime.now()
-        rating.rating = 20
+        rating.rating = points
         userTransactionRatingRepository.save(rating)
         return transactionCompleted
     }
