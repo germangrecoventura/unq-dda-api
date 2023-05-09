@@ -68,6 +68,28 @@ class TransactionService(
         }
     }
 
+    fun transferTransaction(userId: Long, transactionId: Long): Transaction {
+        transactionValidator.isTransferedValid(userId, transactionId)
+        val transaction = transactionRepository.findById(transactionId).get()
+        transaction.status = TransactionStatus.TRANSFERRED
+        return transactionRepository.save(transaction)
+    }
+
+    fun confirmTransferTransaction(userId: Long, transactionId: Long): Transaction {
+        transactionValidator.isConfirmTransferedValid(userId, transactionId)
+        val transaction = transactionRepository.findById(transactionId).get()
+        transaction.status = TransactionStatus.CONFIRMED
+        val transactionCompleted = transactionRepository.save(transaction)
+        val rating = UserTransactionRating()
+        rating.transaction = transactionCompleted
+        //TODO: ACA A QUIEN SE LE DA LOS PUNTOS?
+        rating.user = transaction.buyer
+        rating.created = LocalDateTime.now()
+        rating.rating = 20
+        userTransactionRatingRepository.save(rating)
+        return transactionCompleted
+    }
+
     fun cancelTransaction(userId: Long, transactionId: Long): Transaction {
         transactionValidator.isCancelTransactionValid(userId, transactionId)
         val transaction = transactionRepository.findById(transactionId).get()

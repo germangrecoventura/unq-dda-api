@@ -14,39 +14,52 @@ class TransactionValidator(
     val transactionRepository: TransactionRepository
 ) {
     fun isCreationRequestValid(userId: Long, idOffer: Long): Boolean {
-        val optionalUser = userRepository.findById(userId)
-        if (optionalUser.isEmpty) {
-            throw UserNotRegisteredException()
-        }
-        val optionalOffer = offerRepository.findById(idOffer)
-        if (optionalOffer.isEmpty) {
-            throw OfferRegisteredException()
-        }
-        if (optionalOffer.get().isActive!!) {
+        userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
+        val optionalOffer = offerRepository.findById(idOffer).orElseThrow { throw OfferRegisteredException() }
+        if (optionalOffer.isActive!!) {
             throw OfferNotActiveException()
         }
         return true
     }
 
     fun isCancelTransactionValid(userId: Long, transactionId: Long): Boolean {
-        val optionalUser = userRepository.findById(userId)
-        if (optionalUser.isEmpty) {
-            throw UserNotRegisteredException()
-        }
-        val optionalTransaction = transactionRepository.findById(transactionId)
-        if (optionalTransaction.isEmpty) {
-            throw TransactionRegisteredException()
-        }
-        val user = optionalUser.get()
-        val transaction = optionalTransaction.get()
+        val user = userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
+        val transaction =
+            transactionRepository.findById(transactionId).orElseThrow { throw TransactionRegisteredException() }
         if (transaction.buyer != user && transaction.seller != user) {
             throw TransactionUserException()
         }
         if (transaction.status == TransactionStatus.CONFIRMED) {
             throw TransactionConfirmedException()
         }
-        if (optionalTransaction.get().status == TransactionStatus.CANCELED) {
+        if (transaction.status == TransactionStatus.CANCELED) {
             throw TransactionCancelException()
+        }
+        return true
+    }
+
+    fun isTransferedValid(userId: Long, transactionId: Long): Boolean {
+        val user = userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
+        val transaction =
+            transactionRepository.findById(transactionId).orElseThrow { throw TransactionRegisteredException() }
+        if (transaction.buyer != user) {
+            throw TransactionTransferException()
+        }
+        if (transaction.status != TransactionStatus.WAITING) {
+            throw TransactionStatusTransferException()
+        }
+        return true
+    }
+
+    fun isConfirmTransferedValid(userId: Long, transactionId: Long): Boolean {
+        val user = userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
+        val transaction =
+            transactionRepository.findById(transactionId).orElseThrow { throw TransactionRegisteredException() }
+        if (transaction.seller != user) {
+            throw TransactionConfirmTransferException()
+        }
+        if (transaction.status != TransactionStatus.TRANSFERRED) {
+            throw TransactionStatusConfirmTransferException()
         }
         return true
     }
@@ -69,3 +82,14 @@ class TransactionCancelException :
 
 class TransactionUserException :
     ModelException("The user does not belong to the current transaction", "transaction.buyer/seller")
+
+class TransactionTransferException :
+    ModelException("The user does not have permissions to transfer", "transaction.user")
+
+class TransactionConfirmTransferException :
+    ModelException("The user does not have permissions to confirm transfer", "transaction.user")
+class TransactionStatusTransferException :
+    ModelException("A transfer cannot be made if it is not in the WAITING state", "transaction.status")
+
+class TransactionStatusConfirmTransferException :
+    ModelException("A transfer cannot be made if it is not in the TRANSFERRED state", "transaction.status")
