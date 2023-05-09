@@ -26,10 +26,6 @@ class TransactionService(
         transactionValidator.isCreationRequestValid(userId, offerId)
         val user = userRepository.findById(userId).get()
         val offer = offerRepository.findById(offerId).get()
-        val fivePercent = offer.asset!!.prices.last().unitPrice!! * 5.0 / 100
-        val isActive = offer.unitPrice!! <= (offer.asset!!.prices.last().unitPrice!! + fivePercent)
-                &&
-                offer.unitPrice!! >= (offer.asset!!.prices.last().unitPrice!! - fivePercent)
         val buyer = if (offer.operation == OfferType.BUY) {
             offer.user
         } else {
@@ -40,35 +36,18 @@ class TransactionService(
         } else {
             user
         }
-        if (!isActive) {
-            offer.isActive = false
-            offerRepository.save(offer)
-            val transaction = Transaction().fromModel(
-                offer.asset!!,
-                offer.quantity!!,
-                offer.unitPrice!!,
-                offer.totalAmount!!,
-                offer,
-                seller!!,
-                buyer!!
-            )
-            transaction.status = TransactionStatus.CANCELED
-            return transactionRepository.save(transaction)
-        } else {
-            offer.isActive = false
-            offerRepository.save(offer)
-            val transaction = Transaction().fromModel(
-                offer.asset!!,
-                offer.quantity!!,
-                offer.unitPrice!!,
-                offer.totalAmount!!,
-                offer,
-                seller!!,
-                buyer!!
-            )
-            return transactionRepository.save(transaction)
-        }
+        val transaction = Transaction().fromModel(
+            offer.asset!!,
+            offer.quantity!!,
+            offer.unitPrice!!,
+            offer.totalAmount!!,
+            offer,
+            seller!!,
+            buyer!!
+        )
+        return transactionRepository.save(transaction)
     }
+
 
     fun transferTransaction(userId: Long, transactionId: Long): Transaction {
         transactionValidator.isTransferedValid(userId, transactionId)

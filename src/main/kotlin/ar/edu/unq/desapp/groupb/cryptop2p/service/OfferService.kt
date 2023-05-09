@@ -27,10 +27,10 @@ class OfferService(
         offerValidator.isCreationRequestValid(offerRequestDTO)
         val asset = assetRepository.findByName(offerRequestDTO.asset!!).get()
         val user = userRepository.findById(offerRequestDTO.user!!).get()
-        /*val fivePercent = asset.prices.last().unitPrice!! * 5.0 / 100
+        val fivePercent = asset.prices.last().unitPrice!! * 5.0 / 100
         val isActive = offerRequestDTO.unitPrice!! <= (asset.prices.last().unitPrice!! + fivePercent)
                 &&
-                offerRequestDTO.unitPrice!! >= (asset.prices.last().unitPrice!! - fivePercent)*/
+                offerRequestDTO.unitPrice!! >= (asset.prices.last().unitPrice!! - fivePercent)
         val offer =
             Offer(
                 asset,
@@ -40,7 +40,7 @@ class OfferService(
                 user,
                 OfferType.valueOf(
                     offerRequestDTO.operation!!
-                ), true, LocalDateTime.now()
+                ), isActive, LocalDateTime.now()
             )
         return offerRepository.save(offer)
     }
