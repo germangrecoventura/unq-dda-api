@@ -55,6 +55,8 @@ class TransactionService(
             transaction.status = TransactionStatus.CANCELED
             return transactionRepository.save(transaction)
         } else {
+            offer.isActive = false
+            offerRepository.save(offer)
             val transaction = Transaction().fromModel(
                 offer.asset!!,
                 offer.quantity!!,
@@ -81,13 +83,18 @@ class TransactionService(
         transaction.status = TransactionStatus.CONFIRMED
         val transactionCompleted = transactionRepository.save(transaction)
         val points = if (LocalDateTime.now().isAfter(transaction.offer!!.created!!.plusMinutes(31))) 5 else 10
-        val rating = UserTransactionRating()
-        rating.transaction = transactionCompleted
-        //TODO: ACA A QUIEN SE LE DA LOS PUNTOS?
-        rating.user = transaction.buyer
-        rating.created = LocalDateTime.now()
-        rating.rating = points
-        userTransactionRatingRepository.save(rating)
+        val ratingBuyer = UserTransactionRating()
+        ratingBuyer.transaction = transactionCompleted
+        ratingBuyer.user = transaction.buyer
+        ratingBuyer.created = LocalDateTime.now()
+        ratingBuyer.rating = points
+        val ratingSeller = UserTransactionRating()
+        ratingBuyer.transaction = transactionCompleted
+        ratingBuyer.user = transaction.seller
+        ratingBuyer.created = LocalDateTime.now()
+        ratingBuyer.rating = points
+        userTransactionRatingRepository.save(ratingBuyer)
+        userTransactionRatingRepository.save(ratingSeller)
         return transactionCompleted
     }
 
@@ -96,7 +103,6 @@ class TransactionService(
         val transaction = transactionRepository.findById(transactionId).get()
         val user = userRepository.findById(userId).get()
         transaction.status = TransactionStatus.CANCELED
-        //TODO:  OFFER QUEDARIA COMO ACTIVA O SE SETEA FALSA?
         val transactionUpdate = transactionRepository.save(transaction)
         val rating = UserTransactionRating()
         rating.transaction = transactionUpdate
