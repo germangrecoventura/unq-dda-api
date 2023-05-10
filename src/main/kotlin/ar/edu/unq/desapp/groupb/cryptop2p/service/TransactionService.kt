@@ -9,7 +9,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.TransactionRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserTransactionRatingRepository
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionCancelDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionCreateRequestDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionDTO
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -24,7 +24,7 @@ class TransactionService(
     private val transactionValidator: TransactionValidator,
     private val userTransactionRatingRepository: UserTransactionRatingRepository
 ) {
-    fun save(transactionDTO: TransactionDTO): Transaction {
+    fun save(transactionDTO: TransactionCreateRequestDTO): Transaction {
         transactionValidator.isCreationRequestValid(transactionDTO.userId!!, transactionDTO.offerId!!)
         val user = userRepository.findById(transactionDTO.userId!!).get()
         var offer = offerRepository.findById(transactionDTO.offerId!!).get()
@@ -53,16 +53,16 @@ class TransactionService(
     }
 
 
-    fun transferTransaction(userId: Long, transactionId: Long): Transaction {
-        transactionValidator.isTransferedValid(userId, transactionId)
-        val transaction = transactionRepository.findById(transactionId).get()
+    fun transferTransaction(transactionDTO: TransactionDTO): Transaction {
+        transactionValidator.isTransferedValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
+        val transaction = transactionRepository.findById(transactionDTO.transactionId!!).get()
         transaction.status = TransactionStatus.TRANSFERRED
         return transactionRepository.save(transaction)
     }
 
-    fun confirmTransferTransaction(userId: Long, transactionId: Long): Transaction {
-        transactionValidator.isConfirmTransferedValid(userId, transactionId)
-        val transaction = transactionRepository.findById(transactionId).get()
+    fun confirmTransferTransaction(transactionDTO: TransactionDTO): Transaction {
+        transactionValidator.isConfirmTransferedValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
+        val transaction = transactionRepository.findById(transactionDTO.transactionId!!).get()
         transaction.status = TransactionStatus.CONFIRMED
         val transactionCompleted = transactionRepository.save(transaction)
         val points = if (LocalDateTime.now().isAfter(transaction.offer!!.created!!.plusMinutes(31))) 5 else 10
@@ -81,7 +81,7 @@ class TransactionService(
         return transactionCompleted
     }
 
-    fun cancelTransaction(transactionCancelDTO: TransactionCancelDTO): Transaction {
+    fun cancelTransaction(transactionCancelDTO: TransactionDTO): Transaction {
         transactionValidator.isCancelTransactionValid(
             transactionCancelDTO.userId!!,
             transactionCancelDTO.transactionId!!

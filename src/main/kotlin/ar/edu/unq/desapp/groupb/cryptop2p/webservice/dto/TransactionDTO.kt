@@ -8,7 +8,7 @@ class TransactionDTO {
     @Schema(example = "1")
     var userId: Long? = null
 
-    @NotNull(message = "The offer id cannot be blank")
+    @NotNull(message = "The transaction id cannot be blank")
     @Schema(example = "1")
-    var offerId: Long? = null
+    var transactionId: Long? = null
 }

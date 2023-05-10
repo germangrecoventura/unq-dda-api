@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Transaction
 import ar.edu.unq.desapp.groupb.cryptop2p.service.TransactionService
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionCancelDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionCreateRequestDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import io.swagger.v3.oas.annotations.Operation
@@ -51,11 +51,77 @@ class TransactionController(private val transactionService: TransactionService) 
             )
         ]
     )
-    fun createTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
+    fun createTransaction(@RequestBody @Valid transactionDTO: TransactionCreateRequestDTO): ResponseEntity<Transaction> {
         return ResponseEntity(transactionService.save(transactionDTO), HttpStatus.OK)
     }
 
-    @PutMapping
+    @PutMapping("/transfer")
+    @Operation(
+        summary = "Transfer transaction",
+        description = "Transfer a transaction",
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = Transaction::class),
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
+                    )
+                ]
+            )
+        ]
+    )
+    fun transferTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
+        return ResponseEntity(transactionService.transferTransaction(transactionDTO), HttpStatus.OK)
+    }
+
+    @PutMapping("/confirm")
+    @Operation(
+        summary = "Confirm transfer to transaction",
+        description = "Confirm transfer to transaction",
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = Transaction::class),
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
+                    )
+                ]
+            )
+        ]
+    )
+    fun confirmTransferTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
+        return ResponseEntity(transactionService.confirmTransferTransaction(transactionDTO), HttpStatus.OK)
+    }
+
+    @PutMapping("cancel")
     @Operation(
         summary = "Cancel transaction",
         description = "Cancel a transaction",
@@ -84,7 +150,7 @@ class TransactionController(private val transactionService: TransactionService) 
             )
         ]
     )
-    fun cancelTransaction(@RequestBody @Valid transactionCancelDTO: TransactionCancelDTO): ResponseEntity<Transaction> {
-        return ResponseEntity(transactionService.cancelTransaction(transactionCancelDTO), HttpStatus.OK)
+    fun cancelTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
+        return ResponseEntity(transactionService.cancelTransaction(transactionDTO), HttpStatus.OK)
     }
 }
