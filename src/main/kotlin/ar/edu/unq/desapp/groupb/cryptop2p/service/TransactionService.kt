@@ -9,6 +9,8 @@ import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.TransactionRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserTransactionRatingRepository
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionCancelDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionDTO
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -22,10 +24,10 @@ class TransactionService(
     private val transactionValidator: TransactionValidator,
     private val userTransactionRatingRepository: UserTransactionRatingRepository
 ) {
-    fun save(userId: Long, offerId: Long): Transaction {
-        transactionValidator.isCreationRequestValid(userId, offerId)
-        val user = userRepository.findById(userId).get()
-        val offer = offerRepository.findById(offerId).get()
+    fun save(transactionDTO: TransactionDTO): Transaction {
+        transactionValidator.isCreationRequestValid(transactionDTO.userId!!, transactionDTO.offerId!!)
+        val user = userRepository.findById(transactionDTO.userId!!).get()
+        var offer = offerRepository.findById(transactionDTO.offerId!!).get()
         val buyer = if (offer.operation == OfferType.BUY) {
             offer.user
         } else {
@@ -36,6 +38,8 @@ class TransactionService(
         } else {
             user
         }
+        offer.isActive = false
+        offer = offerRepository.save(offer)
         val transaction = Transaction().fromModel(
             offer.asset!!,
             offer.quantity!!,
@@ -77,10 +81,13 @@ class TransactionService(
         return transactionCompleted
     }
 
-    fun cancelTransaction(userId: Long, transactionId: Long): Transaction {
-        transactionValidator.isCancelTransactionValid(userId, transactionId)
-        val transaction = transactionRepository.findById(transactionId).get()
-        val user = userRepository.findById(userId).get()
+    fun cancelTransaction(transactionCancelDTO: TransactionCancelDTO): Transaction {
+        transactionValidator.isCancelTransactionValid(
+            transactionCancelDTO.userId!!,
+            transactionCancelDTO.transactionId!!
+        )
+        val transaction = transactionRepository.findById(transactionCancelDTO.transactionId!!).get()
+        val user = userRepository.findById(transactionCancelDTO.userId!!).get()
         transaction.status = TransactionStatus.CANCELED
         val transactionUpdate = transactionRepository.save(transaction)
         val rating = UserTransactionRating()

@@ -16,7 +16,7 @@ class TransactionValidator(
     fun isCreationRequestValid(userId: Long, idOffer: Long): Boolean {
         userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
         val optionalOffer = offerRepository.findById(idOffer).orElseThrow { throw OfferRegisteredException() }
-        if (optionalOffer.isActive!!) {
+        if (!optionalOffer.isActive!!) {
             throw OfferNotActiveException()
         }
         return true

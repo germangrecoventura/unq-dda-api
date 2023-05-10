@@ -106,13 +106,13 @@ class Transaction {
         buyer: User
     ): Transaction {
         if (seller == buyer) {
-            throw RuntimeException("The seller cannot be the same buyer")
+            throw ModelException("The seller cannot be the same buyer", "transaction.seller")
         }
         if (offer.operation == OfferType.SELL && offer.user != seller) {
-            throw RuntimeException(ERROR_MESSAGE)
+            throw ModelException(ERROR_MESSAGE, "transaction.type")
         }
         if (offer.operation == OfferType.BUY && offer.user != buyer) {
-            throw RuntimeException("The buyer is not the same as the offer")
+            throw ModelException("The buyer is not the same as the offer", "transaction.buyer")
         }
 
         val transaction = Transaction()
