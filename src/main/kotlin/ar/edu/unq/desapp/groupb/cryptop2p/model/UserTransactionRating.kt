@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 
-@Entity
+@Entity(name = "rating_user")
 @JsonPropertyOrder("id", "user", "rating")
 class UserTransactionRating(
     @field:Id
@@ -29,8 +29,8 @@ class UserTransactionRating(
 
     @field:Column(nullable = false)
     @field:NotNull
-    @field:Min(value = 0, message = "The rating cannot be lower than zero")
-    @field:Max(value = 10, message = "The rating cannot be greater than five")
+    @field:Min(value = -20, message = "The rating cannot be lower than -20")
+    @field:Max(value = 10, message = "The rating cannot be greater than 10")
     @field:JsonProperty
     var rating: Int? = null,
 

@@ -17,10 +17,12 @@ import java.util.*
 @ExtendWith(MockitoExtension::class)
 class UserValidatorTest {
     @MockBean
+    @Autowired
     lateinit var userRepository: UserRepository
 
     @Autowired
     lateinit var userValidator: UserValidator
+
 
     fun anyUserCreationRequest(): UserCreateRequestDTOBuilder {
         return UserCreateRequestDTOBuilder()

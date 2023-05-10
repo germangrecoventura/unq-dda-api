@@ -6,13 +6,14 @@ import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserCreateRequestDTO
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
 @Service
 @Validated
 @Transactional
-class UserService(private val userRepository: UserRepository, private val userValidator: UserValidator) {
+class UserService( private val userRepository: UserRepository,  private val userValidator: UserValidator) {
     fun save(@Valid userCreateRequest: UserCreateRequestDTO): User {
         userValidator.isCreationRequestValid(userCreateRequest)
         val newUser = userCreateRequest.toDomain()

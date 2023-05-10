@@ -12,11 +12,6 @@ import java.time.LocalDateTime
 @Entity
 @JsonPropertyOrder("id", "user", "isActive")
 class Offer(
-    @field:Id
-    @field:GeneratedValue(strategy = GenerationType.AUTO)
-    @field:JsonProperty
-    var id: Long? = null,
-
     @field:NotNull(message = "The asset cannot be blank")
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JoinColumn(name = "asset_id", nullable = false)
@@ -61,7 +56,12 @@ class Offer(
     @field:NotNull(message = "The created date time cannot be blank")
     @field:JsonProperty
     var created: LocalDateTime? = null,
-)
+){
+    @field:Id
+    @field:GeneratedValue(strategy = GenerationType.AUTO)
+    @field:JsonProperty
+    var id: Long? = null
+}
 
 enum class OfferType {
     BUY, SELL
