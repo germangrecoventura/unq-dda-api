@@ -132,14 +132,6 @@ class Transaction {
         }
         return transaction
     }
-
-    fun transferred() {
-        this.status = TransactionStatus.TRANSFERRED
-    }
-
-    fun confirmed() {
-        this.status = TransactionStatus.CONFIRMED
-    }
 }
 
 enum class TransactionStatus {

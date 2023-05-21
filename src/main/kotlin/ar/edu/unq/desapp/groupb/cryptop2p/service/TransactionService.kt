@@ -54,31 +54,31 @@ class TransactionService(
 
 
     fun transferTransaction(transactionDTO: TransactionDTO): Transaction {
-        transactionValidator.isTransferedValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
+        transactionValidator.isTransferTransactionValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
         val transaction = transactionRepository.findById(transactionDTO.transactionId!!).get()
         transaction.status = TransactionStatus.TRANSFERRED
         return transactionRepository.save(transaction)
     }
 
-    fun confirmTransferTransaction(transactionDTO: TransactionDTO): Transaction {
-        transactionValidator.isConfirmTransferedValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
+    fun confirmTransaction(transactionDTO: TransactionDTO): Transaction {
+        transactionValidator.isConfirmTransactionValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
         val transaction = transactionRepository.findById(transactionDTO.transactionId!!).get()
         transaction.status = TransactionStatus.CONFIRMED
-        val transactionCompleted = transactionRepository.save(transaction)
+        val confirmedTransaction = transactionRepository.save(transaction)
         val points = if (LocalDateTime.now().isAfter(transaction.offer!!.created!!.plusMinutes(31))) 5 else 10
         val ratingBuyer = UserTransactionRating()
-        ratingBuyer.transaction = transactionCompleted
+        ratingBuyer.transaction = confirmedTransaction
         ratingBuyer.user = transaction.buyer
         ratingBuyer.created = LocalDateTime.now()
         ratingBuyer.rating = points
         val ratingSeller = UserTransactionRating()
-        ratingBuyer.transaction = transactionCompleted
-        ratingBuyer.user = transaction.seller
-        ratingBuyer.created = LocalDateTime.now()
-        ratingBuyer.rating = points
+        ratingSeller.transaction = confirmedTransaction
+        ratingSeller.user = transaction.seller
+        ratingSeller.created = LocalDateTime.now()
+        ratingSeller.rating = points
         userTransactionRatingRepository.save(ratingBuyer)
         userTransactionRatingRepository.save(ratingSeller)
-        return transactionCompleted
+        return confirmedTransaction
     }
 
     fun cancelTransaction(transactionCancelDTO: TransactionDTO): Transaction {
@@ -89,16 +89,15 @@ class TransactionService(
         val transaction = transactionRepository.findById(transactionCancelDTO.transactionId!!).get()
         val user = userRepository.findById(transactionCancelDTO.userId!!).get()
         transaction.status = TransactionStatus.CANCELED
-        val transactionUpdate = transactionRepository.save(transaction)
+        val canceledTransaction = transactionRepository.save(transaction)
         val rating = UserTransactionRating()
-        rating.transaction = transactionUpdate
+        rating.transaction = canceledTransaction
         rating.user = user
         rating.created = LocalDateTime.now()
         rating.rating = -20
         userTransactionRatingRepository.save(rating)
-        return transaction
+        return canceledTransaction
     }
-
 
     fun clear() {
         transactionRepository.deleteAll()

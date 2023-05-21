@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @CrossOrigin
-@Tag(name = "transaction", description = "Endpoints for managing transaction")
+@Tag(name = "transaction", description = "Endpoints for managing transactions")
 @RequestMapping("transaction")
 class TransactionController(private val transactionService: TransactionService) {
     @PostMapping
@@ -118,7 +118,7 @@ class TransactionController(private val transactionService: TransactionService) 
         ]
     )
     fun confirmTransferTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
-        return ResponseEntity(transactionService.confirmTransferTransaction(transactionDTO), HttpStatus.OK)
+        return ResponseEntity(transactionService.confirmTransaction(transactionDTO), HttpStatus.OK)
     }
 
     @PutMapping("cancel")

@@ -22,7 +22,6 @@ class Initializer {
     @Autowired
     lateinit var transactionService: TransactionService
 
-
     fun cleanDataBase() {
         ratingService.clear()
         transactionService.clear()
