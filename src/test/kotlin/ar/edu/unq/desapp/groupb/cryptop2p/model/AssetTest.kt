@@ -12,11 +12,6 @@ class AssetTest {
     @Autowired
     lateinit var validator: Validator
 
-  /*  fun anyAsset(): Asset {
-        val now = LocalDateTime.now()
-        return Asset(id = 1, name = "ALICEUSDT", created = now)
-    }*/
-
     fun anyAsset(): Asset {
         val now = LocalDateTime.now()
         return Asset(name = "ALICEUSDT", created = now)
