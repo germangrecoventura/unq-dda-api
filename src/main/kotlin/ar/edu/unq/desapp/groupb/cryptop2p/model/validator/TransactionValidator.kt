@@ -13,10 +13,10 @@ class TransactionValidator(
     val userRepository: UserRepository,
     val transactionRepository: TransactionRepository
 ) {
-    fun isCreationRequestValid(userId: Long, idOffer: Long): Boolean {
+    fun isCreationRequestValid(userId: Long, offerId: Long): Boolean {
         userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
-        val optionalOffer = offerRepository.findById(idOffer).orElseThrow { throw OfferRegisteredException() }
-        if (optionalOffer.isActive!!) {
+        val optionalOffer = offerRepository.findById(offerId).orElseThrow { throw OfferRegisteredException() }
+        if (!optionalOffer.isActive!!) {
             throw OfferNotActiveException()
         }
         return true
@@ -38,7 +38,7 @@ class TransactionValidator(
         return true
     }
 
-    fun isTransferedValid(userId: Long, transactionId: Long): Boolean {
+    fun isTransferTransactionValid(userId: Long, transactionId: Long): Boolean {
         val user = userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
         val transaction =
             transactionRepository.findById(transactionId).orElseThrow { throw TransactionRegisteredException() }
@@ -51,7 +51,7 @@ class TransactionValidator(
         return true
     }
 
-    fun isConfirmTransferedValid(userId: Long, transactionId: Long): Boolean {
+    fun isConfirmTransactionValid(userId: Long, transactionId: Long): Boolean {
         val user = userRepository.findById(userId).orElseThrow { throw UserNotRegisteredException() }
         val transaction =
             transactionRepository.findById(transactionId).orElseThrow { throw TransactionRegisteredException() }
@@ -88,6 +88,7 @@ class TransactionTransferException :
 
 class TransactionConfirmTransferException :
     ModelException("The user does not have permissions to confirm transfer", "transaction.user")
+
 class TransactionStatusTransferException :
     ModelException("A transfer cannot be made if it is not in the WAITING state", "transaction.status")
 

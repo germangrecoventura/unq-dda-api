@@ -4,7 +4,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.Offer
 import ar.edu.unq.desapp.groupb.cryptop2p.model.OfferType
 import ar.edu.unq.desapp.groupb.cryptop2p.model.TransactionStatus
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.OfferValidator
-import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
+import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetPriceRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserTransactionRatingRepository
@@ -18,29 +18,29 @@ import java.time.LocalDateTime
 @Transactional
 class OfferService(
     private val offerRepository: OfferRepository,
-    private val assetRepository: AssetRepository,
+    private val assetPriceRepository: AssetPriceRepository,
     private val userRepository: UserRepository,
     private val userTransactionRatingRepository: UserTransactionRatingRepository,
     private val offerValidator: OfferValidator
 ) {
     fun save(offerRequestDTO: OfferRequestDTO): Offer {
         offerValidator.isCreationRequestValid(offerRequestDTO)
-        val asset = assetRepository.findByName(offerRequestDTO.asset!!).get()
+        val assetPrice = assetPriceRepository.findCurrentPriceByAssetName(offerRequestDTO.asset!!)
         val user = userRepository.findById(offerRequestDTO.user!!).get()
-        val fivePercent = asset.prices.last().unitPrice!! * 5.0 / 100
-        val isActive = offerRequestDTO.unitPrice!! <= (asset.prices.last().unitPrice!! + fivePercent)
+        val fivePercent = assetPrice.unitPrice!! * 0.05
+        val isActive = offerRequestDTO.unitPrice!! <= (assetPrice.unitPrice!! + fivePercent)
                 &&
-                offerRequestDTO.unitPrice!! >= (asset.prices.last().unitPrice!! - fivePercent)
+                offerRequestDTO.unitPrice!! >= (assetPrice.unitPrice!! - fivePercent)
         val offer =
             Offer(
-                asset,
+                assetPrice.asset,
                 offerRequestDTO.quantity,
                 offerRequestDTO.unitPrice,
                 offerRequestDTO.totalAmount,
                 user,
-                OfferType.valueOf(
-                    offerRequestDTO.operation!!
-                ), isActive, LocalDateTime.now()
+                OfferType.valueOf(offerRequestDTO.operation!!),
+                isActive,
+                LocalDateTime.now(),
             )
         return offerRepository.save(offer)
     }
@@ -78,7 +78,7 @@ class OfferService(
             }
         } else {
             return offerRepository.findAll()
-                .filter { offer: Offer? -> offer!!.isActive == true && offer!!.asset!!.name == asset }.map { offer ->
+                .filter { offer: Offer? -> offer!!.isActive == true && offer.asset!!.name == asset }.map { offer ->
                     val offerActive = OfferActiveDTO()
                     val listUserRating =
                         userTransactionRatingRepository.findAll()

@@ -12,9 +12,14 @@ class AssetPriceTest {
     @Autowired
     lateinit var validator: Validator
 
+    fun anyAsset(): Asset {
+        val now = LocalDateTime.now()
+        return Asset(name = "ALICEUSDT", created = now)
+    }
+
     fun anyAssetPrice(): AssetPrice {
         val now = LocalDateTime.now()
-        return AssetPrice(name = "ALICEUSDT", unitPrice = 3.14, created = now, updated = now)
+        return AssetPrice(anyAsset(), unitPrice = 3.14, created = now)
     }
 
     @Test
@@ -27,7 +32,7 @@ class AssetPriceTest {
     @Test
     fun `should have an error when asset is null`() {
         val assetPrice = anyAssetPrice()
-        assetPrice.name = null
+        assetPrice.asset = null
         val validations = validator.validate(assetPrice)
         assertTrue(validations.isNotEmpty())
     }
@@ -52,14 +57,6 @@ class AssetPriceTest {
     fun `should have an error when created is null`() {
         val assetPrice = anyAssetPrice()
         assetPrice.created = null
-        val validations = validator.validate(assetPrice)
-        assertTrue(validations.isNotEmpty())
-    }
-
-    @Test
-    fun `should have an error when updated is null`() {
-        val assetPrice = anyAssetPrice()
-        assetPrice.updated = null
         val validations = validator.validate(assetPrice)
         assertTrue(validations.isNotEmpty())
     }

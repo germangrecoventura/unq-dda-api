@@ -1,8 +1,10 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.View
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.annotation.JsonView
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
@@ -14,6 +16,7 @@ class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Schema(example = "1")
     @JsonProperty
+    @JsonView(View.Public::class)
     var id: Long? = null
 
     @Column(nullable = false, length = 30)
@@ -22,6 +25,7 @@ class User {
     @Pattern(regexp = "[a-zA-Z ]+", message = "The first name cannot contain special characters")
     @Schema(example = "Homero")
     @JsonProperty
+    @JsonView(View.Public::class)
     var firstName: String? = null
 
     @Column(nullable = false, length = 30)
@@ -30,6 +34,7 @@ class User {
     @Pattern(regexp = "[a-zA-Z ]+", message = "The last name cannot contain special characters or numbers")
     @Schema(example = "Simpson")
     @JsonProperty
+    @JsonView(View.Public::class)
     var lastName: String? = null
 
     @Column(nullable = false, unique = true)
@@ -37,6 +42,7 @@ class User {
     @NotBlank(message = "The email address cannot be blank")
     @Schema(example = "homero.simpson@springfield.com")
     @JsonProperty
+    @JsonView(View.Internal::class)
     var emailAddress: String? = null
 
     @Column(nullable = false, length = 30)
@@ -45,6 +51,7 @@ class User {
     @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "The address cannot contain special characters")
     @Schema(example = "Evergreen 123")
     @JsonProperty
+    @JsonView(View.Internal::class)
     var address: String? = null
 
     @Column(nullable = false)
@@ -63,6 +70,7 @@ class User {
     @Pattern(regexp = "[0-9]+", message = " The CVU can only contain numbers")
     @Schema(example = "0011223344556677889900")
     @JsonProperty
+    @JsonView(View.Internal::class)
     var cvu: String? = null
 
     @Column(nullable = false, length = 8)
@@ -71,5 +79,6 @@ class User {
     @Pattern(regexp = "[0-9]+", message = " The crypto wallet address can only contain numbers")
     @Schema(example = "12345678")
     @JsonProperty
+    @JsonView(View.Internal::class)
     var cryptoWalletAddress: String? = null
 }

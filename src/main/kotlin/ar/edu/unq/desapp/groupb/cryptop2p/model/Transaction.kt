@@ -106,39 +106,33 @@ class Transaction {
         buyer: User
     ): Transaction {
         if (seller == buyer) {
-            throw RuntimeException("The seller cannot be the same buyer")
+            throw ModelException("The seller cannot be the same buyer", "transaction.seller")
         }
         if (offer.operation == OfferType.SELL && offer.user != seller) {
-            throw RuntimeException(ERROR_MESSAGE)
+            throw ModelException(ERROR_MESSAGE, "transaction.type")
         }
         if (offer.operation == OfferType.BUY && offer.user != buyer) {
-            throw RuntimeException("The buyer is not the same as the offer")
+            throw ModelException("The buyer is not the same as the offer", "transaction.buyer")
         }
 
         val transaction = Transaction()
-        transaction.asset = asset
-        transaction.quantity = quantity
-        transaction.unitPrice = unitPrice
-        transaction.totalAmount = totalAmount
-        transaction.offer = offer
-        transaction.seller = seller
-        transaction.buyer = buyer
-        transaction.created = LocalDateTime.now()
-        transaction.status = TransactionStatus.WAITING
-        if (offer.operation == OfferType.BUY) {
-            transaction.address = buyer.cryptoWalletAddress
-        } else {
-            transaction.address = seller.cvu
+        with(transaction) {
+            this.asset = asset
+            this.quantity = quantity
+            this.unitPrice = unitPrice
+            this.totalAmount = totalAmount
+            this.offer = offer
+            this.seller = seller
+            this.buyer = buyer
+            this.created = LocalDateTime.now()
+            this.status = TransactionStatus.WAITING
+            if (offer.operation == OfferType.BUY) {
+                this.address = buyer.cryptoWalletAddress
+            } else {
+                this.address = seller.cvu
+            }
         }
         return transaction
-    }
-
-    fun transferred() {
-        this.status = TransactionStatus.TRANSFERRED
-    }
-
-    fun confirmed() {
-        this.status = TransactionStatus.CONFIRMED
     }
 }
 
