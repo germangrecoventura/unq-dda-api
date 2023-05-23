@@ -21,101 +21,53 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 @Tag(name = "transaction", description = "Endpoints for managing transactions")
 @RequestMapping("transaction")
+@ApiResponses(
+    value = [
+        ApiResponse(
+            responseCode = "200",
+            description = "Success",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = Transaction::class),
+                )
+            ]
+        ),
+        ApiResponse(
+            responseCode = "400",
+            description = "Bad request",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ValidationErrorResponseDTO::class),
+                )
+            ]
+        )
+    ]
+)
 class TransactionController(private val transactionService: TransactionService) {
     @PostMapping
     @Operation(
         summary = "Registers a new transaction",
         description = "Registers a transaction",
     )
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Success",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = Transaction::class),
-                    )
-                ]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
-                    )
-                ]
-            )
-        ]
-    )
     fun createTransaction(@RequestBody @Valid transactionDTO: TransactionCreateRequestDTO): ResponseEntity<Transaction> {
         return ResponseEntity(transactionService.save(transactionDTO), HttpStatus.OK)
     }
 
-    @PutMapping("/transfer")
+    @PutMapping("transfer")
     @Operation(
         summary = "Transfer transaction",
-        description = "Transfer a transaction",
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Success",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = Transaction::class),
-                    )
-                ]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
-                    )
-                ]
-            )
-        ]
+        description = "Transfers a transaction",
     )
     fun transferTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
         return ResponseEntity(transactionService.transferTransaction(transactionDTO), HttpStatus.OK)
     }
 
-    @PutMapping("/confirm")
+    @PutMapping("confirm")
     @Operation(
-        summary = "Confirm transfer to transaction",
-        description = "Confirm transfer to transaction",
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Success",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = Transaction::class),
-                    )
-                ]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
-                    )
-                ]
-            )
-        ]
+        summary = "Confirm transaction",
+        description = "Confirms a transaction",
     )
     fun confirmTransferTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
         return ResponseEntity(transactionService.confirmTransaction(transactionDTO), HttpStatus.OK)
@@ -124,31 +76,7 @@ class TransactionController(private val transactionService: TransactionService) 
     @PutMapping("cancel")
     @Operation(
         summary = "Cancel transaction",
-        description = "Cancel a transaction",
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Success",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = Transaction::class),
-                    )
-                ]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
-                    )
-                ]
-            )
-        ]
+        description = "Cancels a transaction",
     )
     fun cancelTransaction(@RequestBody @Valid transactionDTO: TransactionDTO): ResponseEntity<Transaction> {
         return ResponseEntity(transactionService.cancelTransaction(transactionDTO), HttpStatus.OK)
