@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------
+TAG ENTREGA-2-1.0
+---------------------------------------------------------------------
+NEW FEATURES:
+* Build status at "Green" in SonarCloud
+* Using HSQLDB to persist data (H2)
+* Added data of cryptos and users when starting the application
+* Added endpoint documentation (APIs) with Swagger (v3)
+* Added list of crypto assets
+* Allow a user to express their purchase/sale intention
+* View active buy/sale intentions
+* Process the transaction reported by a user
+* Inform the user of the traded volume of crypto assets between two dates
+* Comprehensive testing of 2 controllers (end-to-end)
+
+NOTES:
+* Everything working correctly
+
+KNOWN ISSUES:
+* So far no problems found
+
+---------------------------------------------------------------------
 TAG ENTREGA-1-1.0
 ---------------------------------------------------------------------
 NEW FEATURES:
