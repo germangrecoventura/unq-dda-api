@@ -1,12 +1,12 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Asset
-import ar.edu.unq.desapp.groupb.cryptop2p.model.AssetPrice
 import ar.edu.unq.desapp.groupb.cryptop2p.service.AssetService
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.AssetPriceDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -21,11 +21,25 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 @Tag(name = "assets", description = "Endpoints for managing assets")
 @RequestMapping("assets")
+@ApiResponses(
+    value = [
+        ApiResponse(
+            responseCode = "400",
+            description = "Bad request",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ValidationErrorResponseDTO::class),
+                )
+            ]
+        )
+    ]
+)
 class AssetController(private val assetService: AssetService) {
     @PostMapping
     @Operation(
-        summary = "Registers a asset",
-        description = "Registers a asset using the name as the unique identifier",
+        summary = "Registers an asset",
+        description = "Registers an asset using the name as a unique identifier",
     )
     @ApiResponses(
         value = [
@@ -39,16 +53,6 @@ class AssetController(private val assetService: AssetService) {
                     )
                 ]
             ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
-                    )
-                ]
-            )
         ]
     )
     fun createAsset(
@@ -71,33 +75,17 @@ class AssetController(private val assetService: AssetService) {
             ApiResponse(
                 responseCode = "200",
                 description = "Success",
-                content = [Content(
-                    mediaType = "application/json", examples = [ExampleObject(
-                        value = "[\n" +
-                                "  {\n" +
-                                "    \"id\": 1,\n" +
-                                "    \"name\": \"ALICEUSDT\",\n" +
-                                "    \"unitPrice\": 1.519,\n" +
-                                "    \"created\": \"2023-04-24T12:42:49.475498\",\n" +
-                                "    \"updated\": \"2023-04-24T12:42:49.475498\"\n" +
-                                "  }\n" +
-                                "]"
-                    )]
-                )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
+                        array = ArraySchema(schema = Schema(implementation = AssetPriceDTO::class)),
                     )
                 ]
-            )
+            ),
         ]
     )
-    fun getAssetsPrices(): ResponseEntity<Set<AssetPrice>> {
-        return ResponseEntity.ok().body(assetService.getAssetPrices())
+    fun getAssetsPrices(): ResponseEntity<Collection<AssetPriceDTO>> {
+        val prices = assetService.getAssetPrices().map { AssetPriceDTO.fromModel(it) }
+        return ResponseEntity.ok().body(prices)
     }
 }
