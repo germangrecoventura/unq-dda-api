@@ -97,7 +97,7 @@ class AssetController(private val assetService: AssetService) {
             )
         ]
     )
-    fun getAssetsPrices(): ResponseEntity<MutableSet<AssetPrice>> {
+    fun getAssetsPrices(): ResponseEntity<Set<AssetPrice>> {
         return ResponseEntity.ok().body(assetService.getAssetPrices())
     }
 }

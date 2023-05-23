@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.groupb.cryptop2p.service
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Asset
 import ar.edu.unq.desapp.groupb.cryptop2p.model.AssetPrice
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.AssetValidator
-import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetPriceRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -16,7 +15,6 @@ import java.time.LocalDateTime
 @Transactional
 class AssetService(
     private val assetRepository: AssetRepository,
-    private val assetPriceRepository: AssetPriceRepository,
     private val assetValidator: AssetValidator,
     private val restTemplate: RestTemplate,
 ) {
@@ -29,17 +27,16 @@ class AssetService(
         val root: JsonNode = mapper.readTree(response.body)
 
         val price = root.path("price").asDouble()
-        val assetPrice =
-            assetPriceRepository.save(AssetPrice(assetName, price, LocalDateTime.now(), LocalDateTime.now()))
-        val asset = Asset(assetName, LocalDateTime.now(), mutableSetOf(assetPrice))
+
+        val asset = Asset(assetName, created = LocalDateTime.now())
+        val assetPrice = AssetPrice(asset, price, created = LocalDateTime.now())
+        asset.prices.add(assetPrice)
         return assetRepository.save(asset)
     }
 
-    fun getAssetPrices(): MutableSet<AssetPrice>? {
+    fun getAssetPrices(): Set<AssetPrice> {
         val assets = assetRepository.findAll()
-        val list = mutableSetOf<AssetPrice>()
-        assets.map { asset -> list.add(asset.prices.last()) }
-        return list
+        return assets.map { it.prices.last() }.toSet()
     }
 
     fun clear() {
