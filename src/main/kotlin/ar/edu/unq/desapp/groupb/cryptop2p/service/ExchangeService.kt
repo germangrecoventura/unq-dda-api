@@ -44,7 +44,7 @@ class ExchangeService(private val restTemplate: RestTemplate) {
     }
 
     fun getCryptoAssetPrice(assetName: String): Double {
-        return if (!System.getenv("API_ON").isNullOrBlank()) {
+        return if (System.getenv("API_ON").isNullOrBlank()) {
             val url = "https://api.binance.com/api/v3/ticker/price?symbol=$assetName"
             val response = restTemplate.getForEntity(url, Symbol::class.java)
 
@@ -55,7 +55,7 @@ class ExchangeService(private val restTemplate: RestTemplate) {
     }
 
     fun getCryptoAssetsPrices(assetNames: List<String>): Map<String, Double> {
-        return if (!System.getenv("API_ON").isNullOrBlank()) {
+        return if (System.getenv("API_ON").isNullOrBlank()) {
             val symbols =
                 assetNames.joinToString(
                     prefix = "[",
