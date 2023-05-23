@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.service
 
+import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
 import ar.edu.unq.desapp.groupb.cryptop2p.model.TradedVolumeReport
 import ar.edu.unq.desapp.groupb.cryptop2p.model.TradedVolumeReportLineItem
 import ar.edu.unq.desapp.groupb.cryptop2p.model.TransactionStatus
@@ -40,8 +41,15 @@ class ReportService(
 
 
         val lineItems = transactions.groupBy { it.asset }
-            .map { it ->
-                val assetPrice = assetPrices[it.key!!.name!!]!!
+            .map {
+                val assetName = it.key!!.name!!
+                val assetPrice: Double
+                try {
+                    assetPrice = assetPrices.getValue(it.key!!.name!!)
+                } catch (e: NoSuchElementException) {
+                    throw ModelException("Missing price for $assetName")
+                }
+
                 val quantity = it.value.sumOf { t -> t.quantity!! }
                 val totalAmountInARS = assetPrice * quantity
 
