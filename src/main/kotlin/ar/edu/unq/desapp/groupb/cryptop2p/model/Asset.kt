@@ -1,6 +1,9 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
@@ -31,7 +34,6 @@ class Asset(
 
     @field:OneToMany(mappedBy = "asset", cascade = [CascadeType.ALL])
     @field:JsonProperty
-    @field:JsonManagedReference
     val prices: MutableSet<AssetPrice> = mutableSetOf(),
 ) {
     @field:Id

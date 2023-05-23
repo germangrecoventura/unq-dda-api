@@ -1,6 +1,9 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
@@ -16,7 +19,6 @@ class AssetPrice(
     @field:NotNull(message = "The asset cannot be blank")
     @field:ManyToOne(fetch = FetchType.LAZY)
     @field:JsonProperty
-    @field:JsonBackReference
     var asset: Asset? = null,
 
     @field:Column(nullable = false)
