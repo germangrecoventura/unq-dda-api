@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.groupb.cryptop2p
 
 import ar.edu.unq.desapp.groupb.cryptop2p.service.*
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -30,12 +31,12 @@ class Initializer {
         assetService.clear()
     }
 
-    /*  @PostConstruct
-      fun loadData() {
-          //  loadUsers()
-          loadAssets()
-      }
-  */
+    @PostConstruct
+    fun loadData() {
+        // loadUsers()
+        loadAssets()
+    }
+
 
     private fun loadAssets() {
         val assets = mutableSetOf(
