@@ -1,8 +1,11 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.View
+import com.fasterxml.jackson.annotation.JsonView
 import java.time.LocalDateTime
 
-class TradedVolumeReport(
+@JsonView(View.Public::class)
+data class TradedVolumeReport(
     val user: User,
     val requestDateTime: LocalDateTime,
     val totalAmountUSD: Double,
@@ -10,7 +13,8 @@ class TradedVolumeReport(
     val lineItems: List<TradedVolumeReportLineItem>,
 )
 
-class TradedVolumeReportLineItem(
+@JsonView(View.Public::class)
+data class TradedVolumeReportLineItem(
     val asset: String,
     val quantity: Double,
     val unitPrice: Double,

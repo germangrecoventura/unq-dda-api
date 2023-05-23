@@ -24,12 +24,7 @@ class ReportService(
             throw UserNotRegisteredException()
         }
         val user = optionalUser.get()
-        val requestDateTime = LocalDateTime.now()
-        var totalAmountInUSD = 0.0
-        var totalAmountInARS = 0.0
-        val lineItems = mutableListOf<TradedVolumeReportLineItem>()
-
-        val exchangeRate = exchangeService.getARStoUSDExchangeRate()
+        val exchangeRateUSD = exchangeService.getConversionRateARStoUSD()
 
         val transactions = transactionRepository.getAllBySellerOrBuyerAndCreatedBetweenAndStatus(
             user,
@@ -38,25 +33,28 @@ class ReportService(
             TransactionStatus.CONFIRMED
         )
 
+        val assetNames = transactions.map { it.asset!!.name!! }.toSet()
+        val assetPrices = exchangeService.getCryptoAssetsPrices(assetNames.toList())
 
-        transactions.forEach {
-            totalAmountInARS += it.totalAmount!!
-            val item = TradedVolumeReportLineItem(
-                it.asset!!.name!!, it.quantity!!, it.unitPrice!!, it.totalAmount!!
-            )
-            lineItems.add(item)
-        }
+        val requestDateTime = LocalDateTime.now()
 
-        totalAmountInUSD = totalAmountInARS / exchangeRate
 
-//        Dia y hora de solicitud -> LocalDatetime.now
-//        Valor total operado en dólares -> Valor total operado segun el rating
-//        Valor total operado en pesos ARG -> Valor total operado segun el rating
-//        Activos:
-//        Criptoactivo -> Nombre
-//        Cantidad nominal del Cripto Activo -> Suma de la cantidad en rating porque ahi tiene la oferta
-//        Cotización actual del Cripto Activo -> Binance
-//        Monto de la cotización en pesos ARG -> Binance y conversor
+        val lineItems = transactions.groupBy { it.asset }
+            .map { it ->
+                val assetPrice = assetPrices[it.key!!.name!!]!!
+                val quantity = it.value.sumOf { t -> t.quantity!! }
+                val totalAmountInARS = assetPrice * quantity
+
+                TradedVolumeReportLineItem(
+                    it.key!!.name!!,
+                    quantity,
+                    assetPrice,
+                    totalAmountInARS,
+                )
+            }.toList()
+
+        val totalAmountInARS = lineItems.sumOf { it.totalAmountInARS }
+        val totalAmountInUSD = totalAmountInARS / exchangeRateUSD
 
         return TradedVolumeReport(user, requestDateTime, totalAmountInUSD, totalAmountInARS, lineItems)
     }

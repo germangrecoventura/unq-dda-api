@@ -1,37 +1,45 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.service
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
+import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 @Service
 class ExchangeService(private val restTemplate: RestTemplate) {
-    fun getARStoUSDExchangeRate(): Double {
+    fun getConversionRateARStoUSD(): Double {
         val url = "https://www.dolarsi.com/api/api.php?type=valoresprincipales"
 
         val response = restTemplate.getForEntity(url, Array<Root>::class.java)
 
         val officialRate = response.body?.first {
             it.casa?.nombre == "Dolar Oficial"
-        } ?: throw Exception("Could not find conversion rate")
+        } ?: throw ModelException("Could not find conversion rate")
 
         return officialRate.casa?.venta?.replace(",", ".")?.toDouble()
-            ?: throw Exception("Could not find conversion rate")
+            ?: throw ModelException("Could not find conversion rate")
     }
 
     fun getCryptoAssetPrice(assetName: String): Double {
         val url = "https://api.binance.com/api/v3/ticker/price?symbol=$assetName"
-        val response = restTemplate.getForEntity(url, String::class.java)
-        val mapper = ObjectMapper()
-        val root: JsonNode = mapper.readTree(response.body)
+        val response = restTemplate.getForEntity(url, Symbol::class.java)
 
-        return root.path("price").asDouble()
+        return response.body?.price ?: throw ModelException("Could not find asset price")
+    }
+
+    fun getCryptoAssetsPrices(assetNames: List<String>): Map<String, Double> {
+        val symbols =
+            assetNames.joinToString(prefix = "[", postfix = "]", separator = ",", transform = { c -> "\"" + c + "\"" })
+        val url = "https://api.binance.com/api/v3/ticker/price?symbols=$symbols"
+
+        val response = restTemplate.getForEntity(url, Array<Symbol>::class.java)
+
+        return response.body?.associate { it.symbol!! to it.price!! }
+            ?: throw ModelException("Could not find assets prices")
     }
 }
 
 
-class Casa(
+data class Casa(
     var compra: String?,
     var venta: String?,
     var nombre: String?,
@@ -39,6 +47,11 @@ class Casa(
 )
 
 
-class Root(
+data class Root(
     var casa: Casa?,
+)
+
+data class Symbol(
+    var symbol: String?,
+    var price: Double?,
 )
