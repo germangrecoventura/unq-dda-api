@@ -116,19 +116,21 @@ class Transaction {
         }
 
         val transaction = Transaction()
-        transaction.asset = asset
-        transaction.quantity = quantity
-        transaction.unitPrice = unitPrice
-        transaction.totalAmount = totalAmount
-        transaction.offer = offer
-        transaction.seller = seller
-        transaction.buyer = buyer
-        transaction.created = LocalDateTime.now()
-        transaction.status = TransactionStatus.WAITING
-        if (offer.operation == OfferType.BUY) {
-            transaction.address = buyer.cryptoWalletAddress
-        } else {
-            transaction.address = seller.cvu
+        with(transaction) {
+            this.asset = asset
+            this.quantity = quantity
+            this.unitPrice = unitPrice
+            this.totalAmount = totalAmount
+            this.offer = offer
+            this.seller = seller
+            this.buyer = buyer
+            this.created = LocalDateTime.now()
+            this.status = TransactionStatus.WAITING
+            if (offer.operation == OfferType.BUY) {
+                this.address = buyer.cryptoWalletAddress
+            } else {
+                this.address = seller.cvu
+            }
         }
         return transaction
     }
