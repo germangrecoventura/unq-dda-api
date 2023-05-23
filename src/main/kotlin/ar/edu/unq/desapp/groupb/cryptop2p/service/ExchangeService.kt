@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.service
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
@@ -16,6 +18,15 @@ class ExchangeService(private val restTemplate: RestTemplate) {
 
         return officialRate.casa?.venta?.replace(",", ".")?.toDouble()
             ?: throw Exception("Could not find conversion rate")
+    }
+
+    fun getCryptoAssetPrice(assetName: String): Double {
+        val url = "https://api.binance.com/api/v3/ticker/price?symbol=$assetName"
+        val response = restTemplate.getForEntity(url, String::class.java)
+        val mapper = ObjectMapper()
+        val root: JsonNode = mapper.readTree(response.body)
+
+        return root.path("price").asDouble()
     }
 }
 
