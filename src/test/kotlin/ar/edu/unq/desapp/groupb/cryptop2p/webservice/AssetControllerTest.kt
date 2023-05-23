@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
 import ar.edu.unq.desapp.groupb.cryptop2p.service.AssetService
+import ar.edu.unq.desapp.groupb.cryptop2p.service.ExchangeService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -16,7 +17,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import org.springframework.web.client.RestTemplate
 import org.springframework.web.context.WebApplicationContext
 
 @SpringBootTest
@@ -29,7 +29,7 @@ class AssetControllerTest {
 
     @MockBean
     @Autowired
-    lateinit var restTemplate: RestTemplate
+    lateinit var exchangeService: ExchangeService
 
     @Autowired
     lateinit var context: WebApplicationContext
@@ -39,14 +39,11 @@ class AssetControllerTest {
         assetService.clear()
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
 
-        val symbol = "ALICEUSDT"
-        val url = "https://api.binance.com/api/v3/ticker/price?symbol=$symbol"
-
-        val responseBody = "{\"symbol\":\"ALICEUSDT\",\"price\":\"1.31200000\"}"
-
+        val assetName = "ALICEUSDT"
+        
         Mockito
-            .`when`(restTemplate.getForEntity(url, String::class.java))
-            .thenReturn(ResponseEntity(responseBody, HttpStatus.OK));
+            .`when`(exchangeService.getCryptoAssetPrice(assetName))
+            .thenReturn(1.31200000);
     }
 
     @Test
