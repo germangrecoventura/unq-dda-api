@@ -36,35 +36,41 @@ class ReportService(
             TransactionStatus.CONFIRMED
         )
 
-        val assetNames = transactions.map { it.asset!!.name!! }.toSet()
-        val assetPrices = exchangeService.getCryptoAssetsPrices(assetNames.toList())
-
         val requestDateTime = LocalDateTime.now(clock)
 
-        val lineItems = transactions.groupBy { it.asset!!.name }
-            .map {
-                val assetName = it.key!!
-                val assetPrice: Double
-                try {
-                    assetPrice = assetPrices.getValue(assetName)
-                } catch (e: NoSuchElementException) {
-                    throw ModelException("Missing price for $assetName")
-                }
+        val report: TradedVolumeReport
+        if (transactions.isEmpty()) {
+            report = TradedVolumeReport(user, requestDateTime, 0.0, 0.0, listOf())
+        } else {
+            val assetNames = transactions.map { it.asset!!.name!! }.toSet()
+            val assetPrices = exchangeService.getCryptoAssetsPrices(assetNames.toList())
 
-                val quantity = it.value.sumOf { t -> t.quantity!! }
-                val totalAmountInARS = assetPrice * quantity
+            val lineItems = transactions.groupBy { it.asset!!.name }
+                .map {
+                    val assetName = it.key!!
+                    val assetPrice: Double
+                    try {
+                        assetPrice = assetPrices.getValue(assetName)
+                    } catch (e: NoSuchElementException) {
+                        throw ModelException("Missing price for $assetName")
+                    }
 
-                TradedVolumeReportLineItem(
-                    assetName,
-                    quantity,
-                    assetPrice,
-                    totalAmountInARS,
-                )
-            }.toList()
+                    val quantity = it.value.sumOf { t -> t.quantity!! }
+                    val totalAmountInARS = assetPrice * quantity
 
-        val totalAmountInARS = lineItems.sumOf { it.totalAmountInARS }
-        val totalAmountInUSD = totalAmountInARS / exchangeRateUSD
+                    TradedVolumeReportLineItem(
+                        assetName,
+                        quantity,
+                        assetPrice,
+                        totalAmountInARS,
+                    )
+                }.toList()
 
-        return TradedVolumeReport(user, requestDateTime, totalAmountInUSD, totalAmountInARS, lineItems)
+            val totalAmountInARS = lineItems.sumOf { it.totalAmountInARS }
+            val totalAmountInUSD = totalAmountInARS / exchangeRateUSD
+
+            report = TradedVolumeReport(user, requestDateTime, totalAmountInUSD, totalAmountInARS, lineItems)
+        }
+        return report
     }
 }

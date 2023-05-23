@@ -148,9 +148,9 @@ class ReportServiceTest {
 
     @Test
     fun `should return a report with no line items when user does not have any transactions`() {
-        val expectedDateTime = LocalDateTime.of(2023, 5, 21, 0, 0, 0)
-
         val report = reportService.generateTradedVolumeReport(1, startDateTime.toLocalDate(), endDateTime.toLocalDate())
+
+        val expectedDateTime = LocalDateTime.of(2023, 5, 21, 0, 0, 0)
 
         Assertions.assertEquals(expectedDateTime, report.requestDateTime)
         Assertions.assertEquals(seller, report.user)
@@ -178,10 +178,9 @@ class ReportServiceTest {
             )
             .thenReturn(transactions)
 
+        val report = reportService.generateTradedVolumeReport(1, startDateTime.toLocalDate(), endDateTime.toLocalDate())
 
         val expectedDateTime = LocalDateTime.of(2023, 5, 21, 0, 0, 0)
-
-        val report = reportService.generateTradedVolumeReport(1, startDateTime.toLocalDate(), endDateTime.toLocalDate())
 
         Assertions.assertEquals(expectedDateTime, report.requestDateTime)
         Assertions.assertEquals(seller, report.user)
@@ -192,5 +191,18 @@ class ReportServiceTest {
         Assertions.assertEquals(60.0, report.lineItems[0].quantity)
         Assertions.assertEquals(40.0, report.lineItems[0].unitPrice)
         Assertions.assertEquals(2400.0, report.lineItems[0].totalAmountInARS)
+    }
+
+    @Test
+    fun `should return an empty report if there are no transactions`() {
+        val report = reportService.generateTradedVolumeReport(1, startDateTime.toLocalDate(), endDateTime.toLocalDate())
+
+        val expectedDateTime = LocalDateTime.of(2023, 5, 21, 0, 0, 0)
+
+        Assertions.assertEquals(expectedDateTime, report.requestDateTime)
+        Assertions.assertEquals(seller, report.user)
+        Assertions.assertEquals(0.0, report.totalAmountARS)
+        Assertions.assertEquals(0.0, report.totalAmountUSD)
+        Assertions.assertEquals(0, report.lineItems.size)
     }
 }
