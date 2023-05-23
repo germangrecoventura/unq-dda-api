@@ -67,8 +67,8 @@ class AssetController(private val assetService: AssetService) {
 
     @GetMapping("prices")
     @Operation(
-        summary = "Get a assets prices",
-        description = "Returns all current asset prices",
+        summary = "Lists latest assets prices",
+        description = "Lists latest assets prices",
     )
     @ApiResponses(
         value = [

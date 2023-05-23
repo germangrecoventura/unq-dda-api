@@ -38,8 +38,8 @@ import org.springframework.web.bind.annotation.*
 class OfferController(private val offerService: OfferService) {
     @PostMapping
     @Operation(
-        summary = "Registers a offers",
-        description = "Register an offer with an already registered user",
+        summary = "Registers an offer",
+        description = "Registers an offer for an already registered user",
     )
     @ApiResponses(
         value = [
@@ -62,8 +62,8 @@ class OfferController(private val offerService: OfferService) {
 
     @GetMapping
     @Operation(
-        summary = "Get a offers active",
-        description = "Returns all offers active",
+        summary = "Lists all active offers",
+        description = "Lists all active offers",
     )
     @ApiResponses(
         value = [
