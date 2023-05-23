@@ -9,6 +9,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.persistence.TransactionRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -18,6 +19,7 @@ class ReportService(
     private val transactionRepository: TransactionRepository,
     private val userRepository: UserRepository,
     private val exchangeService: ExchangeService,
+    private val clock: Clock,
 ) {
     fun generateTradedVolumeReport(userId: Long, startDate: LocalDate, endDate: LocalDate): TradedVolumeReport {
         val optionalUser = userRepository.findById(userId)
@@ -37,15 +39,14 @@ class ReportService(
         val assetNames = transactions.map { it.asset!!.name!! }.toSet()
         val assetPrices = exchangeService.getCryptoAssetsPrices(assetNames.toList())
 
-        val requestDateTime = LocalDateTime.now()
+        val requestDateTime = LocalDateTime.now(clock)
 
-
-        val lineItems = transactions.groupBy { it.asset }
+        val lineItems = transactions.groupBy { it.asset!!.name }
             .map {
-                val assetName = it.key!!.name!!
+                val assetName = it.key!!
                 val assetPrice: Double
                 try {
-                    assetPrice = assetPrices.getValue(it.key!!.name!!)
+                    assetPrice = assetPrices.getValue(assetName)
                 } catch (e: NoSuchElementException) {
                     throw ModelException("Missing price for $assetName")
                 }
@@ -54,7 +55,7 @@ class ReportService(
                 val totalAmountInARS = assetPrice * quantity
 
                 TradedVolumeReportLineItem(
-                    it.key!!.name!!,
+                    assetName,
                     quantity,
                     assetPrice,
                     totalAmountInARS,
