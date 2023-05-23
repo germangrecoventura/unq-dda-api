@@ -21,6 +21,20 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 @Tag(name = "offers", description = "Endpoints for managing offers")
 @RequestMapping("offers")
+@ApiResponses(
+    value = [
+        ApiResponse(
+            responseCode = "400",
+            description = "Bad request",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ValidationErrorResponseDTO::class),
+                )
+            ]
+        )
+    ]
+)
 class OfferController(private val offerService: OfferService) {
     @PostMapping
     @Operation(
@@ -36,16 +50,6 @@ class OfferController(private val offerService: OfferService) {
                     Content(
                         mediaType = "application/json",
                         schema = Schema(implementation = Offer::class),
-                    )
-                ]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
                     )
                 ]
             )
@@ -97,16 +101,6 @@ class OfferController(private val offerService: OfferService) {
                                 "]"
                     )]
                 )]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "Bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
-                    )
-                ]
             )
         ]
     )
