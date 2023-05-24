@@ -82,6 +82,6 @@ class Initializer {
             .withPassword("Cos!4s")
             .withCVU("0011523344556677889900")
             .withCryptoWallet("12335678").build()
-        Thread.sleep(3000)
+        userService.save(user2)
     }
 }
