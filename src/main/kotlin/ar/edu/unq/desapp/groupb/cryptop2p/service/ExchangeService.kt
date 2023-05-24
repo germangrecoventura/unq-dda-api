@@ -69,7 +69,7 @@ class ExchangeService(private val restTemplate: RestTemplate) {
             return response.body?.associate { it.symbol!! to it.price!! }
                 ?: throw ModelException("Could not find assets prices")
         } else {
-            return mapAsset
+            mapAsset
         }
     }
 }
