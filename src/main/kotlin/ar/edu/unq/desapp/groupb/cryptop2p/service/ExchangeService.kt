@@ -6,6 +6,30 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class ExchangeService(private val restTemplate: RestTemplate) {
+    private val mapAsset = loadAsset()
+    private fun loadAsset(): Map<String, Double> {
+        val listAssets = mutableSetOf(
+            "ALICEUSDT",
+            "MATICUSDT",
+            "AXSUSDT",
+            "AAVEUSDT",
+            "ATOMUSDT",
+            "NEOUSDT",
+            "DOTUSDT",
+            "ETHUSDT",
+            "CAKEUSDT",
+            "BTCUSDT",
+            "BNBUSDT",
+            "ADAUSDT",
+            "TRXUSDT",
+            "AUDIOUSDT"
+        )
+        val mapAsset = HashMap<String, Double>()
+        listAssets.forEach { assetName -> mapAsset[assetName] = 10.00 }
+        return mapAsset
+    }
+
+
     fun getConversionRateARStoUSD(): Double {
         val url = "https://www.dolarsi.com/api/api.php?type=valoresprincipales"
 
@@ -20,21 +44,33 @@ class ExchangeService(private val restTemplate: RestTemplate) {
     }
 
     fun getCryptoAssetPrice(assetName: String): Double {
-        val url = "https://api.binance.com/api/v3/ticker/price?symbol=$assetName"
-        val response = restTemplate.getForEntity(url, Symbol::class.java)
+        return if (System.getenv("API_ON").isNullOrBlank()) {
+            val url = "https://api.binance.com/api/v3/ticker/price?symbol=$assetName"
+            val response = restTemplate.getForEntity(url, Symbol::class.java)
 
-        return response.body?.price ?: throw ModelException("Could not find asset price")
+            response.body?.price ?: throw ModelException("Could not find asset price")
+        } else {
+            mapAsset[assetName] ?: throw ModelException("Could not find asset price")
+        }
     }
 
     fun getCryptoAssetsPrices(assetNames: List<String>): Map<String, Double> {
-        val symbols =
-            assetNames.joinToString(prefix = "[", postfix = "]", separator = ",", transform = { c -> "\"" + c + "\"" })
-        val url = "https://api.binance.com/api/v3/ticker/price?symbols=$symbols"
+        return if (System.getenv("API_ON").isNullOrBlank()) {
+            val symbols =
+                assetNames.joinToString(
+                    prefix = "[",
+                    postfix = "]",
+                    separator = ",",
+                    transform = { c -> "\"" + c + "\"" })
+            val url = "https://api.binance.com/api/v3/ticker/price?symbols=$symbols"
 
-        val response = restTemplate.getForEntity(url, Array<Symbol>::class.java)
+            val response = restTemplate.getForEntity(url, Array<Symbol>::class.java)
 
-        return response.body?.associate { it.symbol!! to it.price!! }
-            ?: throw ModelException("Could not find assets prices")
+            return response.body?.associate { it.symbol!! to it.price!! }
+                ?: throw ModelException("Could not find assets prices")
+        } else {
+            mapAsset
+        }
     }
 }
 

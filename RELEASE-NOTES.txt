@@ -14,10 +14,10 @@ NEW FEATURES:
 * Comprehensive testing of 2 controllers (end-to-end)
 
 NOTES:
-* Everything working correctly
+* Not currently deployed
 
 KNOWN ISSUES:
-* So far no problems found
+* Loading data when starting the application generates conflicts with some tests, so the build for the deployment cannot be generated
 
 ---------------------------------------------------------------------
 TAG ENTREGA-1-1.0
