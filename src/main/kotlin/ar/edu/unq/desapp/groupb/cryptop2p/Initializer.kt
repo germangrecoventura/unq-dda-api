@@ -33,7 +33,7 @@ class Initializer {
 
     @PostConstruct
     fun loadData() {
-        // loadUsers()
+        loadUsers()
         loadAssets()
     }
 
@@ -79,18 +79,9 @@ class Initializer {
             .withLastName("Lopez")
             .withEmail("german@gmail.com")
             .withAddress("Andrade 123")
-            .withPassword("Cos!4")
-            .withCVU("0011223344556277889900")
+            .withPassword("Cos!4s")
+            .withCVU("0011523344556677889900")
             .withCryptoWallet("12335678").build()
-        userService.save(user2)
-        val user3 = anyUser()
-            .withFirstName("Jose")
-            .withLastName("Fernandez")
-            .withEmail("fer@gmail.com")
-            .withAddress("Torcuato de Alvear 123")
-            .withPassword("Jos@ss1")
-            .withCVU("0011225344556277889900")
-            .withCryptoWallet("12335678").build()
-        userService.save(user3)
+        Thread.sleep(3000)
     }
 }
