@@ -31,11 +31,11 @@ class Initializer {
         assetService.clear()
     }
 
-    @PostConstruct
+   /* @PostConstruct
     fun loadData() {
         loadUsers()
         loadAssets()
-    }
+    }*/
 
 
     private fun loadAssets() {
