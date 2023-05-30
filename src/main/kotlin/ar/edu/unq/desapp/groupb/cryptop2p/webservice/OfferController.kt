@@ -105,6 +105,6 @@ class OfferController(private val offerService: OfferService) {
         ]
     )
     fun getOffersActive(@RequestParam(required = false) asset: String?): ResponseEntity<List<OfferActiveDTO>> {
-        return ResponseEntity.ok().body(offerService.getOffersActive(asset))
+        return ResponseEntity.ok().body(offerService.getActiveOffers(asset))
     }
 }

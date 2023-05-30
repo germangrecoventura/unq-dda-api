@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.groupb.cryptop2p.service
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.Offer
 import ar.edu.unq.desapp.groupb.cryptop2p.model.OfferType
-import ar.edu.unq.desapp.groupb.cryptop2p.model.TransactionStatus
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.OfferValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetPriceRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.OfferRepository
@@ -13,6 +12,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferRequestDTO
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import kotlin.math.max
 
 @Service
 @Transactional
@@ -45,63 +45,42 @@ class OfferService(
         return offerRepository.save(offer)
     }
 
-    fun getOffersActive(asset: String?): List<OfferActiveDTO> {
-        if (asset == null) {
-            return offerRepository.findAll().filter { offer: Offer? -> offer!!.isActive == true }.map { offer ->
-                val offerActive = OfferActiveDTO()
-                val listUserRating =
-                    userTransactionRatingRepository.findAll()
-                        .filter { userRating -> userRating.user!! == offer.user && userRating.transaction!!.status != TransactionStatus.CANCELED }
-                val rating =
-                    if (listUserRating.isEmpty()) {
-                        "Without operations"
-                    } else {
-                        val result = listUserRating.sumOf { user -> 0 + user.rating!! }
-                        if (result < 0) {
-                            "0"
-                        } else {
-                            result.toString()
-                        }
-
-                    }
-                offerActive.date = offer.created
-                offerActive.asset = offer.asset
-                offerActive.quantity = offer.quantity
-                offerActive.unitPrice = offer.unitPrice
-                offerActive.totalAmount = offer.totalAmount
-                offerActive.firstName = offer.user!!.firstName
-                offerActive.lastName = offer.user!!.lastName
-                offerActive.operation = offer.operation
-                offerActive.sizeOperations = listUserRating.size
-                offerActive.rating = rating
-                offerActive
-            }
+    fun getActiveOffers(asset: String?): List<OfferActiveDTO> {
+        val offers = if (asset == null) {
+            offerRepository.getByIsActive(true)
         } else {
-            return offerRepository.findAll()
-                .filter { offer: Offer? -> offer!!.isActive == true && offer.asset!!.name == asset }.map { offer ->
-                    val offerActive = OfferActiveDTO()
-                    val listUserRating =
-                        userTransactionRatingRepository.findAll()
-                            .filter { userRating -> userRating.user!! == offer.user && userRating.transaction!!.status != TransactionStatus.CANCELED }
-                    val rating =
-                        if (listUserRating.isEmpty()) {
-                            "Without operations"
-                        } else {
-                            listUserRating.sumOf { user -> 0 + user.rating!! }.toString()
-                        }
-                    offerActive.date = offer.created
-                    offerActive.asset = offer.asset
-                    offerActive.quantity = offer.quantity
-                    offerActive.unitPrice = offer.unitPrice
-                    offerActive.totalAmount = offer.totalAmount
-                    offerActive.firstName = offer.user!!.firstName
-                    offerActive.lastName = offer.user!!.lastName
-                    offerActive.operation = offer.operation
-                    offerActive.sizeOperations = listUserRating.size
-                    offerActive.rating = rating
-                    offerActive
-                }
+            offerRepository.getByIsActiveAndAsset(true, assetName = asset)
         }
+
+        val userIds = offers.map { it.user!!.id!! }.toSet()
+        val userRatings = userTransactionRatingRepository.getByUserIn(userIds)
+        val ratingsByUser = userRatings.associateBy { it.getUserId() }
+
+        val activeOffers = offers.map {
+            val userRating = ratingsByUser.getOrDefault(it.user!!.id!!, null)
+            var rating = 0.0
+            var totalOperations = 0
+            if (userRating != null) {
+                rating = max(userRating.getRating(), 0.0)
+                totalOperations = userRating.getTotalOperations()
+            }
+            val printableUserRating = if (rating == 0.0) "No Operations" else rating.toString()
+            val activeOffer = OfferActiveDTO()
+            activeOffer.id = it.id
+            activeOffer.created = it.created
+            activeOffer.assetId = it.asset!!.id
+            activeOffer.assetName = it.asset!!.name
+            activeOffer.quantity = it.quantity
+            activeOffer.unitPrice = it.unitPrice
+            activeOffer.totalAmount = it.totalAmount
+            activeOffer.firstName = it.user!!.firstName
+            activeOffer.lastName = it.user!!.lastName
+            activeOffer.operation = it.operation
+            activeOffer.totalOperations = totalOperations
+            activeOffer.rating = printableUserRating
+            activeOffer
+        }
+        return activeOffers
     }
 
     fun clear() {

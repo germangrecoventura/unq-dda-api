@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 
-@Entity(name = "rating_user")
+@Entity
 @JsonPropertyOrder("id", "user", "rating")
 class UserTransactionRating(
     @field:Id
