@@ -15,7 +15,7 @@ interface UserTransactionRatingRepository : CrudRepository<UserTransactionRating
 }
 
 interface UserRating {
-    fun getUserId(): Long
-    fun getRating(): Double
-    fun getTotalOperations(): Int
+    val userId: Long
+    val rating: Double
+    val totalOperations: Int
 }

@@ -54,15 +54,15 @@ class OfferService(
 
         val userIds = offers.map { it.user!!.id!! }.toSet()
         val userRatings = userTransactionRatingRepository.getByUserIn(userIds)
-        val ratingsByUser = userRatings.associateBy { it.getUserId() }
+        val ratingsByUser = userRatings.associateBy { it.userId }
 
         val activeOffers = offers.map {
             val userRating = ratingsByUser.getOrDefault(it.user!!.id!!, null)
             var rating = 0.0
             var totalOperations = 0
             if (userRating != null) {
-                rating = max(userRating.getRating(), 0.0)
-                totalOperations = userRating.getTotalOperations()
+                rating = max(userRating.rating, 0.0)
+                totalOperations = userRating.totalOperations
             }
             val printableUserRating = if (rating == 0.0) "No Operations" else rating.toString()
             val activeOffer = OfferActiveDTO()
