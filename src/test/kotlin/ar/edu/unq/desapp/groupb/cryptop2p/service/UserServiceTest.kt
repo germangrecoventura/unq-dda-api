@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.service
 
-import ar.edu.unq.desapp.groupb.cryptop2p.Initializer
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -14,12 +12,9 @@ class UserServiceTest {
     @Autowired
     lateinit var userService: UserService
 
-    @Autowired
-    lateinit var initializer: Initializer
-
     @BeforeEach
     fun setUp() {
-        initializer.cleanDataBase()
+        userService.clear()
     }
 
     fun anyUser(): UserCreateRequestDTOBuilder {
@@ -409,10 +404,5 @@ class UserServiceTest {
             "save.userCreateRequest.cryptoWalletAddress: The crypto wallet address must be 8 digits long",
             thrown.message
         )
-    }
-
-    @AfterEach
-    fun clear() {
-        userService.clear()
     }
 }

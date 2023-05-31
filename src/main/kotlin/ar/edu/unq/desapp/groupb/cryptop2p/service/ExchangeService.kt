@@ -6,29 +6,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class ExchangeService(private val restTemplate: RestTemplate) {
-    private val mapAsset = loadAsset()
-    private fun loadAsset(): Map<String, Double> {
-        val listAssets = mutableSetOf(
-            "ALICEUSDT",
-            "MATICUSDT",
-            "AXSUSDT",
-            "AAVEUSDT",
-            "ATOMUSDT",
-            "NEOUSDT",
-            "DOTUSDT",
-            "ETHUSDT",
-            "CAKEUSDT",
-            "BTCUSDT",
-            "BNBUSDT",
-            "ADAUSDT",
-            "TRXUSDT",
-            "AUDIOUSDT"
-        )
-        val mapAsset = HashMap<String, Double>()
-        listAssets.forEach { assetName -> mapAsset[assetName] = 10.00 }
-        return mapAsset
-    }
-
+    private val assetPrices = assetNames().associateWith { 10.00 }
 
     fun getConversionRateARStoUSD(): Double {
         val url = "https://www.dolarsi.com/api/api.php?type=valoresprincipales"
@@ -50,7 +28,7 @@ class ExchangeService(private val restTemplate: RestTemplate) {
 
             response.body?.price ?: throw ModelException("Could not find asset price")
         } else {
-            mapAsset[assetName] ?: throw ModelException("Could not find asset price")
+            assetPrices[assetName] ?: throw ModelException("Could not find asset price")
         }
     }
 
@@ -66,10 +44,10 @@ class ExchangeService(private val restTemplate: RestTemplate) {
 
             val response = restTemplate.getForEntity(url, Array<Symbol>::class.java)
 
-            return response.body?.associate { it.symbol!! to it.price!! }
+            response.body?.associate { it.symbol!! to it.price!! }
                 ?: throw ModelException("Could not find assets prices")
         } else {
-            mapAsset
+            assetPrices
         }
     }
 }
@@ -90,4 +68,22 @@ data class Root(
 data class Symbol(
     var symbol: String?,
     var price: Double?,
+)
+
+
+fun assetNames(): Set<String> = setOf(
+    "ALICEUSDT",
+    "MATICUSDT",
+    "AXSUSDT",
+    "AAVEUSDT",
+    "ATOMUSDT",
+    "NEOUSDT",
+    "DOTUSDT",
+    "ETHUSDT",
+    "CAKEUSDT",
+    "BTCUSDT",
+    "BNBUSDT",
+    "ADAUSDT",
+    "TRXUSDT",
+    "AUDIOUSDT"
 )

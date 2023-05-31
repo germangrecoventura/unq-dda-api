@@ -126,7 +126,7 @@ class ReportServiceTest {
         endDateTime = LocalDateTime.of(2023, 5, 22, 23, 59, 59)
 
         Mockito
-            .`when`(userRepository.findById(1))
+            .`when`(userRepository.findById(seller.id!!))
             .thenReturn(Optional.of(seller))
         Mockito
             .`when`(
@@ -148,7 +148,11 @@ class ReportServiceTest {
 
     @Test
     fun `should return a report with no line items when user does not have any transactions`() {
-        val report = reportService.generateTradedVolumeReport(1, startDateTime.toLocalDate(), endDateTime.toLocalDate())
+        val report = reportService.generateTradedVolumeReport(
+            seller.id!!,
+            startDateTime.toLocalDate(),
+            endDateTime.toLocalDate()
+        )
 
         val expectedDateTime = LocalDateTime.of(2023, 5, 21, 0, 0, 0)
 
@@ -178,7 +182,11 @@ class ReportServiceTest {
             )
             .thenReturn(transactions)
 
-        val report = reportService.generateTradedVolumeReport(1, startDateTime.toLocalDate(), endDateTime.toLocalDate())
+        val report = reportService.generateTradedVolumeReport(
+            seller.id!!,
+            startDateTime.toLocalDate(),
+            endDateTime.toLocalDate()
+        )
 
         val expectedDateTime = LocalDateTime.of(2023, 5, 21, 0, 0, 0)
 
@@ -195,7 +203,11 @@ class ReportServiceTest {
 
     @Test
     fun `should return an empty report if there are no transactions`() {
-        val report = reportService.generateTradedVolumeReport(1, startDateTime.toLocalDate(), endDateTime.toLocalDate())
+        val report = reportService.generateTradedVolumeReport(
+            seller.id!!,
+            startDateTime.toLocalDate(),
+            endDateTime.toLocalDate()
+        )
 
         val expectedDateTime = LocalDateTime.of(2023, 5, 21, 0, 0, 0)
 
