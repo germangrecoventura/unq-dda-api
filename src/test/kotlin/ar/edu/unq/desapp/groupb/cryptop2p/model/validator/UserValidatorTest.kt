@@ -23,7 +23,6 @@ class UserValidatorTest {
     @Autowired
     lateinit var userValidator: UserValidator
 
-
     fun anyUserCreationRequest(): UserCreateRequestDTOBuilder {
         return UserCreateRequestDTOBuilder()
             .withFirstName("Homero")

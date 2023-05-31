@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
-import ar.edu.unq.desapp.groupb.cryptop2p.Initializer
 import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -25,12 +24,8 @@ class UserControllerTest {
     @Autowired
     lateinit var userService: UserService
 
-    @Autowired
-    lateinit var initializer: Initializer
-
     @BeforeEach
     fun setUp() {
-        initializer.cleanDataBase()
         userService.clear()
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
     }

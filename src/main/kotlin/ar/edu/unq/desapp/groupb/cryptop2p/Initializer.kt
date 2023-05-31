@@ -2,11 +2,15 @@ package ar.edu.unq.desapp.groupb.cryptop2p
 
 import ar.edu.unq.desapp.groupb.cryptop2p.service.*
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.builder.UserCreateRequestDTOBuilder
+
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.CommandLineRunner
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 
+@Profile("!test")
 @Component
-class Initializer {
+class Initializer : CommandLineRunner {
     @Autowired
     lateinit var assetService: AssetService
 
@@ -22,40 +26,8 @@ class Initializer {
     @Autowired
     lateinit var transactionService: TransactionService
 
-    fun cleanDataBase() {
-        ratingService.clear()
-        transactionService.clear()
-        offerService.clear()
-        userService.clear()
-        assetService.clear()
-    }
-
-    /* @PostConstruct
-     fun loadData() {
-         loadUsers()
-         loadAssets()
-     }*/
-
-
     private fun loadAssets() {
-        val assets = mutableSetOf(
-            "ALICEUSDT",
-            "MATICUSDT",
-            "AXSUSDT",
-            "AAVEUSDT",
-            "ATOMUSDT",
-            "NEOUSDT",
-            "DOTUSDT",
-            "ETHUSDT",
-            "CAKEUSDT",
-            "BTCUSDT",
-            "BNBUSDT",
-            "ADAUSDT",
-            "TRXUSDT",
-            "AUDIOUSDT"
-        )
-
-        assets.forEach { asset ->
+        assetNames().forEach { asset ->
             assetService.save(asset)
         }
     }
@@ -72,15 +44,33 @@ class Initializer {
     }
 
     private fun loadUsers() {
-        userService.save(anyUser().build())
-        val user2 = anyUser()
-            .withFirstName("German")
-            .withLastName("Lopez")
-            .withEmail("german@gmail.com")
-            .withAddress("Andrade 123")
-            .withPassword("Cos!4s")
-            .withCVU("0011523344556677889900")
-            .withCryptoWallet("12335678").build()
-        userService.save(user2)
+        val userNames = listOf(
+            Pair("Homero", "Simpson"),
+            Pair("Bart", "Simpson"),
+            Pair("Lisa", "Simpson"),
+            Pair("Marge", "Simpson"),
+            Pair("Maggie", "Simpson"),
+            Pair("Ned", "Flanders"),
+            Pair("Moe", "Szyslak"),
+            Pair("Apu", "Nahasapeemapetilon"),
+        )
+
+        userNames.forEach {
+            val user = anyUser()
+                .withFirstName(it.first)
+                .withLastName(it.second)
+                .withEmail("${it.first.lowercase()}@springfield.com")
+                .withAddress("Evergreen 123")
+                .withPassword("Super!")
+                .withCVU("0011223344556677889900")
+                .withCryptoWallet("12345678")
+                .build()
+            userService.save(user)
+        }
+    }
+
+    override fun run(vararg args: String?) {
+        loadUsers()
+        loadAssets()
     }
 }
