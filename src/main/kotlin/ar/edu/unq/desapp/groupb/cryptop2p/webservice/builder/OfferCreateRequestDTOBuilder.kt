@@ -6,7 +6,6 @@ class OfferCreateRequestDTOBuilder {
     private var asset: String? = null
     private var quantity: Double? = null
     private var unitPrice: Double? = null
-    private var totalAmount: Double? = null
     private var user: Long? = null
     private var operation: String? = null
 
@@ -32,11 +31,6 @@ class OfferCreateRequestDTOBuilder {
 
     fun withUnitPrice(unitPrice: Double?): OfferCreateRequestDTOBuilder {
         this.unitPrice = unitPrice
-        return this
-    }
-
-    fun withTotalAmount(totalAmount: Double?): OfferCreateRequestDTOBuilder {
-        this.totalAmount = totalAmount
         return this
     }
 
