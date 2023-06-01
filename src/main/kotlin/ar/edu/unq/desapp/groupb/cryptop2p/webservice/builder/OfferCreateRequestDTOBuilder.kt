@@ -15,7 +15,6 @@ class OfferCreateRequestDTOBuilder {
         offerRequest.asset = asset
         offerRequest.quantity = quantity
         offerRequest.unitPrice = unitPrice
-        offerRequest.totalAmount = totalAmount
         offerRequest.user = user
         offerRequest.operation = operation
         return offerRequest
@@ -45,7 +44,6 @@ class OfferCreateRequestDTOBuilder {
         this.user = user
         return this
     }
-
 
     fun withOperation(operation: String?): OfferCreateRequestDTOBuilder {
         this.operation = operation

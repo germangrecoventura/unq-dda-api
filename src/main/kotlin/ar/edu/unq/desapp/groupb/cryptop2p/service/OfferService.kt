@@ -31,12 +31,13 @@ class OfferService(
         val isActive = offerRequestDTO.unitPrice!! <= (assetPrice.unitPrice!! + fivePercent)
                 &&
                 offerRequestDTO.unitPrice!! >= (assetPrice.unitPrice!! - fivePercent)
+        val totalAmount = offerRequestDTO.quantity!! * offerRequestDTO.unitPrice!!
         val offer =
             Offer(
                 assetPrice.asset,
                 offerRequestDTO.quantity,
                 offerRequestDTO.unitPrice,
-                offerRequestDTO.totalAmount,
+                totalAmount,
                 user,
                 OfferType.valueOf(offerRequestDTO.operation!!),
                 isActive,
