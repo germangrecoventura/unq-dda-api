@@ -41,7 +41,7 @@ class AssetControllerTest {
 
         Mockito
             .`when`(exchangeService.getCryptoAssetPrice(assetName))
-            .thenReturn(1.31200000);
+            .thenReturn(1.31200000)
     }
 
     @Test

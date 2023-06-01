@@ -55,7 +55,7 @@ class OfferControllerTest {
 
         Mockito
             .`when`(exchangeService.getCryptoAssetPrice(assetName))
-            .thenReturn(1.0);
+            .thenReturn(1.0)
 
         assetService.save("ALICEUSDT")
     }
