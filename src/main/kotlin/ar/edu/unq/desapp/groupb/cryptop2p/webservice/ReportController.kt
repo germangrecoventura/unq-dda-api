@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 import ar.edu.unq.desapp.groupb.cryptop2p.model.TradedVolumeReport
 import ar.edu.unq.desapp.groupb.cryptop2p.service.ReportService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.View
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.helpers.View
 import com.fasterxml.jackson.annotation.JsonView
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content

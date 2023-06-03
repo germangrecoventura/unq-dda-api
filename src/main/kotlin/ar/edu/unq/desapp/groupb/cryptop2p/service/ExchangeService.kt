@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.service
 
 import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
+import ar.edu.unq.desapp.groupb.cryptop2p.service.helpers.Root
+import ar.edu.unq.desapp.groupb.cryptop2p.service.helpers.Symbol
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
@@ -51,25 +53,6 @@ class ExchangeService(private val restTemplate: RestTemplate) {
         }
     }
 }
-
-
-data class Casa(
-    var compra: String?,
-    var venta: String?,
-    var nombre: String?,
-    var fecha: String?,
-)
-
-
-data class Root(
-    var casa: Casa?,
-)
-
-data class Symbol(
-    var symbol: String?,
-    var price: Double?,
-)
-
 
 fun assetNames(): Set<String> = setOf(
     "ALICEUSDT",
