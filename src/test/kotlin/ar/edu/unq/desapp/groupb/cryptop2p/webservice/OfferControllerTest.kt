@@ -55,7 +55,7 @@ class OfferControllerTest {
 
         Mockito
             .`when`(exchangeService.getCryptoAssetPrice(assetName))
-            .thenReturn(1.0);
+            .thenReturn(1.0)
 
         assetService.save("ALICEUSDT")
     }
@@ -76,7 +76,6 @@ class OfferControllerTest {
             .withAsset("ALICEUSDT")
             .withQuantity(2.0)
             .withUnitPrice(1.0)
-            .withTotalAmount(40.0)
             .withUser(null)
             .withOperation("BUY")
     }
@@ -150,19 +149,6 @@ class OfferControllerTest {
     fun `should throw a 400 status when a unit price is negative`() {
         val user = userService.save(anyUser().build())
         val offer = anyOffer().withUser(user.id).withUnitPrice(-10.0).build()
-
-        mockMvc.perform(
-            post("/offers")
-                .contentType("application/json")
-                .content(mapper.writeValueAsString(offer))
-                .accept("application/json")
-        ).andExpect(status().isBadRequest)
-    }
-
-    @Test
-    fun `should throw a 400 status when a total amount is negative`() {
-        val user = userService.save(anyUser().build())
-        val offer = anyOffer().withUser(user.id).withTotalAmount(-10.0).build()
 
         mockMvc.perform(
             post("/offers")

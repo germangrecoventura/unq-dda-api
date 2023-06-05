@@ -3,8 +3,10 @@ package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 import ar.edu.unq.desapp.groupb.cryptop2p.model.User
 import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserCreateRequestDTO
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -18,6 +20,20 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 @Tag(name = "users", description = "Endpoints for managing users")
 @RequestMapping("users")
+@ApiResponses(
+    value = [
+        ApiResponse(
+            responseCode = "400",
+            description = "Bad request",
+            content = [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ValidationErrorResponseDTO::class),
+                )
+            ]
+        )
+    ]
+)
 class UserController(private val userService: UserService) {
     @PostMapping
     @Operation(
@@ -35,21 +51,35 @@ class UserController(private val userService: UserService) {
                         schema = Schema(implementation = User::class),
                     )
                 ]
-            ),
-            ApiResponse(
-                responseCode = "400",
-                description = "bad request",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = ValidationErrorResponseDTO::class),
-                    )
-                ]
             )
         ]
     )
     fun createUser(@RequestBody userCreateRequestDTO: UserCreateRequestDTO): ResponseEntity<User> {
         val user = userService.save(userCreateRequestDTO)
         return ResponseEntity.ok().body(user)
+    }
+
+    @GetMapping
+    @Operation(
+        summary = "Lists all users",
+        description = "Lists all users",
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = UserDTO::class)),
+                    )
+                ]
+            )
+        ]
+    )
+    fun getUsers(): ResponseEntity<List<UserDTO>> {
+        val users = userService.getAll()
+        return ResponseEntity.ok().body(users)
     }
 }

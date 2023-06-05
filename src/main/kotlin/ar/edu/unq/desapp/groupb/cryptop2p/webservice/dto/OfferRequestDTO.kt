@@ -23,10 +23,6 @@ class OfferRequestDTO {
     @DecimalMin("0.0", message = "The unit price can't be negative")
     var unitPrice: Double? = null
 
-    @NotNull(message = "The total amount cannot be blank")
-    @DecimalMin("0.0", message = "The total amount can't be negative")
-    var totalAmount: Double? = null
-
     @NotNull(message = "The user cannot be blank")
     var user: Long? = null
 

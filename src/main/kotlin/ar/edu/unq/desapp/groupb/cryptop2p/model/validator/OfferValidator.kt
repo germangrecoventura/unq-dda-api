@@ -23,7 +23,6 @@ class OfferValidator(
         }
         if (offer.quantity!! < 0) throw QuantityException()
         if (offer.unitPrice!! < 0) throw UnitPriceException()
-        if (offer.totalAmount!! < 0) throw TotalAmountException()
         try {
             OfferType.valueOf(offer.operation!!)
             return true
