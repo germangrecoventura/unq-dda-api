@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.*
         )
     ]
 )
+@SecurityRequirement(name = "bearerAuth")
 class AssetController(private val assetService: AssetService) {
     @PostMapping
     @Operation(
