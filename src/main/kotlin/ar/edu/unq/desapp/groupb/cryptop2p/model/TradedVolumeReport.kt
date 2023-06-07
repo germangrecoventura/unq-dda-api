@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.model
 
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.View
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.helpers.View
 import com.fasterxml.jackson.annotation.JsonView
 import java.time.LocalDateTime
 

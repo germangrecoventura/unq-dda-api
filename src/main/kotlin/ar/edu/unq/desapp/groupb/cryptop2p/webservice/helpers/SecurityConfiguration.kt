@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.groupb.cryptop2p.webservice
+package ar.edu.unq.desapp.groupb.cryptop2p.webservice.helpers
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

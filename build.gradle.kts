@@ -34,6 +34,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("com.tngtech.archunit:archunit-junit4:1.0.1")
 }
 
 tasks.withType<KotlinCompile> {
