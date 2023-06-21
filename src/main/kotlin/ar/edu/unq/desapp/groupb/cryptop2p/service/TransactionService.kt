@@ -12,6 +12,8 @@ import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserTransactionRatingRepos
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionCreateRequestDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionDTO
 import jakarta.transaction.Transactional
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -24,7 +26,9 @@ class TransactionService(
     private val transactionValidator: TransactionValidator,
     private val userTransactionRatingRepository: UserTransactionRatingRepository
 ) {
+    var logger: Logger = LoggerFactory.getLogger(TransactionService::class.java)
     fun save(transactionDTO: TransactionCreateRequestDTO): Transaction {
+        logger.info("Saving transaction...")
         transactionValidator.isCreationRequestValid(transactionDTO.userId!!, transactionDTO.offerId!!)
         val user = userRepository.findById(transactionDTO.userId!!).get()
         var offer = offerRepository.findById(transactionDTO.offerId!!).get()
@@ -54,6 +58,7 @@ class TransactionService(
 
 
     fun transferTransaction(transactionDTO: TransactionDTO): Transaction {
+        logger.info("Transfer transaction...")
         transactionValidator.isTransferTransactionValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
         val transaction = transactionRepository.findById(transactionDTO.transactionId!!).get()
         transaction.status = TransactionStatus.TRANSFERRED
@@ -61,6 +66,7 @@ class TransactionService(
     }
 
     fun confirmTransaction(transactionDTO: TransactionDTO): Transaction {
+        logger.info("Confirm transaction...")
         transactionValidator.isConfirmTransactionValid(transactionDTO.userId!!, transactionDTO.transactionId!!)
         val transaction = transactionRepository.findById(transactionDTO.transactionId!!).get()
         transaction.status = TransactionStatus.CONFIRMED
@@ -82,6 +88,7 @@ class TransactionService(
     }
 
     fun cancelTransaction(transactionCancelDTO: TransactionDTO): Transaction {
+        logger.info("Cancel transaction...")
         transactionValidator.isCancelTransactionValid(
             transactionCancelDTO.userId!!,
             transactionCancelDTO.transactionId!!

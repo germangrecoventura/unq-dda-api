@@ -10,6 +10,8 @@ import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserTransactionRatingRepos
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferActiveDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.OfferRequestDTO
 import jakarta.transaction.Transactional
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import kotlin.math.max
@@ -23,7 +25,9 @@ class OfferService(
     private val userTransactionRatingRepository: UserTransactionRatingRepository,
     private val offerValidator: OfferValidator
 ) {
+    var logger: Logger = LoggerFactory.getLogger(OfferService::class.java)
     fun save(offerRequestDTO: OfferRequestDTO): Offer {
+        logger.info("Saving offer...")
         offerValidator.isCreationRequestValid(offerRequestDTO)
         val assetPrice = assetPriceRepository.findCurrentPriceByAssetName(offerRequestDTO.asset!!)
         val user = userRepository.findById(offerRequestDTO.user!!).get()
@@ -47,6 +51,7 @@ class OfferService(
     }
 
     fun getActiveOffers(asset: String?): List<OfferActiveDTO> {
+        logger.info("Get active offers...")
         val offers = if (asset == null) {
             offerRepository.getByIsActive(true)
         } else {

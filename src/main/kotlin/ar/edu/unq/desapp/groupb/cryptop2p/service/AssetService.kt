@@ -6,6 +6,8 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.AssetValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetPriceRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
 import jakarta.transaction.Transactional
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -17,7 +19,9 @@ class AssetService(
     private val assetValidator: AssetValidator,
     private val exchangeService: ExchangeService,
 ) {
+    var logger: Logger = LoggerFactory.getLogger(AssetService::class.java)
     fun save(assetName: String): Asset {
+        logger.info("Saving Assets...")
         assetValidator.isCreationRequestValid(assetName)
         val price = exchangeService.getCryptoAssetPrice(assetName)
 
@@ -28,6 +32,7 @@ class AssetService(
     }
 
     fun getAssetPrices(): Collection<AssetPrice> {
+        logger.info("Return AssetPrices...")
         return assetPriceRepository.findLatestPrices()
     }
 
