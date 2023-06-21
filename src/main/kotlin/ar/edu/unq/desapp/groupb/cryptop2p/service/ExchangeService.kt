@@ -3,10 +3,14 @@ package ar.edu.unq.desapp.groupb.cryptop2p.service
 import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
 import ar.edu.unq.desapp.groupb.cryptop2p.service.helpers.Root
 import ar.edu.unq.desapp.groupb.cryptop2p.service.helpers.Symbol
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.AssetPriceDTO
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import java.time.LocalDateTime
 
 @Service
 class ExchangeService(private val restTemplate: RestTemplate) {
@@ -57,6 +61,21 @@ class ExchangeService(private val restTemplate: RestTemplate) {
                 ?: throw ModelException("Could not find assets prices")
         } else {
             assetPrices
+        }
+    }
+
+    fun quotesFromLast24HoursOfAsset(assetName: String): AssetPriceDTO {
+        logger.info("Get quotes from last 24 Hours of Asset...")
+        return if (System.getenv("API_ON").isNullOrBlank()) {
+            val url = "https://api.binance.com/api/v3/ticker/24hr?symbol=$assetName"
+            assetPrices[assetName] ?: throw ModelException("Could not find asset")
+            val response = restTemplate.getForEntity(url, String::class.java)
+            val mapper = ObjectMapper()
+            val root: JsonNode = mapper.readTree(response.body)
+            AssetPriceDTO(assetName, root.path("prevClosePrice").asDouble(), LocalDateTime.now())
+        } else {
+            assetPrices[assetName] ?: throw ModelException("Could not find asset")
+            AssetPriceDTO(assetName, 5.0, LocalDateTime.now())
         }
     }
 }

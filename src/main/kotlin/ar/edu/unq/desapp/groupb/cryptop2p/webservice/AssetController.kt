@@ -90,4 +90,18 @@ class AssetController(private val assetService: AssetService) {
         val prices = assetService.getAssetPrices().map { AssetPriceDTO.fromModel(it) }
         return ResponseEntity.ok().body(prices)
     }
+
+    @GetMapping("priceLast24Hours")
+    @Operation(
+        summary = "24 hour rolling window price change statistics.",
+        description = "Lists latest assets prices",
+    )
+    fun quotesFromLast24HoursOfAsset(
+        @RequestParam @NotBlank(message = "The name cannot be blank") @Pattern(
+            regexp = "^[A-Z0-9-_.]{1,20}$",
+            message = "The asset name is not in a valid format"
+        ) assetName: String
+    ): ResponseEntity<AssetPriceDTO> {
+        return ResponseEntity.ok().body(assetService.quotesFromLast24HoursOfAsset(assetName))
+    }
 }

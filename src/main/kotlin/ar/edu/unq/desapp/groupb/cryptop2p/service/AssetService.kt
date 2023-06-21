@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.AssetPrice
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.AssetValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetPriceRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.AssetPriceDTO
 import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -38,5 +39,9 @@ class AssetService(
 
     fun clear() {
         assetRepository.deleteAll()
+    }
+
+    fun quotesFromLast24HoursOfAsset(assetName: String): AssetPriceDTO {
+        return exchangeService.quotesFromLast24HoursOfAsset(assetName)
     }
 }
