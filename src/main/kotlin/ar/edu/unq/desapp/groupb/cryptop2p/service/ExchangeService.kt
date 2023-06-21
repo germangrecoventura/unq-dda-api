@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDateTime
 
+
 @Service
 class ExchangeService(private val restTemplate: RestTemplate) {
     private val assetPrices = assetNames().associateWith { 10.00 }
