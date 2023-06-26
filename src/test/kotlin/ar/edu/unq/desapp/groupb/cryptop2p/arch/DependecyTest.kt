@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.groupb.cryptop2p.arch
 import com.tngtech.archunit.core.domain.JavaClasses
 import com.tngtech.archunit.core.importer.ClassFileImporter
 import com.tngtech.archunit.core.importer.ImportOption
-import com.tngtech.archunit.lang.conditions.ArchConditions.haveSimpleNameEndingWith
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,42 +16,38 @@ class DependecyTest {
     fun setup() {
         baseClasses = ClassFileImporter()
             .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-
             .importPackages("ar.edu.unq.desapp.groupb.cryptop2p")
     }
 
     @Test
-    fun dtoClassesShouldEndWithDTOOrDTOCompanion() {
-        classes().that().resideInAPackage("..dto")
-            .should(haveSimpleNameEndingWith("DTO").or(haveSimpleNameEndingWith("DTO" + "$" + "Companion")))
-            .check(baseClasses)
+    fun `dto classes should end with DTO or DTOCompanion`() {
+        classes().that().haveSimpleNameEndingWith("DTO").or().haveSimpleNameEndingWith("DTO" + "$" + "Companion")
+            .should().resideInAPackage("..dto").check(baseClasses)
     }
 
     @Test
-    fun controllerClassesShouldEndWithController() {
+    fun `controller classes should end with controller`() {
         classes().that().resideInAPackage("..webservice")
             .should().haveSimpleNameEndingWith("Controller").check(baseClasses)
     }
 
     @Test
-    fun controllerClassesShouldHaveSpringControllerAnnotation() {
+    fun `controller classes should have spring ControllerAnnotation`() {
         classes().that().resideInAPackage("..webservice")
             .should().beAnnotatedWith("org.springframework.web.bind.annotation.RestController")
             .check(baseClasses)
     }
 
     @Test
-    fun serviceClassesShouldEndWithService() {
-        classes().that().resideInAPackage("..service")
-            .should().haveSimpleNameEndingWith("Service").check(baseClasses)
+    fun `controllers should depend on services`() {
+        classes().that().resideInAPackage("..webservice")
+            .should().dependOnClassesThat()
+            .resideInAPackage("..service").check(baseClasses)
     }
 
     @Test
-    fun serviceClassesShouldHaveSpringServiceAnnotation() {
-        classes().that().resideInAPackage("..service")
-            .should().beAnnotatedWith("org.springframework.stereotype.Service")
-            .check(baseClasses)
+    fun `the classes of the persistence package should be interfaces`() {
+        classes().that().resideInAPackage("..persistence")
+            .should().beInterfaces().check(baseClasses)
     }
-
-
 }

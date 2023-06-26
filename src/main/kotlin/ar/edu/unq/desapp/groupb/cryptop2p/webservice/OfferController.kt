@@ -54,6 +54,22 @@ class OfferController(private val offerService: OfferService) {
                         schema = Schema(implementation = Offer::class),
                     )
                 ]
+            ), ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [Content(
+                    mediaType = "application/json", examples = [ExampleObject(
+                        value = "{\n" +
+                                "  \"errors\": [\n" +
+                                "    {\n" +
+                                "      \"source\": \"user\",\n" +
+                                "      \"message\": \"Full authentication is required to access this resource\"\n" +
+                                "    }\n" +
+                                "  ]\n" +
+                                "}"
+                    )]
+                )
+                ]
             )
         ]
     )

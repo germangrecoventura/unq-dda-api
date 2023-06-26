@@ -8,7 +8,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -60,5 +62,19 @@ class GlobalExceptionHandler {
         logger.error(ex.message ?: "")
         val body = ValidationErrorResponseDTO(listOf(error))
         return ResponseEntity(body, HttpStatus.UNAUTHORIZED)
+    }
+
+    @ExceptionHandler(UsernameNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun userNotFound(ex: UsernameNotFoundException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.message!!)
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleException(ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
+        var logger: Logger = LoggerFactory.getLogger(BadCredentialsException::class.java)
+        logger.error(ex.message!!)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.message!!)
     }
 }

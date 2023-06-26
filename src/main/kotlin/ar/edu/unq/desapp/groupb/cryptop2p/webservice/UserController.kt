@@ -1,12 +1,13 @@
 package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 
-import ar.edu.unq.desapp.groupb.cryptop2p.security.JwtUtilService
 import ar.edu.unq.desapp.groupb.cryptop2p.model.User
+import ar.edu.unq.desapp.groupb.cryptop2p.security.JwtUtilService
 import ar.edu.unq.desapp.groupb.cryptop2p.service.UserService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.*
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -87,6 +88,22 @@ class UserController(private val userService: UserService) {
                         array = ArraySchema(schema = Schema(implementation = UserDTO::class)),
                     )
                 ]
+            ), ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [Content(
+                    mediaType = "application/json", examples = [ExampleObject(
+                        value = "{\n" +
+                                "  \"errors\": [\n" +
+                                "    {\n" +
+                                "      \"source\": \"user\",\n" +
+                                "      \"message\": \"Full authentication is required to access this resource\"\n" +
+                                "    }\n" +
+                                "  ]\n" +
+                                "}"
+                    )]
+                )
+                ]
             )
         ]
     )
@@ -96,6 +113,24 @@ class UserController(private val userService: UserService) {
     }
 
     @PostMapping("/login")
+    @Operation(
+        summary = "Login the user",
+        description = "Login the user",
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                description = "Success",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = TokenInfo::class)),
+                    )
+                ]
+            )
+        ]
+    )
     fun authenticate(@Valid @RequestBody loginDTO: LoginDTO): ResponseEntity<TokenInfo> {
         val authentication =
             authenticationManager.authenticate(UsernamePasswordAuthenticationToken(loginDTO.email, loginDTO.password))
