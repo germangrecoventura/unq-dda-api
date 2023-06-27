@@ -108,17 +108,17 @@ class AssetController(private val assetService: AssetService) {
         return ResponseEntity.ok().body(prices)
     }
 
-    @GetMapping("priceLast24Hours")
+    @GetMapping("/24h")
     @Operation(
         summary = "24 hour rolling window price change statistics.",
         description = "Lists latest assets prices",
     )
-    fun quotesFromLast24HoursOfAsset(
+    fun getAssetPricesFromLast24Hours(
         @RequestParam @NotBlank(message = "The name cannot be blank") @Pattern(
             regexp = "^[A-Z0-9-_.]{1,20}$",
             message = "The asset name is not in a valid format"
         ) assetName: String
     ): ResponseEntity<AssetPriceDTO> {
-        return ResponseEntity.ok().body(assetService.quotesFromLast24HoursOfAsset(assetName))
+        return ResponseEntity.ok().body(assetService.getAssetPricesFromLast24Hours(assetName))
     }
 }
