@@ -40,14 +40,16 @@ class AssetService(
     }
 
     fun getAssetPrices(): Collection<AssetPrice> {
-        val assetPrices = if (assetPriceCache.none { it.value == null }) {
-            logger.info("Returning AssetPrice list from cache...")
-            val cachedAssetPrices = assetPriceCache.getAll(assetNames()).toList()
-            cachedAssetPrices.map { it.second }
-        } else {
+        val cachedAssetPrices = assetPriceCache.getAll(assetNames()).toList()
+
+        val assetPrices = if (cachedAssetPrices.any { it.second == null }) {
             logger.info("Returning AssetPrice list from DB...")
             assetPriceRepository.findLatestPrices()
+        } else {
+            logger.info("Returning AssetPrice list from cache...")
+            cachedAssetPrices.map { it.second }
         }
+
         return assetPrices
     }
 
