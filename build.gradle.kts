@@ -31,8 +31,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("javax.cache:cache-api:1.1.1")
+    implementation("org.ehcache:ehcache:3.10.8")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
+    
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.mockito:mockito-core:3.+")
@@ -65,10 +70,10 @@ sonarqube {
         property(
             "sonar.coverage.exclusions",
             "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/webservice/**, " +
-            "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/service/**, " +
-            "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/persistance/**," +
-            "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/Initializer.kt," +
-            "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/model/validator/**"
+                    "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/service/**, " +
+                    "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/persistance/**," +
+                    "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/Initializer.kt," +
+                    "src/main/kotlin/ar/edu/unq/desapp/groupb/cryptop2p/model/validator/**"
         )
     }
 }

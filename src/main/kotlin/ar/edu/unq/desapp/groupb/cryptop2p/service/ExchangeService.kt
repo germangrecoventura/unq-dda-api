@@ -20,6 +20,7 @@ class ExchangeService(private val restTemplate: RestTemplate) {
 
     fun getConversionRateARStoUSD(): Double {
         logger.info("Conversion Rate ARS to USD...")
+
         val url = "https://www.dolarsi.com/api/api.php?type=valoresprincipales"
 
         val response = restTemplate.getForEntity(url, Array<Root>::class.java)
@@ -65,14 +66,16 @@ class ExchangeService(private val restTemplate: RestTemplate) {
         }
     }
 
-    fun quotesFromLast24HoursOfAsset(assetName: String): AssetPriceDTO {
+    fun getAssetPricesFromLast24Hours(assetName: String): AssetPriceDTO {
         logger.info("Get quotes from last 24 Hours of Asset...")
         return if (System.getenv("API_ON").isNullOrBlank()) {
             val url = "https://api.binance.com/api/v3/ticker/24hr?symbol=$assetName"
-            assetPrices[assetName] ?: throw ModelException("Could not find asset")
+
             val response = restTemplate.getForEntity(url, String::class.java)
+
             val mapper = ObjectMapper()
             val root: JsonNode = mapper.readTree(response.body)
+
             AssetPriceDTO(assetName, root.path("prevClosePrice").asDouble(), LocalDateTime.now())
         } else {
             assetPrices[assetName] ?: throw ModelException("Could not find asset")
