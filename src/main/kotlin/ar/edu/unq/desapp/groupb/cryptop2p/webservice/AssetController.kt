@@ -7,9 +7,11 @@ import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.*
         )
     ]
 )
+@SecurityRequirement(name = "bearerAuth")
 class AssetController(private val assetService: AssetService) {
     @PostMapping
     @Operation(
@@ -52,7 +55,23 @@ class AssetController(private val assetService: AssetService) {
                         schema = Schema(implementation = Asset::class),
                     )
                 ]
-            ),
+            ), ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [Content(
+                    mediaType = "application/json", examples = [ExampleObject(
+                        value = "{\n" +
+                                "  \"errors\": [\n" +
+                                "    {\n" +
+                                "      \"source\": \"user\",\n" +
+                                "      \"message\": \"Full authentication is required to access this resource\"\n" +
+                                "    }\n" +
+                                "  ]\n" +
+                                "}"
+                    )]
+                )
+                ]
+            )
         ]
     )
     fun createAsset(
@@ -87,5 +106,19 @@ class AssetController(private val assetService: AssetService) {
     fun getAssetsPrices(): ResponseEntity<Collection<AssetPriceDTO>> {
         val prices = assetService.getAssetPrices().map { AssetPriceDTO.fromModel(it) }
         return ResponseEntity.ok().body(prices)
+    }
+
+    @GetMapping("priceLast24Hours")
+    @Operation(
+        summary = "24 hour rolling window price change statistics.",
+        description = "Lists latest assets prices",
+    )
+    fun quotesFromLast24HoursOfAsset(
+        @RequestParam @NotBlank(message = "The name cannot be blank") @Pattern(
+            regexp = "^[A-Z0-9-_.]{1,20}$",
+            message = "The asset name is not in a valid format"
+        ) assetName: String
+    ): ResponseEntity<AssetPriceDTO> {
+        return ResponseEntity.ok().body(assetService.quotesFromLast24HoursOfAsset(assetName))
     }
 }

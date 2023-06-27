@@ -3,13 +3,15 @@ package ar.edu.unq.desapp.groupb.cryptop2p.webservice
 import ar.edu.unq.desapp.groupb.cryptop2p.model.TradedVolumeReport
 import ar.edu.unq.desapp.groupb.cryptop2p.service.ReportService
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.View
+import ar.edu.unq.desapp.groupb.cryptop2p.webservice.helpers.View
 import com.fasterxml.jackson.annotation.JsonView
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -19,6 +21,7 @@ import java.time.LocalDate
 @CrossOrigin
 @Tag(name = "reports", description = "Endpoints for managing reports")
 @RequestMapping("reports")
+@SecurityRequirement(name = "bearerAuth")
 class ReportController(private val reportService: ReportService) {
 
     @GetMapping("{userId}/traded-volume")
@@ -47,6 +50,22 @@ class ReportController(private val reportService: ReportService) {
                         schema = Schema(implementation = ValidationErrorResponseDTO::class),
                     )
                 ]
+            ), ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [Content(
+                    mediaType = "application/json", examples = [ExampleObject(
+                        value = "{\n" +
+                                "  \"errors\": [\n" +
+                                "    {\n" +
+                                "      \"source\": \"user\",\n" +
+                                "      \"message\": \"Full authentication is required to access this resource\"\n" +
+                                "    }\n" +
+                                "  ]\n" +
+                                "}"
+                    )]
+                )
+                ]
             )
         ]
     )
@@ -59,5 +78,5 @@ class ReportController(private val reportService: ReportService) {
         val report = reportService.generateTradedVolumeReport(userId, startDate, endDate)
         return ResponseEntity.ok().body(report)
     }
-    
+
 }

@@ -29,11 +29,14 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("com.tngtech.archunit:archunit-junit4:1.0.1")
 }
 
 tasks.withType<KotlinCompile> {

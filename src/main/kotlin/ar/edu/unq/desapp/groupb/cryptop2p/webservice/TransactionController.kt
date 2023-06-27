@@ -7,9 +7,11 @@ import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.TransactionDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -42,9 +44,26 @@ import org.springframework.web.bind.annotation.*
                     schema = Schema(implementation = ValidationErrorResponseDTO::class),
                 )
             ]
+        ), ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized",
+            content = [Content(
+                mediaType = "application/json", examples = [ExampleObject(
+                    value = "{\n" +
+                            "  \"errors\": [\n" +
+                            "    {\n" +
+                            "      \"source\": \"user\",\n" +
+                            "      \"message\": \"Full authentication is required to access this resource\"\n" +
+                            "    }\n" +
+                            "  ]\n" +
+                            "}"
+                )]
+            )
+            ]
         )
     ]
 )
+@SecurityRequirement(name = "bearerAuth")
 class TransactionController(private val transactionService: TransactionService) {
     @PostMapping
     @Operation(

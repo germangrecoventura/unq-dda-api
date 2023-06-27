@@ -8,6 +8,8 @@ import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserCreateRequestDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.UserDTO
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 import kotlin.math.max
@@ -20,13 +22,16 @@ class UserService(
     private val userValidator: UserValidator,
     private val userTransactionRatingRepository: UserTransactionRatingRepository
 ) {
+    var logger: Logger = LoggerFactory.getLogger(UserService::class.java)
     fun save(@Valid userCreateRequest: UserCreateRequestDTO): User {
+        logger.info("Saving user...")
         userValidator.isCreationRequestValid(userCreateRequest)
         val newUser = userCreateRequest.toDomain()
         return userRepository.save(newUser)
     }
 
     fun getAll(): List<UserDTO> {
+        logger.info("Get all users...")
         val users = userRepository.findAll()
         val userIds = users.map { it.id!! }.toSet()
         val userRatings = userTransactionRatingRepository.getByUserIn(userIds)

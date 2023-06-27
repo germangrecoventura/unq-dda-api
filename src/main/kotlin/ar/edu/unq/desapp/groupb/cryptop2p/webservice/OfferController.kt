@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.*
         )
     ]
 )
+@SecurityRequirement(name = "bearerAuth")
 class OfferController(private val offerService: OfferService) {
     @PostMapping
     @Operation(
@@ -51,6 +53,22 @@ class OfferController(private val offerService: OfferService) {
                         mediaType = "application/json",
                         schema = Schema(implementation = Offer::class),
                     )
+                ]
+            ), ApiResponse(
+                responseCode = "401",
+                description = "Unauthorized",
+                content = [Content(
+                    mediaType = "application/json", examples = [ExampleObject(
+                        value = "{\n" +
+                                "  \"errors\": [\n" +
+                                "    {\n" +
+                                "      \"source\": \"user\",\n" +
+                                "      \"message\": \"Full authentication is required to access this resource\"\n" +
+                                "    }\n" +
+                                "  ]\n" +
+                                "}"
+                    )]
+                )
                 ]
             )
         ]
