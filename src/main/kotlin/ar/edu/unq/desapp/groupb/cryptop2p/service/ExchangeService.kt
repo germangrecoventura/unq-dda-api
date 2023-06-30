@@ -6,8 +6,6 @@ import ar.edu.unq.desapp.groupb.cryptop2p.service.helpers.Symbol
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.AssetPriceDTO
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDateTime
@@ -16,11 +14,7 @@ import java.time.LocalDateTime
 @Service
 class ExchangeService(private val restTemplate: RestTemplate) {
     private val assetPrices = assetNames().associateWith { 10.00 }
-    var logger: Logger = LoggerFactory.getLogger(ExchangeService::class.java)
-
     fun getConversionRateARStoUSD(): Double {
-        logger.info("Conversion Rate ARS to USD...")
-
         val url = "https://www.dolarsi.com/api/api.php?type=valoresprincipales"
 
         val response = restTemplate.getForEntity(url, Array<Root>::class.java)
@@ -35,7 +29,6 @@ class ExchangeService(private val restTemplate: RestTemplate) {
     }
 
     fun getCryptoAssetPrice(assetName: String): Double {
-        logger.info("Get Crypto Asset Price...")
         return if (System.getenv("API_ON").isNullOrBlank()) {
             val url = "https://api.binance.com/api/v3/ticker/price?symbol=$assetName"
             val response = restTemplate.getForEntity(url, Symbol::class.java)
@@ -47,7 +40,6 @@ class ExchangeService(private val restTemplate: RestTemplate) {
     }
 
     fun getCryptoAssetsPrices(assetNames: List<String>): Map<String, Double> {
-        logger.info("Get Cryptos Assets Prices...")
         return if (System.getenv("API_ON").isNullOrBlank()) {
             val symbols =
                 assetNames.joinToString(
@@ -67,7 +59,6 @@ class ExchangeService(private val restTemplate: RestTemplate) {
     }
 
     fun getAssetPricesFromLast24Hours(assetName: String): AssetPriceDTO {
-        logger.info("Get quotes from last 24 Hours of Asset...")
         return if (System.getenv("API_ON").isNullOrBlank()) {
             val url = "https://api.binance.com/api/v3/ticker/24hr?symbol=$assetName"
 
