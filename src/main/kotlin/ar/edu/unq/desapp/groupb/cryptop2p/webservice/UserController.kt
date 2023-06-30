@@ -125,18 +125,18 @@ class UserController(private val userService: UserService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        array = ArraySchema(schema = Schema(implementation = TokenInfo::class)),
+                        array = ArraySchema(schema = Schema(implementation = TokenInfoDTO::class)),
                     )
                 ]
             )
         ]
     )
-    fun authenticate(@Valid @RequestBody loginDTO: LoginDTO): ResponseEntity<TokenInfo> {
+    fun authenticate(@Valid @RequestBody loginDTO: LoginDTO): ResponseEntity<TokenInfoDTO> {
         val authentication =
             authenticationManager.authenticate(UsernamePasswordAuthenticationToken(loginDTO.email, loginDTO.password))
         SecurityContextHolder.getContext().authentication = authentication
 
         val token = jwtUtilService.generateToken(authentication)
-        return ResponseEntity.ok().body(TokenInfo(token))
+        return ResponseEntity.ok().body(TokenInfoDTO(token))
     }
 }
