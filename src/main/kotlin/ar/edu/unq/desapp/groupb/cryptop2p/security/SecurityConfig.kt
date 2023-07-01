@@ -19,8 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
-    private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint = JwtAuthenticationEntryPoint()
+class SecurityConfig(private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint) {
 
     @Bean
     @Throws(Exception::class)
@@ -41,17 +40,21 @@ class SecurityConfig {
     @Bean
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            .and()
+        http
+            .cors().and()
+            .csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
             .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
             .requestMatchers("/docs/**").permitAll()
+            .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/v3/api-docs/**").permitAll()
             .requestMatchers("/swagger-ui/**").permitAll()
-            .anyRequest().authenticated().and().httpBasic()
+            .anyRequest().authenticated().and()
+            .httpBasic()
         http.headers().frameOptions().disable()
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter::class.java)
 

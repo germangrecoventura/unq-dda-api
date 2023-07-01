@@ -5,11 +5,8 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.AssetPrice
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.AssetValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetPriceRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.AssetPriceDTO
 import jakarta.transaction.Transactional
 import org.ehcache.Cache
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
@@ -26,10 +23,7 @@ class AssetService(
     private val exchangeService: ExchangeService,
     private val assetPriceCache: Cache<String, AssetPrice>,
 ) {
-    var logger: Logger = LoggerFactory.getLogger(AssetService::class.java)
-
     fun save(assetName: String): Asset {
-        logger.info("Saving Asset...")
         assetValidator.isCreationRequestValid(assetName)
         val price = exchangeService.getCryptoAssetPrice(assetName)
         val asset = Asset(assetName, created = LocalDateTime.now())
@@ -41,21 +35,17 @@ class AssetService(
 
     fun getAssetPrices(): Collection<AssetPrice> {
         val cachedAssetPrices = assetPriceCache.getAll(assetNames()).toList()
-
         val assetPrices = if (cachedAssetPrices.any { it.second == null }) {
-            logger.info("Returning AssetPrice list from DB...")
             assetPriceRepository.findLatestPrices()
         } else {
-            logger.info("Returning AssetPrice list from cache...")
             cachedAssetPrices.map { it.second }
         }
 
         return assetPrices
     }
 
-    fun getAssetPricesFromLast24Hours(assetName: String): AssetPriceDTO {
-        logger.info("Returning assets prices from the last 24 hours...")
-        return exchangeService.getAssetPricesFromLast24Hours(assetName)
+    fun getAssetPricesFromLast24Hours(assetName: String): Collection<AssetPrice> {
+        return assetPriceRepository.findAllByAssetAndCreatedAfter(assetName, LocalDateTime.now().minusHours(24))
     }
 
     @Scheduled(fixedDelay = 600000)
@@ -64,8 +54,10 @@ class AssetService(
         assets.forEach {
             val price = exchangeService.getCryptoAssetPrice(it.name!!)
             val assetPrice = AssetPrice(it, price, created = LocalDateTime.now())
+            it.prices.add(assetPrice)
             assetPriceCache.put(it.name!!, assetPrice)
         }
+        assetRepository.saveAll(assets)
     }
 
     fun clear() {

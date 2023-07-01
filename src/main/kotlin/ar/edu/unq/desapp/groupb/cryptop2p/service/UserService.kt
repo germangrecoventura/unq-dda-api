@@ -24,14 +24,12 @@ class UserService(
 ) {
     var logger: Logger = LoggerFactory.getLogger(UserService::class.java)
     fun save(@Valid userCreateRequest: UserCreateRequestDTO): User {
-        logger.info("Saving user...")
         userValidator.isCreationRequestValid(userCreateRequest)
         val newUser = userCreateRequest.toDomain()
         return userRepository.save(newUser)
     }
 
     fun getAll(): List<UserDTO> {
-        logger.info("Get all users...")
         val users = userRepository.findAll()
         val userIds = users.map { it.id!! }.toSet()
         val userRatings = userTransactionRatingRepository.getByUserIn(userIds)

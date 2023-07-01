@@ -11,7 +11,15 @@ import java.time.LocalDateTime
 
 @Repository
 interface TransactionRepository : CrudRepository<Transaction, Long> {
-    @Query("SELECT t FROM Transaction t WHERE (t.seller = :user OR t.buyer = :user) AND t.created BETWEEN :created AND :created2 AND t.status = :status")
+    @Query(
+        value = """
+            SELECT t 
+            FROM Transaction t 
+            WHERE (t.seller = :user OR t.buyer = :user) 
+            AND t.created BETWEEN :created AND :created2 
+            AND t.status = :status
+        """
+    )
     fun getAllBySellerOrBuyerAndCreatedBetweenAndStatus(
         @Param("user") user: User,
         @Param("created") created: LocalDateTime,

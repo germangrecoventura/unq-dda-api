@@ -9,7 +9,14 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserTransactionRatingRepository : CrudRepository<UserTransactionRating, Long> {
 
-    @Query(value = "SELECT u.user.id AS userId, SUM(u.rating) AS rating, COUNT(u.user.id) AS totalOperations FROM UserTransactionRating AS u WHERE u.user.id IN :userIds GROUP BY u.user.id")
+    @Query(
+        value = """
+            SELECT u.user.id AS userId, SUM(u.rating) AS rating, COUNT(u.user.id) AS totalOperations 
+            FROM UserTransactionRating AS u 
+            WHERE u.user.id IN :userIds 
+            GROUP BY u.user.id
+        """
+    )
     fun getByUserIn(@Param("userIds") userIds: Set<Long>): List<UserRating>
 
 }

@@ -8,8 +8,6 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.UserNotRegisteredExcep
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.TransactionRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.UserRepository
 import jakarta.transaction.Transactional
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.LocalDate
@@ -23,9 +21,7 @@ class ReportService(
     private val exchangeService: ExchangeService,
     private val clock: Clock,
 ) {
-    var logger: Logger = LoggerFactory.getLogger(ReportService::class.java)
     fun generateTradedVolumeReport(userId: Long, startDate: LocalDate, endDate: LocalDate): TradedVolumeReport {
-        logger.info("Generate traded volume report...")
         val optionalUser = userRepository.findById(userId)
         if (optionalUser.isEmpty) {
             throw UserNotRegisteredException()

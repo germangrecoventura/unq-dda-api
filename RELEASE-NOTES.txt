@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------
+TAG ENTREGA-3-1.0
+---------------------------------------------------------------------
+NEW FEATURES:
+* Added architecture tests
+* Added web-services audit. Log <timestamp, user, operation/method, parameters, execution time>
+* Added secure API access (JWT)
+* Added the quotes of the last 24 hours for a given crypto asset
+* Added the list of quotes (high performance - implement cache)
+* Fixed the initialization of data when starting the application
+* Fixed deployment
+
+NOTES:
+* Everything properly working
+
+KNOWN ISSUES:
+* So far no problems were found
+
+---------------------------------------------------------------------
 TAG ENTREGA-2-1.0
 ---------------------------------------------------------------------
 NEW FEATURES:

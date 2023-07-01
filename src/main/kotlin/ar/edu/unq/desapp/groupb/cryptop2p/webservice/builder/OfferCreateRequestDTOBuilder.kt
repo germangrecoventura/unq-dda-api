@@ -10,13 +10,13 @@ class OfferCreateRequestDTOBuilder {
     private var operation: String? = null
 
     fun build(): OfferRequestDTO {
-        val offerRequest = OfferRequestDTO()
-        offerRequest.asset = asset
-        offerRequest.quantity = quantity
-        offerRequest.unitPrice = unitPrice
-        offerRequest.user = user
-        offerRequest.operation = operation
-        return offerRequest
+        return OfferRequestDTO(
+            asset,
+            quantity,
+            unitPrice,
+            user,
+            operation,
+        )
     }
 
     fun withAsset(asset: String?): OfferCreateRequestDTOBuilder {

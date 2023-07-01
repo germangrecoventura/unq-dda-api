@@ -4,11 +4,13 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 
 
-class LoginDTO {
-    @NotBlank(message = "The email cannot be blank")
-    @Email(message = "The email address is not valid")
-    var email: String? = null
+data class LoginDTO(
+    @field:NotBlank(message = "The email cannot be blank")
+    @field:Email(message = "The email address is not valid")
+    val email: String,
 
-    @NotBlank(message = "The password cannot be blank")
-    var password: String? = null
+    @field:NotBlank(message = "The password cannot be blank")
+    val password: String
+) {
+    override fun toString() = "${this.javaClass.simpleName}(email=$email, password=********)"
 }
