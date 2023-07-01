@@ -27,6 +27,7 @@ class JwtAuthenticationEntryPoint : AuthenticationEntryPoint {
                 )
             )
         )
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
         response.writer.write(json)
     }
 }

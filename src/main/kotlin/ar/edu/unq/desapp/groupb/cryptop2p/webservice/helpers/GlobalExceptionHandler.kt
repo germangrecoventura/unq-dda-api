@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import jakarta.validation.ConstraintViolationException
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,8 +21,8 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException): ResponseEntity<*> {
-        var logger: Logger = LoggerFactory.getLogger(MethodArgumentNotValidException::class.java)
+    fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException): ResponseEntity<*> {
+        val logger = LoggerFactory.getLogger(MethodArgumentNotValidException::class.java)
         val errors = ex.bindingResult
             .fieldErrors
             .map { obj: FieldError -> ValidationErrorDTO(obj.field, obj.defaultMessage ?: "") }
@@ -36,7 +35,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleConstraintViolationException(ex: ConstraintViolationException): ResponseEntity<*> {
-        var logger: Logger = LoggerFactory.getLogger(ConstraintViolationException::class.java)
+        val logger = LoggerFactory.getLogger(ConstraintViolationException::class.java)
         val errors = ex.constraintViolations
             .map(ValidationErrorDTO::of)
         val body = ValidationErrorResponseDTO(errors)
@@ -47,7 +46,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(ModelException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleUserEmailAddressAlreadyRegisteredException(ex: ModelException): ResponseEntity<*> {
-        var logger: Logger = LoggerFactory.getLogger(ModelException::class.java)
+        val logger = LoggerFactory.getLogger(ModelException::class.java)
         val error = ValidationErrorDTO(ex.source, ex.message ?: "")
         logger.error(ex.message ?: "")
         val body = ValidationErrorResponseDTO(listOf(error))
@@ -57,7 +56,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleNoSuchElementException(ex: BadCredentialsException): ResponseEntity<*> {
-        var logger: Logger = LoggerFactory.getLogger(BadCredentialsException::class.java)
+        val logger = LoggerFactory.getLogger(BadCredentialsException::class.java)
         val error = ValidationErrorDTO("user", ex.message ?: "")
         logger.error(ex.message ?: "")
         val body = ValidationErrorResponseDTO(listOf(error))
@@ -66,14 +65,14 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun userNotFound(ex: UsernameNotFoundException): ResponseEntity<*> {
+    fun handleUsernameNotFoundException(ex: UsernameNotFoundException): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.message!!)
     }
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    fun handleException(ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
-        var logger: Logger = LoggerFactory.getLogger(BadCredentialsException::class.java)
+    fun handleAuthenticationCredentialsNotFoundException(ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
+        val logger = LoggerFactory.getLogger(BadCredentialsException::class.java)
         logger.error(ex.message!!)
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.message!!)
     }
