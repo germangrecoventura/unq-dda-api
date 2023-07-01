@@ -118,7 +118,8 @@ class AssetController(private val assetService: AssetService) {
             regexp = "^[A-Z0-9-_.]{1,20}$",
             message = "The asset name is not in a valid format"
         ) assetName: String
-    ): ResponseEntity<AssetPriceDTO> {
-        return ResponseEntity.ok().body(assetService.getAssetPricesFromLast24Hours(assetName))
+    ): ResponseEntity<List<AssetPriceDTO>> {
+        val prices = assetService.getAssetPricesFromLast24Hours(assetName).map { AssetPriceDTO.fromModel(it) }
+        return ResponseEntity.ok().body(prices)
     }
 }

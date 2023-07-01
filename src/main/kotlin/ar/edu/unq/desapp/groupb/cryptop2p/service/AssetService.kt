@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.AssetPrice
 import ar.edu.unq.desapp.groupb.cryptop2p.model.validator.AssetValidator
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetPriceRepository
 import ar.edu.unq.desapp.groupb.cryptop2p.persistence.AssetRepository
-import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.AssetPriceDTO
 import jakarta.transaction.Transactional
 import org.ehcache.Cache
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -45,8 +44,8 @@ class AssetService(
         return assetPrices
     }
 
-    fun getAssetPricesFromLast24Hours(assetName: String): AssetPriceDTO {
-        return exchangeService.getAssetPricesFromLast24Hours(assetName)
+    fun getAssetPricesFromLast24Hours(assetName: String): Collection<AssetPrice> {
+        return assetPriceRepository.findAllByAssetAndCreatedAfter(assetName, LocalDateTime.now().minusHours(24))
     }
 
     @Scheduled(fixedDelay = 600000)
@@ -55,8 +54,10 @@ class AssetService(
         assets.forEach {
             val price = exchangeService.getCryptoAssetPrice(it.name!!)
             val assetPrice = AssetPrice(it, price, created = LocalDateTime.now())
+            it.prices.add(assetPrice)
             assetPriceCache.put(it.name!!, assetPrice)
         }
+        assetRepository.saveAll(assets)
     }
 
     fun clear() {

@@ -5,10 +5,19 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 interface AssetPriceRepository : CrudRepository<AssetPrice, Long> {
-    @Query(value = "SELECT p FROM AssetPrice p WHERE p.asset.name = :assetName ORDER BY p.created DESC LIMIT 1")
+    @Query(
+        value = """
+            SELECT p 
+            FROM AssetPrice p 
+            WHERE p.asset.name = :assetName 
+            ORDER BY p.created DESC 
+            LIMIT 1
+        """
+    )
     fun findCurrentPriceByAssetName(@Param("assetName") assetName: String): AssetPrice
 
     @Query(
@@ -23,4 +32,18 @@ interface AssetPriceRepository : CrudRepository<AssetPrice, Long> {
         nativeQuery = true
     )
     fun findLatestPrices(): Collection<AssetPrice>
+
+    @Query(
+        value = """
+            SELECT p 
+            FROM AssetPrice p 
+            WHERE p.asset.name = :assetName 
+            AND p.created >= :created 
+            ORDER BY p.created DESC
+        """
+    )
+    fun findAllByAssetAndCreatedAfter(
+        @Param("assetName") assetName: String,
+        @Param("created") created: LocalDateTime
+    ): Collection<AssetPrice>
 }
