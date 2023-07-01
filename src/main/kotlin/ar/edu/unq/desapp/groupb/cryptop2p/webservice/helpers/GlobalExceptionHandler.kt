@@ -4,11 +4,10 @@ import ar.edu.unq.desapp.groupb.cryptop2p.model.ModelException
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorDTO
 import ar.edu.unq.desapp.groupb.cryptop2p.webservice.dto.ValidationErrorResponseDTO
 import jakarta.validation.ConstraintViolationException
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -22,33 +21,26 @@ class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMethodArgumentNotValid(ex: MethodArgumentNotValidException): ResponseEntity<*> {
-        val logger = LoggerFactory.getLogger(MethodArgumentNotValidException::class.java)
         val errors = ex.bindingResult
             .fieldErrors
             .map { obj: FieldError -> ValidationErrorDTO(obj.field, obj.defaultMessage ?: "") }
-
         val body = ValidationErrorResponseDTO(errors)
-        errors.forEach { error -> logger.error(error.message) }
         return ResponseEntity.badRequest().body(body)
     }
 
     @ExceptionHandler(ConstraintViolationException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleConstraintViolationException(ex: ConstraintViolationException): ResponseEntity<*> {
-        val logger = LoggerFactory.getLogger(ConstraintViolationException::class.java)
         val errors = ex.constraintViolations
             .map(ValidationErrorDTO::of)
         val body = ValidationErrorResponseDTO(errors)
-        errors.forEach { error -> logger.error(error.message) }
         return ResponseEntity.badRequest().body(body)
     }
 
     @ExceptionHandler(ModelException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleUserEmailAddressAlreadyRegisteredException(ex: ModelException): ResponseEntity<*> {
-        val logger = LoggerFactory.getLogger(ModelException::class.java)
         val error = ValidationErrorDTO(ex.source, ex.message ?: "")
-        logger.error(ex.message ?: "")
         val body = ValidationErrorResponseDTO(listOf(error))
         return ResponseEntity.badRequest().body(body)
     }
@@ -56,9 +48,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     fun handleNoSuchElementException(ex: BadCredentialsException): ResponseEntity<*> {
-        val logger = LoggerFactory.getLogger(BadCredentialsException::class.java)
         val error = ValidationErrorDTO("user", ex.message ?: "")
-        logger.error(ex.message ?: "")
         val body = ValidationErrorResponseDTO(listOf(error))
         return ResponseEntity(body, HttpStatus.UNAUTHORIZED)
     }
@@ -66,14 +56,12 @@ class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleUsernameNotFoundException(ex: UsernameNotFoundException): ResponseEntity<*> {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.message!!)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.message ?: "")
     }
 
-    @ExceptionHandler(AuthenticationCredentialsNotFoundException::class)
+    @ExceptionHandler(AuthenticationException::class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    fun handleAuthenticationCredentialsNotFoundException(ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
-        val logger = LoggerFactory.getLogger(BadCredentialsException::class.java)
-        logger.error(ex.message!!)
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.message!!)
+    fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.message ?: "")
     }
 }
